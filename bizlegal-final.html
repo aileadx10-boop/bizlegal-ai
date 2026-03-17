@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BizLegal AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Gloock:ital@0;1&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,600&family=Geist+Mono:wght@300;400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --bg:       #04060e;
+  --surface:  #070b18;
+  --border:   #142035;
+  --sky:      #7dd3fc;
+  --cyan:     #67e8f9;
+  --teal:     #5eead4;
+  --indigo:   #a5b4fc;
+  --shine:    #f0f9ff;
+  --white:    #ffffff;
+  --muted:    #6b90b0;
+  --dim:      #2a4060;
+  --text:     #f8fafc;
+}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Geist Mono',monospace;
+  min-height:100vh;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── CANVAS ── */
+#gl{
+  position:fixed;top:0;left:0;
+  width:100%;height:100%;
+  z-index:0;
+  opacity:0.92;
+}
+
+/* ── OVERLAY ── */
+.veil{
+  position:fixed;inset:0;z-index:1;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse 70% 60% at 30% 50%, rgba(4,6,14,0.0) 0%, rgba(4,6,14,0.55) 75%),
+    radial-gradient(ellipse 40% 40% at 75% 50%, rgba(4,6,14,0.2) 0%, transparent 70%);
+}
+
+/* ── CONTENT ── */
+.wrap{position:relative;z-index:10}
+.inner{max-width:1100px;margin:0 auto;padding:0 32px}
+
+/* ── GLASS FILTER ── */
+.gf{position:absolute;width:0;height:0;overflow:hidden}
+
+/* ── NAV ── */
+nav{
+  position:sticky;top:0;z-index:100;
+  border-bottom:1px solid rgba(56,189,248,0.08);
+  background:rgba(6,8,15,0.55);
+  backdrop-filter:blur(20px);
+}
+.nav-i{
+  max-width:1100px;margin:0 auto;padding:0 32px;
+  display:flex;align-items:center;justify-content:space-between;
+  height:60px;
+}
+.logo{
+  font-family:'Gloock',serif;
+  font-size:22px;letter-spacing:0.02em;color:var(--white);
+}
+.logo em{color:var(--sky);font-style:italic}
+.nav-links{display:flex;gap:28px}
+.nav-links a{
+  font-size:12px;letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--muted);text-decoration:none;transition:color 0.2s;
+}
+.nav-links a:hover{color:var(--white)}
+
+/* ── GLASS BUTTON ── */
+.gbtn{
+  position:relative;display:inline-flex;
+  align-items:center;justify-content:center;
+  cursor:pointer;border-radius:100px;
+  font-family:'Geist Mono',monospace;
+  font-weight:600;letter-spacing:0.12em;text-transform:uppercase;
+  text-decoration:none;
+  transition:all 0.25s cubic-bezier(0.1,0.4,0.2,1);
+  overflow:hidden;
+}
+.gbtn::before{
+  content:'';position:absolute;
+  top:0;left:-100%;width:200%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(224,242,254,0.4),transparent);
+  transition:left 0.4s ease;
+}
+.gbtn:hover::before{left:100%}
+.gbtn:active{transform:translateY(1px) scale(0.98)}
+
+.gbtn-sky{
+  padding:13px 30px;font-size:13px;
+  border:1px solid rgba(125,211,252,0.55);
+  background:rgba(125,211,252,0.1);
+  color:var(--sky);
+  box-shadow:0 0 24px rgba(125,211,252,0.1),inset 0 1px 0 rgba(240,249,255,0.15);
+}
+.gbtn-sky:hover{
+  background:rgba(125,211,252,0.2);
+  border-color:rgba(125,211,252,0.8);
+  box-shadow:0 0 40px rgba(125,211,252,0.25),inset 0 1px 0 rgba(240,249,255,0.25);
+  color:var(--white);
+}
+
+.gbtn-ghost{
+  padding:13px 30px;font-size:13px;
+  border:1px solid var(--border);
+  background:transparent;color:var(--muted);
+}
+.gbtn-ghost:hover{border-color:rgba(125,211,252,0.3);color:var(--sky)}
+
+.gbtn-xl{padding:16px 40px;font-size:14px}
+.gbtn-sm{padding:8px 18px;font-size:11px}
+
+/* ── HERO ── */
+.hero{
+  min-height:91vh;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;
+  padding:80px 32px 60px;
+}
+
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:8px 22px;border-radius:100px;
+  border:1px solid rgba(125,211,252,0.3);
+  background:rgba(125,211,252,0.07);
+  backdrop-filter:blur(8px);
+  font-size:12px;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--sky);margin-bottom:44px;
+  animation:up 0.7s ease both;
+}
+.bdot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--teal);
+  box-shadow:0 0 6px var(--teal);
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{
+  0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(45,212,191,0.5)}
+  50%{opacity:0.7;box-shadow:0 0 0 7px rgba(45,212,191,0)}
+}
+
+h1{
+  font-family:'Gloock',serif;
+  font-size:clamp(60px,9vw,120px);
+  line-height:1.0;letter-spacing:-0.02em;
+  margin-bottom:28px;
+  animation:up 0.7s 0.1s ease both;
+}
+.h-dim   {color:rgba(248,250,252,0.28);display:block}
+.h-sky   {color:var(--sky);font-style:italic;display:block;text-shadow:0 0 40px rgba(125,211,252,0.4)}
+.h-teal  {color:var(--teal);display:block;text-shadow:0 0 40px rgba(94,234,212,0.35)}
+.h-white {color:var(--white);display:block}
+
+.hero-sub{
+  max-width:560px;font-size:16px;color:var(--muted);
+  line-height:1.8;letter-spacing:0.02em;
+  margin-bottom:48px;
+  animation:up 0.7s 0.18s ease both;
+}
+
+.hero-ctas{
+  display:flex;gap:14px;flex-wrap:wrap;justify-content:center;
+  margin-bottom:72px;
+  animation:up 0.7s 0.25s ease both;
+}
+
+/* ── STATS ── */
+.stats{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:1px;background:rgba(125,211,252,0.1);
+  border:1px solid rgba(125,211,252,0.12);
+  border-radius:14px;overflow:hidden;
+  max-width:720px;width:100%;
+  backdrop-filter:blur(16px);
+  animation:up 0.7s 0.35s ease both;
+}
+.stat{
+  background:rgba(4,6,14,0.6);
+  padding:24px 26px;text-align:center;
+}
+.sv{
+  font-family:'Gloock',serif;
+  font-size:38px;color:var(--white);
+  margin-bottom:6px;line-height:1;
+  text-shadow:0 0 20px rgba(125,211,252,0.2);
+}
+.sl{
+  font-size:11px;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--muted);
+}
+
+@keyframes up{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── SECTION ── */
+section{
+  padding:76px 0;
+  border-top:1px solid rgba(56,189,248,0.05);
+}
+.eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:44px}
+.eline{width:28px;height:1px;background:rgba(125,211,252,0.3)}
+.elabel{font-size:12px;letter-spacing:0.25em;text-transform:uppercase;color:var(--muted)}
+
+/* ── PRODUCTS ── */
+.products{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+
+.pcard{
+  position:relative;border-radius:16px;padding:28px;
+  border:1px solid var(--border);
+  background:rgba(6,8,15,0.6);
+  backdrop-filter:blur(20px);
+  transition:all 0.3s ease;overflow:hidden;
+}
+.pcard::after{
+  content:'';position:absolute;inset:0;border-radius:16px;
+  background:radial-gradient(ellipse at 50% 0%,rgba(56,189,248,0.05) 0%,transparent 60%);
+  opacity:0;transition:opacity 0.3s;
+}
+.pcard:hover{transform:translateY(-3px);border-color:rgba(56,189,248,0.2)}
+.pcard:hover::after{opacity:1}
+/* Shine top line */
+.pcard::before{
+  content:'';position:absolute;
+  top:0;left:20%;right:20%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(224,242,254,0.1),transparent);
+}
+
+.ptag{
+  display:inline-block;font-size:10px;font-weight:700;
+  letter-spacing:0.18em;text-transform:uppercase;
+  padding:4px 12px;border-radius:100px;border:1px solid;
+  margin-bottom:18px;
+}
+.tag-sky  {color:var(--sky);  border-color:rgba(125,211,252,0.35); background:rgba(125,211,252,0.08)}
+.tag-ind  {color:var(--indigo);border-color:rgba(165,180,252,0.35);background:rgba(165,180,252,0.08)}
+.tag-teal {color:var(--teal); border-color:rgba(94,234,212,0.35); background:rgba(94,234,212,0.08)}
+
+.pname{
+  font-family:'Gloock',serif;
+  font-size:30px;color:var(--white);
+  margin-bottom:12px;
+}
+.pdesc{font-size:14px;color:var(--muted);line-height:1.75;margin-bottom:24px;letter-spacing:0.01em}
+.pfoot{display:flex;align-items:center;justify-content:space-between}
+.pprice{font-size:12px;color:var(--dim)}
+.pcta{font-size:13px;text-decoration:none;transition:color 0.2s;letter-spacing:0.05em}
+.pcta-sky  {color:var(--sky) } .pcta-sky:hover  {color:var(--white)}
+.pcta-ind  {color:var(--indigo)} .pcta-ind:hover  {color:var(--white)}
+.pcta-teal {color:var(--teal)} .pcta-teal:hover {color:var(--white)}
+
+/* ── JURISDICTIONS ── */
+.juris{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.jcard{
+  border:1px solid var(--border);border-radius:12px;
+  padding:18px 20px;
+  background:rgba(6,8,15,0.5);backdrop-filter:blur(12px);
+  display:flex;align-items:center;justify-content:space-between;
+  transition:all 0.2s;position:relative;overflow:hidden;
+}
+.jcard::before{
+  content:'';position:absolute;
+  top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(56,189,248,0.12),transparent);
+}
+.jcard:hover{border-color:rgba(56,189,248,0.2);background:rgba(56,189,248,0.03)}
+.jcode{
+  font-family:'Gloock',serif;
+  font-size:22px;color:var(--white);
+}
+.jsub{font-size:11px;color:var(--muted);margin-top:3px;letter-spacing:0.08em}
+.jcount{font-size:11px;color:var(--dim);letter-spacing:0.1em}
+
+/* ── GUIDES ── */
+.ggroup{margin-bottom:32px}
+.gregion{
+  font-size:11px;letter-spacing:0.22em;text-transform:uppercase;
+  color:rgba(94,234,212,0.7);margin-bottom:8px;
+}
+.gitem{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 16px;border-radius:8px;
+  border:1px solid transparent;
+  text-decoration:none;transition:all 0.15s;
+}
+.gitem:hover{background:rgba(125,211,252,0.04);border-color:rgba(125,211,252,0.1)}
+.gtitle{font-size:14px;color:var(--muted);transition:color 0.15s;letter-spacing:0.01em}
+.gitem:hover .gtitle{color:var(--white)}
+.garrow{font-size:14px;color:var(--dim);flex-shrink:0;margin-left:12px;transition:color 0.15s}
+.gitem:hover .garrow{color:var(--sky)}
+
+/* ── FOOTER ── */
+footer{
+  border-top:1px solid rgba(56,189,248,0.05);
+  padding:36px 32px;
+  background:rgba(5,7,14,0.8);backdrop-filter:blur(20px);
+  position:relative;z-index:10;
+}
+.foot-i{
+  max-width:1100px;margin:0 auto;
+  display:flex;flex-wrap:wrap;align-items:center;
+  justify-content:space-between;gap:20px;margin-bottom:16px;
+}
+.flogo{font-family:'Gloock',serif;font-size:14px;color:var(--muted)}
+.flogo em{color:var(--sky);font-style:italic}
+.flinks{display:flex;gap:24px}
+.flinks a{font-size:10px;color:var(--dim);text-decoration:none;letter-spacing:0.1em;transition:color 0.2s}
+.flinks a:hover{color:var(--white)}
+.fcopy{font-size:9px;color:var(--dim);letter-spacing:0.1em}
+.fdisclaimer{
+  max-width:1100px;margin:0 auto;
+  font-size:9px;color:rgba(30,40,64,0.8);line-height:1.6;letter-spacing:0.04em;
+}
+
+@media(max-width:768px){
+  .products,.juris,.stats{grid-template-columns:1fr 1fr}
+  .nav-links{display:none}
+  h1{font-size:42px}
+}
+@media(max-width:480px){
+  .products,.stats{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- Glass SVG filter -->
+<svg class="gf" aria-hidden>
+  <defs>
+    <filter id="gf" x="0%" y="0%" width="100%" height="100%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.04 0.04" numOctaves="1" seed="2" result="t"/>
+      <feGaussianBlur in="t" stdDeviation="2" result="b"/>
+      <feDisplacementMap in="SourceGraphic" in2="b" scale="35" xChannelSelector="R" yChannelSelector="B" result="d"/>
+      <feGaussianBlur in="d" stdDeviation="2.5"/>
+    </filter>
+  </defs>
+</svg>
+
+<canvas id="gl"></canvas>
+<div class="veil"></div>
+
+<div class="wrap">
+
+<!-- NAV -->
+<nav>
+  <div class="nav-i">
+    <div class="logo">BizLegal<em>AI</em></div>
+    <div class="nav-links">
+      <a href="#guides">Guides</a>
+      <a href="https://docstack.bizlegal-ai.com">DocStack</a>
+      <a href="https://brai.bizlegal-ai.com">BRAI</a>
+      <a href="https://tracr.bizlegal-ai.com">TRACR</a>
+    </div>
+    <a href="https://docstack.bizlegal-ai.com" class="gbtn gbtn-sky" style="backdrop-filter:blur(12px) url('#gf')">
+      Get templates
+    </a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">
+    <div class="bdot"></div>
+    Lawyer-drafted · AI-refined · Multi-jurisdiction
+  </div>
+
+  <h1>
+    <span class="h-dim">Legal documents</span>
+    <span class="h-dim">for</span>
+    <span class="h-sky">global real estate</span>
+    <span class="h-teal">&amp; investment</span>
+  </h1>
+
+  <p class="hero-sub">
+    JV agreements, NDAs, LOIs, capital call agreements —
+    structured for US, UAE, EU, UK, Singapore and Canada.
+    Download, fill in, sign.
+  </p>
+
+  <div class="hero-ctas">
+    <a href="https://docstack.bizlegal-ai.com"
+       class="gbtn gbtn-sky gbtn-xl"
+       style="backdrop-filter:blur(14px) url('#gf')">
+      Browse templates from $49
+    </a>
+    <a href="#guides" class="gbtn gbtn-ghost gbtn-xl">
+      Read free guides
+    </a>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="sv">8</div><div class="sl">Templates</div></div>
+    <div class="stat"><div class="sv">6</div><div class="sl">Jurisdictions</div></div>
+    <div class="stat"><div class="sv">$49</div><div class="sl">Starting price</div></div>
+    <div class="stat"><div class="sv">$2k+</div><div class="sl">Saved vs lawyer</div></div>
+  </div>
+</div>
+
+<!-- PRODUCTS -->
+<section>
+  <div class="inner">
+    <div class="eyebrow"><div class="eline"></div><span class="elabel">Products</span></div>
+    <div class="products">
+
+      <div class="pcard">
+        <span class="ptag tag-sky">LIVE</span>
+        <div class="pname">DocStack</div>
+        <p class="pdesc">8 lawyer-drafted real estate templates. JV, NDA, LOI, Capital Call. DOCX + PDF, instant download.</p>
+        <div class="pfoot">
+          <span class="pprice">From $49</span>
+          <a href="https://docstack.bizlegal-ai.com" class="pcta pcta-sky">Browse templates →</a>
+        </div>
+      </div>
+
+      <div class="pcard">
+        <span class="ptag tag-ind">BETA</span>
+        <div class="pname">BRAI</div>
+        <p class="pdesc">Blockchain Regulatory Intelligence. Compliance scanning for VARA, MiCA, SEC, MAS projects instantly.</p>
+        <div class="pfoot">
+          <span class="pprice">Subscription</span>
+          <a href="https://brai.bizlegal-ai.com" class="pcta pcta-ind">Run free scan →</a>
+        </div>
+      </div>
+
+      <div class="pcard">
+        <span class="ptag tag-teal">SOON</span>
+        <div class="pname">TRACR</div>
+        <p class="pdesc">AI forensic investigation. Wallet tracing, fraud analysis, court-ready reports for lawyers and investigators.</p>
+        <div class="pfoot">
+          <span class="pprice">$99 / report</span>
+          <a href="#" class="pcta pcta-teal">Join waitlist →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- JURISDICTIONS -->
+<section>
+  <div class="inner">
+    <div class="eyebrow"><div class="eline"></div><span class="elabel">Jurisdictions</span></div>
+    <div class="juris">
+      <div class="jcard"><div><div class="jcode">UAE</div><div class="jsub">VARA / DIFC</div></div><div class="jcount">3 docs</div></div>
+      <div class="jcard"><div><div class="jcode">USA</div><div class="jsub">SEC / Delaware</div></div><div class="jcount">3 docs</div></div>
+      <div class="jcard"><div><div class="jcode">EU</div><div class="jsub">MiCA / GDPR</div></div><div class="jcount">1 doc</div></div>
+      <div class="jcard"><div><div class="jcode">UK</div><div class="jsub">FCA / Companies Act</div></div><div class="jcount">1 doc</div></div>
+      <div class="jcard"><div><div class="jcode">SGP</div><div class="jsub">MAS / ACRA</div></div><div class="jcount">1 doc</div></div>
+      <div class="jcard"><div><div class="jcode">CAN</div><div class="jsub">CSA / FINTRAC</div></div><div class="jcount">1 doc</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- GUIDES -->
+<section id="guides">
+  <div class="inner">
+    <div class="eyebrow"><div class="eline"></div><span class="elabel">Free legal guides</span></div>
+
+    <div class="ggroup">
+      <div class="gregion">UAE / DIFC</div>
+      <a href="/guides/uae/joint-venture-agreement-real-estate-uae" class="gitem"><span class="gtitle">Joint Venture Agreement for Real Estate in UAE</span><span class="garrow">→</span></a>
+      <a href="/guides/uae/vara-token-distribution-agreement-uae" class="gitem"><span class="gtitle">VARA Token Distribution Agreement UAE</span><span class="garrow">→</span></a>
+      <a href="/guides/uae/nda-real-estate-investment-uae" class="gitem"><span class="gtitle">NDA for Real Estate Investment in UAE</span><span class="garrow">→</span></a>
+    </div>
+    <div class="ggroup">
+      <div class="gregion">United States</div>
+      <a href="/guides/united-states/operating-agreement-llc-real-estate" class="gitem"><span class="gtitle">Real Estate LLC Operating Agreement Guide</span><span class="garrow">→</span></a>
+      <a href="/guides/united-states/capital-call-agreement-real-estate" class="gitem"><span class="gtitle">Capital Call Agreement Real Estate: US Legal Guide</span><span class="garrow">→</span></a>
+      <a href="/guides/united-states/joint-venture-agreement-real-estate-us" class="gitem"><span class="gtitle">Real Estate Joint Venture Agreement Template</span><span class="garrow">→</span></a>
+    </div>
+    <div class="ggroup">
+      <div class="gregion">European Union</div>
+      <a href="/guides/european-union/mica-token-sale-agreement-template" class="gitem"><span class="gtitle">MiCA Token Sale Agreement Template EU</span><span class="garrow">→</span></a>
+    </div>
+    <div class="ggroup">
+      <div class="gregion">United Kingdom</div>
+      <a href="/guides/united-kingdom/loi-commercial-real-estate-uk" class="gitem"><span class="gtitle">Commercial Real Estate LOI Template UK</span><span class="garrow">→</span></a>
+    </div>
+    <div class="ggroup">
+      <div class="gregion">Singapore / MAS</div>
+      <a href="/guides/singapore/capital-call-agreement-singapore" class="gitem"><span class="gtitle">Capital Call Agreement Singapore</span><span class="garrow">→</span></a>
+    </div>
+    <div class="ggroup">
+      <div class="gregion">Canada</div>
+      <a href="/guides/canada/joint-venture-agreement-real-estate-canada" class="gitem"><span class="gtitle">Joint Venture Agreement Real Estate Canada</span><span class="garrow">→</span></a>
+    </div>
+  </div>
+</section>
+
+</div><!-- /wrap -->
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-i">
+    <div class="flogo">BizLegal<em>AI</em></div>
+    <div class="flinks">
+      <a href="https://docstack.bizlegal-ai.com">DocStack</a>
+      <a href="https://brai.bizlegal-ai.com">BRAI</a>
+      <a href="https://tracr.bizlegal-ai.com">TRACR</a>
+    </div>
+    <span class="fcopy">© 2025 BizLegal AI</span>
+  </div>
+  <p class="fdisclaimer">Templates only — not legal advice. No attorney-client relationship is created. Always have qualified counsel review before execution.</p>
+</footer>
+
+<script>
+// ── WEBGL: sky-blue + teal shader ──
+const canvas = document.getElementById('gl')
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: false })
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+renderer.setClearColor(new THREE.Color(0x06080f))
+
+const scene  = new THREE.Scene()
+const camera = new THREE.OrthographicCamera(-1,1,1,-1,0,-1)
+
+const vert = `
+  attribute vec3 position;
+  void main(){ gl_Position = vec4(position,1.0); }
+`
+
+// Dual-wave shader: sky-blue base + teal second wave
+const frag = `
+  precision highp float;
+  uniform vec2  resolution;
+  uniform float time;
+
+  void main(){
+    vec2 p = (gl_FragCoord.xy * 2.0 - resolution) / min(resolution.x, resolution.y);
+
+    // Wave 1 — sky blue, slow, bright
+    float d1 = 0.08 / abs(p.y + sin((p.x + time * 0.6) * 1.1) * 0.38);
+    vec3 sky = vec3(0.28, 0.72, 1.0) * d1;
+
+    // Wave 2 — teal, faster, offset
+    float d2 = 0.06 / abs(p.y + sin((p.x * 0.8 + time * 0.9 + 1.4) * 1.4) * 0.28);
+    vec3 teal = vec3(0.12, 0.88, 0.78) * d2;
+
+    // Wave 3 — cyan accent
+    float d3 = 0.04 / abs(p.y + sin((p.x * 1.2 - time * 0.4 + 3.0) * 0.9) * 0.22);
+    vec3 cyn = vec3(0.18, 0.92, 1.0) * d3;
+
+    // Wave 4 — deep teal low wave
+    float d4 = 0.03 / abs(p.y * 1.4 + sin((p.x * 0.6 + time * 0.3 + 5.0) * 0.7) * 0.18);
+    vec3 deep = vec3(0.05, 0.55, 0.60) * d4;
+
+    // Chromatic aberration
+    float ab = length(p) * 0.05;
+    float rr = 0.06 / abs(p.y + sin((p.x*(1.0+ab) + time*0.6)*1.1)*0.38);
+    float bb = 0.06 / abs(p.y + sin((p.x*(1.0-ab) + time*0.6)*1.1)*0.38);
+
+    vec3 col = sky + teal + cyn + deep;
+    col.r += rr * 0.12;
+    col.b += bb * 0.22;
+
+    // Soft vignette — less aggressive
+    float vig = 1.0 - smoothstep(0.6, 1.6, length(p));
+    col *= vig;
+
+    // Brightness boost
+    col = col * 1.3;
+
+    gl_FragColor = vec4(col, 1.0);
+  }
+`
+
+const uniforms = {
+  resolution: { value: [window.innerWidth, window.innerHeight] },
+  time:       { value: 0.0 },
+}
+
+const geo = new THREE.BufferGeometry()
+geo.setAttribute('position', new THREE.BufferAttribute(
+  new Float32Array([-1,-1,0, 1,-1,0, -1,1,0, 1,-1,0, -1,1,0, 1,1,0]), 3
+))
+
+scene.add(new THREE.Mesh(geo, new THREE.RawShaderMaterial({
+  vertexShader: vert, fragmentShader: frag, uniforms, side: THREE.DoubleSide
+})))
+
+const resize = () => {
+  const w = window.innerWidth, h = window.innerHeight
+  renderer.setSize(w, h, false)
+  uniforms.resolution.value = [w, h]
+}
+resize()
+window.addEventListener('resize', resize)
+
+;(function loop(){
+  uniforms.time.value += 0.007
+  renderer.render(scene, camera)
+  requestAnimationFrame(loop)
+})()
+</script>
+</body>
+</html>

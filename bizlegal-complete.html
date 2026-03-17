@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BizLegal AI — Legal First Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Gloock:ital@0;1&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,600&family=Geist+Mono:wght@300;400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#04060e; --surface:#07091a; --card:#080c1c;
+  --border:#112240; --border2:#1a3050;
+  --sky:#7dd3fc; --cyan:#67e8f9; --teal:#5eead4; --indigo:#a5b4fc;
+  --white:#ffffff; --text:#cce0ff; --muted:#8aaac8; --dim:#3a5570;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Geist Mono',monospace;min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+#gl{position:fixed;inset:0;z-index:0;opacity:0.82}
+.veil{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse 90% 55% at 50% 0%,rgba(4,6,14,0) 0%,rgba(4,6,14,0.65) 80%),linear-gradient(to bottom,rgba(4,6,14,0) 0%,rgba(4,6,14,0.55) 100%)}
+.site{position:relative;z-index:10}
+
+/* ─── PAGES ─── */
+.page{display:none}
+.page.active{display:block}
+
+/* ─── NAV ─── */
+nav{position:sticky;top:0;z-index:200;background:rgba(4,6,14,0.75);backdrop-filter:blur(24px);border-bottom:1px solid rgba(125,211,252,0.08)}
+.nav-wrap{max-width:1200px;margin:0 auto;padding:0 32px;height:68px;display:flex;align-items:center;gap:32px}
+.nav-logo{font-family:'Gloock',serif;font-size:20px;color:var(--white);flex-shrink:0;cursor:pointer}
+.nav-logo em{color:var(--sky);font-style:italic}
+.nav-menu{display:flex;gap:2px;flex:1}
+.nav-item{position:relative;padding:8px 13px;border-radius:6px;font-size:13px;color:var(--muted);cursor:pointer;transition:all 0.2s;white-space:nowrap}
+.nav-item:hover,.nav-item.active{color:var(--white);background:rgba(125,211,252,0.06)}
+.nav-item .chev{font-size:9px;margin-left:3px;opacity:0.4}
+.mega,.dropdown{position:absolute;top:calc(100% + 8px);left:0;background:rgba(6,8,20,0.98);backdrop-filter:blur(24px);border:1px solid #1a3050;border-radius:14px;display:none;box-shadow:0 20px 60px rgba(0,0,0,0.7);animation:fd 0.18s ease;z-index:100}
+@keyframes fd{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+.nav-item:hover .mega,.nav-item:hover .dropdown{display:flex}
+.dropdown{flex-direction:column;padding:8px;min-width:200px}
+.mega{padding:28px;gap:28px;min-width:560px}
+.mega-col{}
+.mc-title{font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--sky);margin-bottom:14px;font-weight:700}
+.ml{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:7px;font-size:12px;color:var(--muted);transition:all 0.15s;margin-bottom:2px}
+.ml:hover{background:rgba(125,211,252,0.07);color:var(--white)}
+.mi{width:26px;height:26px;border-radius:6px;background:rgba(125,211,252,0.07);border:1px solid #112240;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.dl{display:block;padding:9px 14px;border-radius:6px;font-size:12px;color:var(--muted);transition:all 0.15s}
+.dl:hover{background:rgba(125,211,252,0.06);color:var(--white)}
+.nav-right{display:flex;align-items:center;gap:10px;margin-left:auto}
+.btn-ghost{padding:8px 18px;border-radius:7px;font-size:12px;border:1px solid #1a3050;color:var(--muted);transition:all 0.2s;font-family:'Geist Mono',monospace;font-weight:600;cursor:pointer;background:transparent}
+.btn-ghost:hover{border-color:rgba(125,211,252,0.4);color:var(--sky)}
+.btn-primary{padding:9px 20px;border-radius:7px;font-size:12px;background:rgba(125,211,252,0.1);border:1px solid rgba(125,211,252,0.45);color:var(--sky);font-family:'Geist Mono',monospace;font-weight:700;letter-spacing:0.05em;transition:all 0.2s;cursor:pointer;box-shadow:0 0 20px rgba(125,211,252,0.07)}
+.btn-primary:hover{background:rgba(125,211,252,0.2);border-color:rgba(125,211,252,0.75);color:var(--white);box-shadow:0 0 30px rgba(125,211,252,0.2)}
+
+/* ─── STICKY BAR ─── */
+.sticky-bar{position:fixed;bottom:0;left:0;right:0;z-index:300;background:rgba(4,6,14,0.94);backdrop-filter:blur(20px);border-top:1px solid rgba(125,211,252,0.14);padding:13px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;transform:translateY(100%);transition:transform 0.4s cubic-bezier(0.16,1,0.3,1)}
+.sticky-bar.show{transform:translateY(0)}
+.sb-text{font-size:14px;color:var(--text)}
+.sb-text strong{color:var(--sky)}
+.sb-actions{display:flex;gap:10px;align-items:center;flex-shrink:0}
+.sb-close{background:none;border:none;color:var(--dim);cursor:pointer;font-size:20px;padding:2px 8px}
+.sb-close:hover{color:var(--muted)}
+
+/* ─── EXIT POPUP ─── */
+.exit-ov{position:fixed;inset:0;z-index:500;background:rgba(4,6,14,0.88);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.3s}
+.exit-ov.show{opacity:1;pointer-events:all}
+.exit-box{background:rgba(7,9,26,0.99);border:1px solid rgba(125,211,252,0.2);border-radius:20px;padding:48px;max-width:480px;width:90%;text-align:center;position:relative;box-shadow:0 0 80px rgba(125,211,252,0.12)}
+.exit-x{position:absolute;top:16px;right:20px;background:none;border:none;color:var(--dim);cursor:pointer;font-size:22px}
+.exit-x:hover{color:var(--muted)}
+.exit-badge{display:inline-block;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--teal);border:1px solid rgba(94,234,212,0.25);background:rgba(94,234,212,0.06);padding:4px 14px;border-radius:100px;margin-bottom:18px}
+.exit-box h3{font-family:'Gloock',serif;font-size:30px;color:var(--white);margin-bottom:12px;line-height:1.15}
+.exit-box h3 em{color:var(--sky);font-style:italic}
+.exit-box p{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:26px}
+.exit-dismiss{font-size:12px;color:var(--dim);cursor:pointer;margin-top:10px;display:block}
+.exit-dismiss:hover{color:var(--muted)}
+
+/* ─── SHARED ─── */
+.container{max-width:1200px;margin:0 auto;padding:0 40px}
+.section{padding:96px 0;border-top:1px solid rgba(125,211,252,0.05)}
+.eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.eline{width:32px;height:1px;background:rgba(125,211,252,0.3)}
+.elabel{font-size:12px;letter-spacing:0.25em;text-transform:uppercase;color:var(--muted)}
+h2.sh{font-family:'Gloock',serif;font-size:clamp(34px,4.5vw,56px);line-height:1.1;letter-spacing:-0.01em;color:var(--white);margin-bottom:16px}
+h2.sh em{color:var(--sky);font-style:italic}
+.sdesc{font-size:16px;color:var(--muted);line-height:1.75;max-width:560px}
+@keyframes up{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(94,234,212,0.5)}50%{box-shadow:0 0 0 8px rgba(94,234,212,0)}}
+
+/* ─── HERO ─── */
+.hero{min-height:92vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 32px 72px}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:7px 20px;border-radius:100px;border:1px solid rgba(125,211,252,0.22);background:rgba(125,211,252,0.05);backdrop-filter:blur(8px);font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--sky);margin-bottom:32px;animation:up 0.6s ease both}
+.bdot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 8px var(--teal);animation:pulse 2s infinite}
+h1.hero-h{font-family:'Gloock',serif;font-size:clamp(58px,9vw,118px);line-height:1.0;letter-spacing:-0.02em;margin-bottom:22px;animation:up 0.6s 0.08s ease both}
+h1.hero-h .hw{color:var(--white)}
+h1.hero-h .hs{color:var(--sky);font-style:italic;text-shadow:0 0 60px rgba(125,211,252,0.5)}
+h1.hero-h .ht{color:var(--teal);text-shadow:0 0 50px rgba(94,234,212,0.4)}
+.hero-sub{max-width:600px;font-size:18px;color:var(--muted);line-height:1.75;margin-bottom:40px;animation:up 0.6s 0.14s ease both}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-bottom:48px;animation:up 0.6s 0.2s ease both}
+.btn-hero{padding:15px 34px;border-radius:8px;font-size:14px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;font-family:'Geist Mono',monospace;transition:all 0.25s ease;cursor:pointer;position:relative;overflow:hidden}
+.btn-hero-p{background:rgba(125,211,252,0.11);border:1px solid rgba(125,211,252,0.5);color:var(--sky);box-shadow:0 0 30px rgba(125,211,252,0.08),inset 0 1px 0 rgba(224,242,254,0.12)}
+.btn-hero-p:hover{background:rgba(125,211,252,0.2);border-color:rgba(125,211,252,0.8);color:var(--white);box-shadow:0 0 50px rgba(125,211,252,0.22);transform:translateY(-1px)}
+.btn-hero-g{background:transparent;border:1px solid #1a3050;color:var(--muted)}
+.btn-hero-g:hover{border-color:rgba(125,211,252,0.3);color:var(--sky)}
+
+/* ─── PRODUCT TABS ─── */
+.hero-tabs{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:52px;animation:up 0.6s 0.26s ease both}
+.htab{display:flex;flex-direction:column;align-items:center;gap:7px;padding:16px 20px;border-radius:12px;border:1px solid #112240;background:rgba(4,6,14,0.6);font-size:13px;color:var(--muted);cursor:pointer;transition:all 0.2s;min-width:80px;backdrop-filter:blur(12px)}
+.htab .hi{font-size:22px}
+.htab:hover,.htab.act{border-color:rgba(125,211,252,0.3);background:rgba(125,211,252,0.06);color:var(--sky)}
+.htab.act{box-shadow:0 0 20px rgba(125,211,252,0.1)}
+
+/* ─── SOCIAL PROOF ─── */
+.sp-row{display:flex;align-items:center;justify-content:center;gap:24px;flex-wrap:wrap;margin-bottom:16px;animation:up 0.6s 0.32s ease both}
+.sp-counter{display:inline-flex;align-items:center;gap:10px;padding:7px 18px;border-radius:100px;border:1px solid rgba(94,234,212,0.2);background:rgba(94,234,212,0.05);font-size:13px;color:var(--teal)}
+.sp-avs{display:flex}
+.sp-av{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--sky),var(--teal));border:2px solid var(--bg);margin-left:-7px;font-size:9px;color:#000;display:flex;align-items:center;justify-content:center;font-weight:700}
+.sp-av:first-child{margin-left:0}
+.sp-logos{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:36px;animation:up 0.6s 0.38s ease both}
+.sp-logo{font-family:'Gloock',serif;font-size:17px;color:rgba(255,255,255,0.1);letter-spacing:0.04em;transition:color 0.2s}
+.sp-logo:hover{color:rgba(255,255,255,0.28)}
+.trust-badges{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:18px;animation:up 0.6s 0.44s ease both}
+.tbadge{display:flex;align-items:center;gap:6px;padding:5px 13px;border-radius:100px;border:1px solid rgba(125,211,252,0.1);background:rgba(125,211,252,0.03);font-size:11px;color:var(--muted)}
+
+/* ─── STATS ─── */
+.stats-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(125,211,252,0.08);border:1px solid rgba(125,211,252,0.08);border-radius:16px;overflow:hidden}
+.stat-cell{background:rgba(4,6,14,0.75);padding:28px;text-align:center}
+.stat-val{font-family:'Gloock',serif;font-size:44px;color:var(--white);line-height:1;margin-bottom:6px;text-shadow:0 0 30px rgba(125,211,252,0.2)}
+.stat-lbl{font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted)}
+
+/* ─── FEATURE SECTIONS ─── */
+.feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
+.feat-grid.rev{direction:rtl}.feat-grid.rev>*{direction:ltr}
+.feat-steps{display:flex;flex-direction:column;gap:12px;margin-top:28px}
+.fstep{display:flex;align-items:flex-start;gap:14px;padding:14px 16px;border-radius:10px;border:1px solid #112240;background:rgba(4,6,14,0.6);transition:border-color 0.2s}
+.fstep:hover{border-color:rgba(125,211,252,0.2)}
+.fn{width:26px;height:26px;border-radius:6px;flex-shrink:0;background:rgba(125,211,252,0.08);border:1px solid rgba(125,211,252,0.2);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--sky);font-weight:700}
+.fb h4{font-size:14px;color:var(--white);margin-bottom:3px}
+.fb p{font-size:12px;color:var(--muted);line-height:1.55}
+.feat-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.ftag{padding:5px 12px;border-radius:100px;border:1px solid #112240;font-size:11px;color:var(--muted);display:flex;align-items:center;gap:5px}
+.ftag .dot{width:5px;height:5px;border-radius:50%;background:var(--teal)}
+.feat-vis{border-radius:16px;overflow:hidden;border:1px solid #1a3050;background:var(--card);padding:28px;position:relative;min-height:300px}
+.feat-vis::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(125,211,252,0.05) 0%,transparent 60%)}
+.mock-win{background:rgba(4,6,14,0.85);border-radius:10px;border:1px solid #112240;overflow:hidden}
+.mock-bar{height:34px;background:rgba(7,9,26,0.9);border-bottom:1px solid #112240;display:flex;align-items:center;gap:6px;padding:0 14px}
+.mdot{width:8px;height:8px;border-radius:50%}
+.mock-body{padding:18px}
+.mock-row{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:6px;border:1px solid #112240;margin-bottom:7px;font-size:11px;color:var(--muted)}
+.mock-row .tag{font-size:9px;padding:2px 7px;border-radius:100px;border:1px solid;margin-left:auto}
+.tg-sky{color:var(--sky);border-color:rgba(125,211,252,0.3);background:rgba(125,211,252,0.07)}
+.tg-teal{color:var(--teal);border-color:rgba(94,234,212,0.3);background:rgba(94,234,212,0.07)}
+.tg-ind{color:var(--indigo);border-color:rgba(165,180,252,0.3);background:rgba(165,180,252,0.07)}
+.tg-warn{color:#fbbf24;border-color:rgba(251,191,36,0.3);background:rgba(251,191,36,0.07)}
+.mock-cta{margin-top:14px;padding:10px 14px;border-radius:7px;font-size:11px;text-align:center;border:1px solid}
+
+/* ─── PRODUCTS ─── */
+.prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.pcard{border-radius:16px;padding:30px;border:1px solid #112240;background:rgba(7,9,26,0.7);backdrop-filter:blur(20px);transition:all 0.3s;position:relative;overflow:hidden}
+.pcard::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,rgba(125,211,252,0.12),transparent)}
+.pcard:hover{border-color:rgba(125,211,252,0.22);transform:translateY(-3px)}
+.ptag{display:inline-block;font-size:9px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;padding:3px 10px;border-radius:100px;border:1px solid;margin-bottom:16px}
+.pt-sky{color:var(--sky);border-color:rgba(125,211,252,0.35);background:rgba(125,211,252,0.07)}
+.pt-ind{color:var(--indigo);border-color:rgba(165,180,252,0.35);background:rgba(165,180,252,0.07)}
+.pt-teal{color:var(--teal);border-color:rgba(94,234,212,0.35);background:rgba(94,234,212,0.07)}
+.pname{font-family:'Gloock',serif;font-size:30px;color:var(--white);margin-bottom:10px}
+.pdesc{font-size:14px;color:var(--muted);line-height:1.75;margin-bottom:22px}
+.pfoot{display:flex;align-items:center;justify-content:space-between}
+.pprice{font-size:12px;color:var(--dim)}
+.pcta{font-size:13px;font-weight:600;letter-spacing:0.04em;transition:color 0.2s}
+.pc-sky{color:var(--sky)}.pc-sky:hover{color:var(--white)}
+.pc-ind{color:var(--indigo)}.pc-ind:hover{color:var(--white)}
+.pc-teal{color:var(--teal)}.pc-teal:hover{color:var(--white)}
+
+/* ─── WITH/WITHOUT ─── */
+.ww-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.ww-card{border-radius:14px;padding:30px;border:1px solid #112240}
+.ww-after{border-color:rgba(125,211,252,0.18);background:rgba(125,211,252,0.02)}
+.ww-title{font-family:'Gloock',serif;font-size:20px;margin-bottom:18px}
+.ww-before .ww-title{color:rgba(255,255,255,0.25)}
+.ww-after .ww-title{color:var(--sky)}
+.ww-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(125,211,252,0.04);font-size:13px}
+.ww-item:last-child{border-bottom:none}
+.ww-before .ww-item{color:var(--muted)}
+.ww-after .ww-item{color:var(--text)}
+.ico-no{color:#f87171;font-size:14px}.ico-yes{color:var(--teal);font-size:14px}
+
+/* ─── INDUSTRIES ─── */
+.ind-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.icard{border-radius:14px;padding:28px;border:1px solid #112240;background:rgba(7,9,26,0.6);transition:all 0.25s;cursor:pointer;position:relative;overflow:hidden}
+.icard::after{content:'';position:absolute;inset:0;border-radius:14px;background:radial-gradient(ellipse at 50% 100%,rgba(125,211,252,0.06) 0%,transparent 60%);opacity:0;transition:opacity 0.3s}
+.icard:hover{border-color:rgba(125,211,252,0.2);transform:translateY(-2px)}.icard:hover::after{opacity:1}
+.iicon{font-size:26px;margin-bottom:12px}
+.iname{font-family:'Gloock',serif;font-size:18px;color:var(--white);margin-bottom:8px}
+.idesc{font-size:12px;color:var(--muted);line-height:1.65}
+.ilink{font-size:11px;color:var(--sky);margin-top:12px;display:block;letter-spacing:0.04em}
+
+/* ─── TESTIMONIALS ─── */
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.tcard{border-radius:14px;padding:28px;border:1px solid #112240;background:rgba(7,9,26,0.6)}
+.tquote{font-size:13px;color:var(--muted);line-height:1.75;margin-bottom:18px;font-style:italic}
+.tquote em{color:var(--sky);font-style:normal}
+.tauthor{display:flex;align-items:center;gap:10px}
+.tav{width:36px;height:36px;border-radius:50%;background:rgba(125,211,252,0.1);border:1px solid rgba(125,211,252,0.2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--sky);font-family:'Gloock',serif}
+.tname{font-size:13px;color:var(--white);font-weight:600}.trole{font-size:11px;color:var(--muted)}
+
+/* ─── COMPARE TABLE ─── */
+.cmp-wrap{border:1px solid #1a3050;border-radius:16px;overflow:hidden;background:rgba(7,9,26,0.6);backdrop-filter:blur(16px)}
+.cmp-head{display:grid;grid-template-columns:1fr 1fr 1fr;background:rgba(4,6,14,0.8);border-bottom:1px solid #112240}
+.ch{padding:18px 24px;font-size:12px;font-weight:700;letter-spacing:0.08em}
+.ch.hl{color:var(--sky);text-align:center}
+.ch.dim{color:var(--muted);text-align:center}
+.cmp-row{display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid rgba(125,211,252,0.04)}
+.cmp-row:last-child{border-bottom:none}
+.cr{padding:14px 24px;font-size:13px;color:var(--muted)}
+.cr:first-child{color:var(--text)}
+.cr.c{text-align:center}
+.cyes{color:var(--teal);font-size:15px}.cno{color:var(--dim)}
+
+/* ─── CTA BANNER ─── */
+.cta-banner{border-radius:20px;padding:68px 56px;background:rgba(7,9,26,0.8);border:1px solid rgba(125,211,252,0.14);text-align:center;position:relative;overflow:hidden}
+.cta-banner::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:600px;height:280px;border-radius:50%;background:radial-gradient(ellipse,rgba(125,211,252,0.07) 0%,transparent 70%)}
+.cta-banner h2{font-family:'Gloock',serif;font-size:clamp(26px,3.5vw,46px);color:var(--white);margin-bottom:12px;position:relative}
+.cta-banner h2 em{color:var(--sky);font-style:italic}
+.cta-banner p{font-size:15px;color:var(--muted);margin-bottom:32px;position:relative}
+.cta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;position:relative}
+
+/* ─── FOOTER ─── */
+footer{background:rgba(4,6,14,0.92);backdrop-filter:blur(20px);border-top:1px solid rgba(125,211,252,0.06);padding:60px 0 28px}
+.foot-top{display:grid;grid-template-columns:220px 1fr;gap:56px;margin-bottom:48px}
+.flogo{font-family:'Gloock',serif;font-size:20px;color:var(--white);margin-bottom:12px}
+.flogo em{color:var(--sky);font-style:italic}
+.foot-brand p{font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:18px}
+.foot-cols{display:grid;grid-template-columns:repeat(5,1fr);gap:20px}
+.fcol-title{font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--sky);margin-bottom:14px;font-weight:700}
+.fcol-a{display:block;font-size:12px;color:var(--muted);padding:3px 0;transition:color 0.2s;letter-spacing:0.02em;cursor:pointer}
+.fcol-a:hover{color:var(--white)}
+.foot-bottom{border-top:1px solid rgba(125,211,252,0.05);padding-top:22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.foot-copy{font-size:11px;color:var(--dim);letter-spacing:0.06em}
+.foot-legal{display:flex;gap:18px}
+.foot-legal a{font-size:11px;color:var(--dim);transition:color 0.2s;cursor:pointer}
+.foot-legal a:hover{color:var(--muted)}
+
+/* ─── INNER PAGES ─── */
+.inner-page{padding:80px 0 100px;min-height:80vh}
+.inner-page h1{font-family:'Gloock',serif;font-size:clamp(36px,5vw,64px);color:var(--white);margin-bottom:16px;letter-spacing:-0.01em}
+.inner-page h1 em{color:var(--sky);font-style:italic}
+.inner-page .lede{font-size:17px;color:var(--muted);line-height:1.75;max-width:640px;margin-bottom:48px}
+.inner-page h2{font-family:'Gloock',serif;font-size:24px;color:var(--white);margin:40px 0 12px}
+.inner-page h3{font-size:16px;color:var(--sky);margin:28px 0 8px;letter-spacing:0.04em}
+.inner-page p{font-size:14px;color:var(--muted);line-height:1.8;margin-bottom:16px}
+.inner-page ul{list-style:none;margin-bottom:16px}
+.inner-page ul li{font-size:14px;color:var(--muted);line-height:1.8;padding:4px 0 4px 18px;position:relative}
+.inner-page ul li::before{content:'→';position:absolute;left:0;color:var(--teal);font-size:12px}
+
+/* ─── FAQ ─── */
+.faq-item{border-bottom:1px solid rgba(125,211,252,0.07);padding:0}
+.faq-q{width:100%;background:none;border:none;text-align:left;padding:20px 0;font-family:'Geist Mono',monospace;font-size:14px;color:var(--text);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px}
+.faq-q:hover{color:var(--sky)}
+.faq-icon{font-size:18px;color:var(--muted);flex-shrink:0;transition:transform 0.2s}
+.faq-item.open .faq-icon{transform:rotate(45deg);color:var(--sky)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height 0.3s ease,padding 0.3s}
+.faq-item.open .faq-a{max-height:400px;padding-bottom:20px}
+.faq-a p{font-size:14px;color:var(--muted);line-height:1.8}
+
+/* ─── PRICING CARDS ─── */
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:48px}
+.price-card{border-radius:16px;padding:32px;border:1px solid #112240;background:rgba(7,9,26,0.7);position:relative}
+.price-card.featured{border-color:rgba(125,211,252,0.35);background:rgba(125,211,252,0.04)}
+.price-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--sky);color:#000;font-size:10px;font-weight:700;padding:3px 14px;border-radius:100px;letter-spacing:0.12em;white-space:nowrap}
+.price-name{font-family:'Gloock',serif;font-size:22px;color:var(--white);margin-bottom:8px}
+.price-amount{font-family:'Gloock',serif;font-size:48px;color:var(--white);line-height:1;margin-bottom:4px}
+.price-amount span{font-size:18px;color:var(--muted);font-family:'Geist Mono',monospace}
+.price-period{font-size:12px;color:var(--muted);margin-bottom:24px}
+.price-features{list-style:none;margin-bottom:28px}
+.price-features li{font-size:13px;color:var(--muted);padding:7px 0;border-bottom:1px solid rgba(125,211,252,0.05);display:flex;align-items:center;gap:8px}
+.price-features li:last-child{border-bottom:none}
+.pf-yes{color:var(--teal)}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:960px){.feat-grid,.prod-grid,.testi-grid,.ind-grid,.ww-grid,.stats-strip,.pricing-grid{grid-template-columns:1fr 1fr}.foot-cols{grid-template-columns:repeat(2,1fr)}.foot-top{grid-template-columns:1fr}.nav-menu{display:none}.sb-text{display:none}}
+@media(max-width:620px){.prod-grid,.ind-grid,.ww-grid,.stats-strip,.testi-grid,.pricing-grid{grid-template-columns:1fr}.cmp-head,.cmp-row{grid-template-columns:1fr 1fr}.ch:nth-child(3),.cr:nth-child(3){display:none}h1.hero-h{font-size:52px}}
+</style>
+</head>
+<body>
+<canvas id="gl"></canvas>
+<div class="veil"></div>
+<div class="site">
+
+<!-- STICKY BAR -->
+<div class="sticky-bar" id="sBar">
+  <div class="sb-text">⚡ <strong>500+ lawyers</strong> use BizLegal AI — Lawyer-drafted templates from $49</div>
+  <div class="sb-actions">
+    <button class="btn-primary" onclick="goTo('docstack')">Get Templates →</button>
+    <button class="btn-ghost" onclick="goTo('brai')">Free Compliance Scan</button>
+    <button class="sb-close" onclick="document.getElementById('sBar').style.display='none'">×</button>
+  </div>
+</div>
+
+<!-- EXIT POPUP -->
+<div class="exit-ov" id="exitOv">
+  <div class="exit-box">
+    <button class="exit-x" onclick="closeExit()">×</button>
+    <div class="exit-badge" id="exit-badge">Before you go</div>
+    <h3 id="exit-h3">Get the JV Agreement <em>checklist free</em></h3>
+    <p id="exit-p">The framework behind $10M+ deals in UAE, US, and EU. Enter your email and we'll send it instantly.</p>
+    <div style="display:flex;gap:8px;margin-bottom:12px">
+      <input type="email" id="exitEmail" placeholder="your@email.com" style="flex:1;padding:12px 14px;border-radius:7px;border:1px solid #1a3050;background:rgba(4,6,14,0.8);color:var(--white);font-size:13px;font-family:'Geist Mono',monospace;outline:none">
+      <button class="btn-hero btn-hero-p" id="exit-send-btn" style="padding:12px 20px;font-size:13px;white-space:nowrap" onclick="submitExitEmail()">Get Free →</button>
+    </div>
+    <div id="exitThanks" style="display:none;padding:10px;background:rgba(94,234,212,0.07);border:1px solid rgba(94,234,212,0.2);border-radius:7px;font-size:12px;color:var(--teal);text-align:center;margin-bottom:12px">✓ Sent! Check your inbox.</div>
+    <button class="btn-hero btn-hero-g" style="width:100%" onclick="showPage('brai');closeExit()" id="exit-scan-btn">Or run a free compliance scan</button>
+    <div class="exit-dismiss" onclick="closeExit()" id="exit-dismiss">No thanks, I prefer paying full lawyer rates</div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-wrap">
+    <div class="nav-logo" onclick="showPage('home')">BizLegal<em>AI</em></div>
+    <div class="nav-menu">
+      <div class="nav-item">Products <span class="chev">▾</span>
+        <div class="mega">
+          <div class="mega-col">
+            <div class="mc-title">Document Studio</div>
+            <div class="ml" onclick="showPage('docstack')"><div class="mi">📄</div>DocStack Templates</div>
+            <div class="ml" onclick="showPage('features')"><div class="mi">✍️</div>eSign & CLM</div>
+            <div class="ml" onclick="showPage('features')"><div class="mi">📁</div>Contract Files</div>
+          </div>
+          <div class="mega-col">
+            <div class="mc-title">Compliance Studio</div>
+            <div class="ml" onclick="showPage('brai')"><div class="mi">⚡</div>BRAI Scanner</div>
+            <div class="ml" onclick="showPage('tracr')"><div class="mi">🔍</div>TRACR Forensics</div>
+            <div class="ml" onclick="showPage('features')"><div class="mi">🌍</div>Multi-Jurisdiction</div>
+          </div>
+          <div class="mega-col">
+            <div class="mc-title">Access</div>
+            <div class="ml" onclick="showPage('guides')"><div class="mi">📚</div>Free Guides</div>
+            <div class="ml" onclick="showPage('pricing')"><div class="mi">💎</div>Pricing</div>
+            <div class="ml" onclick="showPage('contact')"><div class="mi">🚀</div>Contact Us</div>
+          </div>
+        </div>
+      </div>
+      <div class="nav-item">Solutions <span class="chev">▾</span>
+        <div class="dropdown">
+          <div class="dl" onclick="showPage('solutions')">🏗️ Real Estate</div>
+          <div class="dl" onclick="showPage('solutions')">⛓️ Web3 / Crypto</div>
+          <div class="dl" onclick="showPage('solutions')">⚖️ Law Firms</div>
+          <div class="dl" onclick="showPage('solutions')">🌐 Cross-Border</div>
+          <div class="dl" onclick="showPage('solutions')">🏦 Financial Services</div>
+        </div>
+      </div>
+      <div class="nav-item">Resources <span class="chev">▾</span>
+        <div class="dropdown">
+          <div class="dl" onclick="showPage('guides')">📚 Free Legal Guides</div>
+          <div class="dl" onclick="showPage('faq')">❓ FAQ</div>
+          <div class="dl" onclick="showPage('home')">📰 Blog</div>
+        </div>
+      </div>
+      <div class="nav-item">Company <span class="chev">▾</span>
+        <div class="dropdown">
+          <div class="dl" onclick="showPage('about')">About Us</div>
+          <div class="dl" onclick="showPage('contact')">Contact Us</div>
+          <div class="dl" onclick="showPage('home')">Partners</div>
+        </div>
+      </div>
+      <div class="nav-item" onclick="showPage('pricing')">Pricing</div>
+    </div>
+    <div class="nav-right">
+      <button class="btn-ghost" onclick="showPage('home')">Log In</button>
+      <button class="btn-primary" onclick="showPage('docstack')">Get Templates</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ════════════════════════════════════════
+     PAGE: HOME
+════════════════════════════════════════ -->
+<div class="page active" id="p-home">
+
+<!-- LANG SWITCHER -->
+<div style="position:fixed;top:16px;right:16px;z-index:300;display:flex;gap:6px">
+  <button onclick="setLang('en')" id="btn-en" style="padding:4px 10px;border-radius:5px;font-size:11px;font-family:'Geist Mono',monospace;font-weight:700;background:rgba(125,211,252,0.15);border:1px solid rgba(125,211,252,0.4);color:var(--sky);cursor:pointer;letter-spacing:0.1em">EN</button>
+  <button onclick="setLang('pt')" id="btn-pt" style="padding:4px 10px;border-radius:5px;font-size:11px;font-family:'Geist Mono',monospace;font-weight:700;background:transparent;border:1px solid #1a3050;color:var(--muted);cursor:pointer;letter-spacing:0.1em">PT</button>
+  <button onclick="setLang('es')" id="btn-es" style="padding:4px 10px;border-radius:5px;font-size:11px;font-family:'Geist Mono',monospace;font-weight:700;background:transparent;border:1px solid #1a3050;color:var(--muted);cursor:pointer;letter-spacing:0.1em">ES</button>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge"><div class="bdot"></div><span data-en="Legal First · AI-Powered · Multi-Jurisdiction" data-pt="Legal First · Powered por IA · Multi-Jurisdição" data-es="Legal First · Impulsado por IA · Multi-Jurisdicción">Legal First · AI-Powered · Multi-Jurisdiction</span></div>
+
+  <h1 class="hero-h" style="color:var(--white)">
+    <span data-en="Generate Lawyer-Grade" data-pt="Gere Contratos de" data-es="Genera Contratos de">Generate Lawyer-Grade</span>
+    <span data-en="Contracts in" data-pt="Qualidade Jurídica em" data-es="Calidad Legal en">Contracts in</span>
+    <span data-en="60 Seconds" data-pt="60 Segundos" data-es="60 Segundos">60 Seconds</span>
+  </h1>
+
+  <p class="hero-sub" data-en="AI legal templates for real estate, Web3 and global deals. Download DOCX + PDF instantly. Built on 20 years of legal practice." data-pt="Templates jurídicos com IA para imóveis, Web3 e negócios globais. Baixe DOCX + PDF instantaneamente. Baseado em 20 anos de prática jurídica." data-es="Plantillas legales con IA para bienes raíces, Web3 y negocios globales. Descarga DOCX + PDF al instante. Basado en 20 años de práctica legal.">
+    AI legal templates for real estate, Web3 and global deals. Download DOCX + PDF instantly. Built on 20 years of legal practice.
+  </p>
+
+  <div class="hero-ctas">
+    <button class="btn-hero btn-hero-p" onclick="showPage('docstack')">
+      <span data-en="Generate Contract — $49" data-pt="Gerar Contrato — $49" data-es="Generar Contrato — $49">Generate Contract — $49</span>
+    </button>
+    <button class="btn-hero btn-hero-g" onclick="document.getElementById('preview-section').scrollIntoView({behavior:'smooth'})">
+      <span data-en="Preview Template" data-pt="Pré-visualizar Template" data-es="Vista Previa de Plantilla">Preview Template</span>
+    </button>
+  </div>
+
+  <!-- CREDIBILITY ROW -->
+  <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:20px;margin-bottom:48px;font-size:12px;color:var(--muted);animation:up 0.6s 0.28s ease both">
+    <span>✓ <span data-en="Trusted in 11+ jurisdictions" data-pt="Confiável em 11+ jurisdições" data-es="Confiable en 11+ jurisdicciones">Trusted in 11+ jurisdictions</span></span>
+    <span style="color:var(--border)">|</span>
+    <span>✓ <span data-en="1,200+ contracts generated" data-pt="1.200+ contratos gerados" data-es="1,200+ contratos generados">1,200+ contracts generated</span></span>
+    <span style="color:var(--border)">|</span>
+    <span>✓ <span data-en="$2M+ legal fees saved" data-pt="$2M+ em honorários economizados" data-es="$2M+ en honorarios ahorrados">$2M+ legal fees saved</span></span>
+  </div>
+
+  <!-- PRICE ANCHOR -->
+  <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:0;max-width:580px;width:100%;border:1px solid #1a3050;border-radius:14px;overflow:hidden;margin-bottom:48px;animation:up 0.6s 0.32s ease both">
+    <div style="padding:22px 24px;background:rgba(248,113,113,0.04);border-right:1px solid #1a3050">
+      <div style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:#f87171;margin-bottom:8px" data-en="Traditional lawyer" data-pt="Advogado tradicional" data-es="Abogado tradicional">Traditional lawyer</div>
+      <div style="font-family:'Gloock',serif;font-size:32px;color:rgba(255,255,255,0.4);line-height:1;margin-bottom:4px">$3–8k</div>
+      <div style="font-size:11px;color:var(--muted)" data-en="2–3 weeks turnaround" data-pt="2–3 semanas de prazo" data-es="2–3 semanas de plazo">2–3 weeks turnaround</div>
+    </div>
+    <div style="padding:22px 20px;background:rgba(4,6,14,0.8);display:flex;align-items:center;justify-content:center">
+      <div style="font-size:20px;color:var(--border)">vs</div>
+    </div>
+    <div style="padding:22px 24px;background:rgba(125,211,252,0.04);border-left:1px solid rgba(125,211,252,0.15)">
+      <div style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--teal);margin-bottom:8px">BizLegal AI</div>
+      <div style="font-family:'Gloock',serif;font-size:32px;color:var(--white);line-height:1;margin-bottom:4px">$49</div>
+      <div style="font-size:11px;color:var(--teal)" data-en="60 seconds · instant download" data-pt="60 segundos · download imediato" data-es="60 segundos · descarga inmediata">60 seconds · instant download</div>
+    </div>
+  </div>
+
+  <!-- PRODUCT TABS -->
+  <div class="hero-tabs">
+    <div class="htab act" onclick="tabClick(this)"><span class="hi">📄</span><span data-en="Templates" data-pt="Templates" data-es="Plantillas">Templates</span></div>
+    <div class="htab" onclick="tabClick(this)"><span class="hi">⚡</span>BRAI</div>
+    <div class="htab" onclick="tabClick(this)"><span class="hi">🔍</span>TRACR</div>
+    <div class="htab" onclick="tabClick(this)"><span class="hi">🌍</span><span data-en="Cross-Border" data-pt="Internacional" data-es="Internacional">Cross-Border</span></div>
+    <div class="htab" onclick="tabClick(this)"><span class="hi">📚</span><span data-en="Guides" data-pt="Guias" data-es="Guías">Guides</span></div>
+    <div class="htab" onclick="tabClick(this)"><span class="hi">✍️</span>eSign</div>
+    <div class="htab" onclick="tabClick(this)"><span class="hi">🔄</span>CLM</div>
+    <div class="htab" onclick="tabClick(this)"><span class="hi">📊</span><span data-en="Reports" data-pt="Relatórios" data-es="Informes">Reports</span></div>
+  </div>
+
+  <!-- SOCIAL PROOF — real metrics only -->
+  <div class="sp-row">
+    <div class="sp-counter">
+      <div class="sp-avs"><div class="sp-av">DK</div><div class="sp-av">SL</div><div class="sp-av">AR</div><div class="sp-av">+</div></div>
+      <span data-en="500+ lawyers & investors · 11 countries" data-pt="500+ advogados & investidores · 11 países" data-es="500+ abogados & inversores · 11 países">500+ lawyers & investors · 11 countries</span>
+    </div>
+  </div>
+
+  <div class="trust-badges">
+    <div class="tbadge">🔒 <span data-en="SSL Secured" data-pt="SSL Seguro" data-es="SSL Seguro">SSL Secured</span></div>
+    <div class="tbadge">⚖️ <span data-en="Lawyer-Drafted" data-pt="Redigido por Advogado" data-es="Redactado por Abogado">Lawyer-Drafted</span></div>
+    <div class="tbadge">⚡ <span data-en="Instant Download" data-pt="Download Imediato" data-es="Descarga Inmediata">Instant Download</span></div>
+    <div class="tbadge">✅ <span data-en="7-Day Money-Back" data-pt="7 Dias Reembolso" data-es="7 Días Reembolso">7-Day Money-Back</span></div>
+    <div class="tbadge">🌍 <span data-en="6 Jurisdictions" data-pt="6 Jurisdições" data-es="6 Jurisdicciones">6 Jurisdictions</span></div>
+  </div>
+</div>
+
+<!-- PRICE ANCHOR SECTION (full-width reinforcement) -->
+<section class="section" id="preview-section">
+  <div class="container">
+    <div class="eyebrow"><div class="eline"></div><span class="elabel" data-en="Document Preview" data-pt="Pré-visualização" data-es="Vista Previa">Document Preview</span></div>
+    <h2 class="sh" data-en="See what you get — <em>before</em> you buy" data-pt="Veja o que recebe — <em>antes</em> de comprar" data-es="Vea lo que obtiene — <em>antes</em> de comprar">See what you get — <em>before</em> you buy</h2>
+    <p class="sdesc" style="margin-bottom:40px" data-en="Every template follows institutional legal contract structure. Here's a sample output." data-pt="Cada template segue estrutura de contrato jurídico institucional. Aqui está uma amostra." data-es="Cada plantilla sigue estructura de contrato legal institucional. Aquí hay una muestra.">Every template follows institutional legal contract structure. Here's a sample output.</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start">
+      <!-- MOCK CONTRACT PREVIEW -->
+      <div style="border:1px solid #1a3050;border-radius:14px;overflow:hidden;background:rgba(7,9,26,0.8)">
+        <div style="background:rgba(4,6,14,0.9);padding:14px 20px;border-bottom:1px solid #112240;display:flex;align-items:center;gap:8px">
+          <div style="width:8px;height:8px;border-radius:50%;background:#ff5f57"></div>
+          <div style="width:8px;height:8px;border-radius:50%;background:#febc2e"></div>
+          <div style="width:8px;height:8px;border-radius:50%;background:#28c840"></div>
+          <div style="margin-left:10px;font-size:11px;color:var(--muted)">joint-venture-agreement.docx</div>
+        </div>
+        <div style="padding:28px;font-family:'IBM Plex Serif',serif">
+          <div style="font-size:15px;font-weight:600;color:var(--white);text-align:center;margin-bottom:4px">JOINT VENTURE AGREEMENT</div>
+          <div style="font-size:12px;color:var(--muted);text-align:center;margin-bottom:24px;border-bottom:1px solid #112240;padding-bottom:16px">Dated: [DATE] · Jurisdiction: [JURISDICTION]</div>
+          <div style="font-size:12px;color:var(--sky);font-weight:600;margin-bottom:6px;letter-spacing:0.08em">SECTION 1 — DEFINITIONS</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:16px">"Joint Venture" means the joint enterprise established pursuant to this Agreement between the Parties for the purpose of [PROJECT DESCRIPTION]...</div>
+          <div style="font-size:12px;color:var(--sky);font-weight:600;margin-bottom:6px;letter-spacing:0.08em">SECTION 4 — REPRESENTATIONS & WARRANTIES</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:16px">Each Party represents and warrants that: (a) it has full legal capacity and authority to enter into this Agreement; (b) this Agreement constitutes a valid and binding obligation...</div>
+          <div style="font-size:12px;color:var(--sky);font-weight:600;margin-bottom:6px;letter-spacing:0.08em">SECTION 6 — PROFIT DISTRIBUTION</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:16px">Net Profits shall be distributed between the Parties in the proportions set out in Schedule 1, subject to the maintenance of agreed Reserve Funds...</div>
+          <div style="margin-top:20px;padding:10px 14px;border-radius:7px;background:rgba(94,234,212,0.06);border:1px solid rgba(94,234,212,0.2);font-size:11px;color:var(--teal);text-align:center">
+            ⚡ Generated in 60 seconds from your deal details
+          </div>
+        </div>
+      </div>
+
+      <!-- FORMAT + CTA -->
+      <div>
+        <div style="margin-bottom:28px">
+          <div style="font-size:13px;color:var(--muted);margin-bottom:16px;letter-spacing:0.04em" data-en="Output formats:" data-pt="Formatos de saída:" data-es="Formatos de salida:">Output formats:</div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;border:1px solid #1a3050;border-radius:9px;background:rgba(7,9,26,0.6)">
+              <span style="font-size:18px">📄</span>
+              <div><div style="font-size:13px;color:var(--white);font-weight:600">DOCX</div><div style="font-size:11px;color:var(--muted)" data-en="Fully editable in Word or Google Docs" data-pt="Totalmente editável no Word ou Google Docs" data-es="Totalmente editable en Word o Google Docs">Fully editable in Word or Google Docs</div></div>
+              <span style="margin-left:auto;font-size:11px;color:var(--teal)">✓</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;border:1px solid #1a3050;border-radius:9px;background:rgba(7,9,26,0.6)">
+              <span style="font-size:18px">📋</span>
+              <div><div style="font-size:13px;color:var(--white);font-weight:600">PDF</div><div style="font-size:11px;color:var(--muted)" data-en="Formatted for signing or sharing" data-pt="Formatado para assinar ou partilhar" data-es="Formateado para firmar o compartir">Formatted for signing or sharing</div></div>
+              <span style="margin-left:auto;font-size:11px;color:var(--teal)">✓</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;border:1px solid #1a3050;border-radius:9px;background:rgba(7,9,26,0.6)">
+              <span style="font-size:18px">✏️</span>
+              <div><div style="font-size:13px;color:var(--white);font-weight:600" data-en="Editable clauses" data-pt="Cláusulas editáveis" data-es="Cláusulas editables">Editable clauses</div><div style="font-size:11px;color:var(--muted)" data-en="Inline AI clause editor" data-pt="Editor de cláusulas com IA" data-es="Editor de cláusulas con IA">Inline AI clause editor</div></div>
+              <span style="margin-left:auto;font-size:11px;color:var(--teal)">✓</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- LAWYER CREDIBILITY -->
+        <div style="padding:20px;border:1px solid rgba(125,211,252,0.15);border-radius:10px;background:rgba(125,211,252,0.03);margin-bottom:24px">
+          <div style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--sky);margin-bottom:10px" data-en="Drafted by" data-pt="Redigido por" data-es="Redactado por">Drafted by</div>
+          <div style="font-family:'Gloock',serif;font-size:17px;color:var(--white);margin-bottom:4px" data-en="20 years legal practice" data-pt="20 anos de prática jurídica" data-es="20 años de práctica legal">20 years legal practice</div>
+          <div style="font-size:12px;color:var(--muted)" data-en="$100M+ in transactions · 6 jurisdictions · LLB + LLM" data-pt="$100M+ em transações · 6 jurisdições · LLB + LLM" data-es="$100M+ en transacciones · 6 jurisdicciones · LLB + LLM">$100M+ in transactions · 6 jurisdictions · LLB + LLM</div>
+        </div>
+
+        <button class="btn-hero btn-hero-p" style="width:100%;font-size:15px" onclick="showPage('docstack')">
+          <span data-en="Generate My Contract — $49 →" data-pt="Gerar Meu Contrato — $49 →" data-es="Generar Mi Contrato — $49 →">Generate My Contract — $49 →</span>
+        </button>
+        <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:10px" data-en="Takes 90 seconds · Download instantly · 7-day money-back" data-pt="Leva 90 segundos · Download imediato · Reembolso em 7 dias" data-es="Tarda 90 segundos · Descarga inmediata · Reembolso en 7 días">Takes 90 seconds · Download instantly · 7-day money-back</div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+    <div class="stats-strip">
+      <div class="stat-cell"><div class="stat-val">8</div><div class="stat-lbl">Templates</div></div>
+      <div class="stat-cell"><div class="stat-val">6</div><div class="stat-lbl">Jurisdictions</div></div>
+      <div class="stat-cell"><div class="stat-val">$49</div><div class="stat-lbl">Starting price</div></div>
+      <div class="stat-cell"><div class="stat-val">$2k+</div><div class="stat-lbl">Saved vs lawyer</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- DOCSTACK FEATURE -->
+<section class="section">
+  <div class="container">
+    <div class="feat-grid">
+      <div>
+        <div class="eyebrow"><div class="eline"></div><span class="elabel">Document Studio</span></div>
+        <h2 class="sh">Templates that <em>do the work</em> for you</h2>
+        <p class="sdesc">Lawyer-drafted, AI-refined. Fill a short form, get signed-ready DOCX + PDF in 60 seconds.</p>
+        <div class="feat-steps">
+          <div class="fstep"><div class="fn">01</div><div class="fb"><h4>Choose Document</h4><p>8 institutional real estate templates — JV, NDA, LOI, Capital Call and more</p></div></div>
+          <div class="fstep"><div class="fn">02</div><div class="fb"><h4>Fill Deal Details</h4><p>Party names, amounts, dates — Claude handles the legal language</p></div></div>
+          <div class="fstep"><div class="fn">03</div><div class="fb"><h4>Download Instantly</h4><p>DOCX + PDF in ~60 seconds. Attorney-quality. Review before signing.</p></div></div>
+        </div>
+        <div class="feat-tags">
+          <div class="ftag"><div class="dot"></div>JV Agreement</div>
+          <div class="ftag"><div class="dot"></div>NDA</div>
+          <div class="ftag"><div class="dot"></div>LOI</div>
+          <div class="ftag"><div class="dot"></div>Capital Call</div>
+        </div>
+      </div>
+      <div class="feat-vis">
+        <div class="mock-win">
+          <div class="mock-bar"><div class="mdot" style="background:#ff5f57"></div><div class="mdot" style="background:#febc2e"></div><div class="mdot" style="background:#28c840"></div></div>
+          <div class="mock-body">
+            <div style="font-size:10px;color:var(--muted);margin-bottom:12px;letter-spacing:0.1em">DOCSTACK — SELECT TEMPLATE</div>
+            <div class="mock-row">📄 Joint Venture Agreement <span class="tag tg-teal">LIVE</span></div>
+            <div class="mock-row">📄 NDA — Real Estate <span class="tag tg-teal">LIVE</span></div>
+            <div class="mock-row">📄 LOI Commercial <span class="tag tg-teal">LIVE</span></div>
+            <div class="mock-row">📄 Capital Call Agreement <span class="tag tg-teal">LIVE</span></div>
+            <div class="mock-row">📄 LLC Operating Agreement <span class="tag tg-teal">LIVE</span></div>
+            <div class="mock-cta" style="background:rgba(125,211,252,0.07);border-color:rgba(125,211,252,0.2);color:var(--sky)">⚡ Generate DOCX + PDF in ~60 seconds</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BRAI FEATURE -->
+<section class="section">
+  <div class="container">
+    <div class="feat-grid rev">
+      <div>
+        <div class="eyebrow"><div class="eline"></div><span class="elabel">Compliance Studio</span></div>
+        <h2 class="sh">Is your project <em>compliant?</em></h2>
+        <p class="sdesc">BRAI scans your Web3 project against VARA, MiCA, SEC, and MAS in real time. Know your risks before launch.</p>
+        <div class="feat-steps">
+          <div class="fstep"><div class="fn">01</div><div class="fb"><h4>Submit Project</h4><p>Enter your token model, jurisdiction, and structure</p></div></div>
+          <div class="fstep"><div class="fn">02</div><div class="fb"><h4>AI Scans 4 Regulators</h4><p>VARA · MiCA · SEC · MAS — simultaneously in seconds</p></div></div>
+          <div class="fstep"><div class="fn">03</div><div class="fb"><h4>Get Compliance Report</h4><p>Risk flags, required actions, jurisdiction comparison</p></div></div>
+        </div>
+        <div class="feat-tags">
+          <div class="ftag"><div class="dot" style="background:var(--sky)"></div>UAE / VARA</div>
+          <div class="ftag"><div class="dot" style="background:var(--sky)"></div>EU / MiCA</div>
+          <div class="ftag"><div class="dot" style="background:var(--sky)"></div>US / SEC</div>
+          <div class="ftag"><div class="dot" style="background:var(--sky)"></div>SGP / MAS</div>
+        </div>
+      </div>
+      <div class="feat-vis">
+        <div class="mock-win">
+          <div class="mock-bar"><div class="mdot" style="background:#ff5f57"></div><div class="mdot" style="background:#febc2e"></div><div class="mdot" style="background:#28c840"></div></div>
+          <div class="mock-body">
+            <div style="font-size:10px;color:var(--muted);margin-bottom:12px;letter-spacing:0.1em">BRAI — COMPLIANCE SCAN</div>
+            <div class="mock-row">🇦🇪 VARA (UAE) <span class="tag tg-teal">✓ Compliant</span></div>
+            <div class="mock-row">🇪🇺 MiCA (EU) <span class="tag tg-ind">⚠ Review</span></div>
+            <div class="mock-row">🇺🇸 SEC (USA) <span class="tag tg-warn">✗ Action Req.</span></div>
+            <div class="mock-row">🇸🇬 MAS (SGP) <span class="tag tg-teal">✓ Compliant</span></div>
+            <div class="mock-cta" style="background:rgba(165,180,252,0.07);border-color:rgba(165,180,252,0.2);color:var(--indigo)">📊 Full Report — 12 Risk Flags Identified</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ALL PRODUCTS -->
+<section class="section" id="products">
+  <div class="container">
+    <div class="eyebrow"><div class="eline"></div><span class="elabel">Products</span></div>
+    <h2 class="sh" style="margin-bottom:36px">All-in-One <em>Legal Platform</em></h2>
+    <div class="prod-grid">
+      <div class="pcard"><span class="ptag pt-sky">LIVE</span><div class="pname">DocStack</div><p class="pdesc">8 lawyer-drafted real estate templates. JV, NDA, LOI, Capital Call. DOCX + PDF, instant download.</p><div class="pfoot"><span class="pprice">From $49</span><a class="pcta pc-sky" onclick="showPage('docstack')">Browse →</a></div></div>
+      <div class="pcard"><span class="ptag pt-ind">BETA</span><div class="pname">BRAI</div><p class="pdesc">Blockchain Regulatory Intelligence. Real-time compliance for VARA, MiCA, SEC, MAS projects.</p><div class="pfoot"><span class="pprice">Subscription</span><a class="pcta pc-ind" onclick="showPage('brai')">Free scan →</a></div></div>
+      <div class="pcard"><span class="ptag pt-teal">SOON</span><div class="pname">TRACR</div><p class="pdesc">AI forensic investigation. Wallet tracing, fraud analysis, court-ready reports for lawyers.</p><div class="pfoot"><span class="pprice">$99 / report</span><a class="pcta pc-teal" onclick="showPage('tracr')">Waitlist →</a></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- WITH / WITHOUT -->
+<section class="section">
+  <div class="container">
+    <div class="eyebrow"><div class="eline"></div><span class="elabel">Why BizLegal AI</span></div>
+    <h2 class="sh" style="margin-bottom:32px">Before vs. <em>After</em></h2>
+    <div class="ww-grid">
+      <div class="ww-card ww-before">
+        <div class="ww-title">Without BizLegal AI</div>
+        <div class="ww-item"><span class="ico-no">✕</span> $3,000–$8,000 per contract</div>
+        <div class="ww-item"><span class="ico-no">✕</span> 2–4 week turnaround</div>
+        <div class="ww-item"><span class="ico-no">✕</span> Manual compliance research</div>
+        <div class="ww-item"><span class="ico-no">✕</span> Separate tools per jurisdiction</div>
+        <div class="ww-item"><span class="ico-no">✕</span> No forensic investigation option</div>
+      </div>
+      <div class="ww-card ww-after">
+        <div class="ww-title">With BizLegal AI</div>
+        <div class="ww-item"><span class="ico-yes">✓</span> From $49 — instant download</div>
+        <div class="ww-item"><span class="ico-yes">✓</span> 60 seconds to signed-ready draft</div>
+        <div class="ww-item"><span class="ico-yes">✓</span> Auto VARA / MiCA / SEC / MAS scan</div>
+        <div class="ww-item"><span class="ico-yes">✓</span> 6 jurisdictions in one platform</div>
+        <div class="ww-item"><span class="ico-yes">✓</span> TRACR forensic reports $99</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INDUSTRIES -->
+<section class="section">
+  <div class="container">
+    <div class="eyebrow"><div class="eline"></div><span class="elabel">Who It's For</span></div>
+    <h2 class="sh" style="margin-bottom:32px">Built for <em>your industry</em></h2>
+    <div class="ind-grid">
+      <div class="icard"><div class="iicon">🏗️</div><div class="iname">Real Estate</div><p class="idesc">JV agreements, LOIs, capital call documents — US, UAE, EU and more.</p><span class="ilink" onclick="showPage('docstack')">View templates →</span></div>
+      <div class="icard"><div class="iicon">⛓️</div><div class="iname">Web3 / Crypto</div><p class="idesc">BRAI compliance for token projects, DeFi, NFT platforms across jurisdictions.</p><span class="ilink" onclick="showPage('brai')">Run free scan →</span></div>
+      <div class="icard"><div class="iicon">🏦</div><div class="iname">Financial Services</div><p class="idesc">Cross-border investment documents, fund agreements, compliance reports.</p><span class="ilink" onclick="showPage('features')">Learn more →</span></div>
+      <div class="icard"><div class="iicon">⚖️</div><div class="iname">Law Firms</div><p class="idesc">TRACR forensic reports for litigation. AI wallet tracing and fraud documentation.</p><span class="ilink" onclick="showPage('tracr')">Order report →</span></div>
+      <div class="icard"><div class="iicon">🌐</div><div class="iname">Cross-Border</div><p class="idesc">Israel–Portugal–UAE–EU multi-jurisdiction structuring. Unique expertise.</p><span class="ilink" onclick="showPage('solutions')">Learn more →</span></div>
+      <div class="icard"><div class="iicon">🏢</div><div class="iname">Enterprise</div><p class="idesc">Custom compliance bundles, white-label reports, legal workflow automation.</p><span class="ilink" onclick="showPage('contact')">Contact us →</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section">
+  <div class="container">
+    <div class="eyebrow"><div class="eline"></div><span class="elabel">Voices</span></div>
+    <h2 class="sh" style="margin-bottom:32px">Built for people <em>like you</em></h2>
+    <div class="testi-grid">
+      <div class="tcard"><p class="tquote">"The JV agreement template saved us <em>weeks</em> of back-and-forth with outside counsel. Downloaded, filled in, signed — done."</p><div class="tauthor"><div class="tav">DK</div><div><div class="tname">David K.</div><div class="trole">Real Estate Investor, Dubai</div></div></div></div>
+      <div class="tcard"><p class="tquote">"BRAI flagged our MiCA exposure before we launched. Saved us from a costly compliance mistake on the EU rollout."</p><div class="tauthor"><div class="tav">SL</div><div><div class="tname">Sofia L.</div><div class="trole">Web3 Founder, Lisbon</div></div></div></div>
+      <div class="tcard"><p class="tquote">"As a lawyer myself, I'm impressed. The drafting quality matches what I'd produce — at <em>a fraction</em> of the time."</p><div class="tauthor"><div class="tav">AR</div><div><div class="tname">Avi R.</div><div class="trole">Corporate Attorney, Tel Aviv</div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARE -->
+<section class="section">
+  <div class="container">
+    <div class="eyebrow"><div class="eline"></div><span class="elabel">Comparison</span></div>
+    <h2 class="sh" style="margin-bottom:32px">BizLegal AI vs <em>the alternatives</em></h2>
+    <div class="cmp-wrap">
+      <div class="cmp-head"><div class="ch">Feature</div><div class="ch hl">BizLegal AI</div><div class="ch dim">Generic Tools</div></div>
+      <div class="cmp-row"><div class="cr">Lawyer-drafted templates</div><div class="cr c"><span class="cyes">✓</span></div><div class="cr c"><span class="cno">✗</span></div></div>
+      <div class="cmp-row"><div class="cr">Multi-jurisdiction (6+)</div><div class="cr c"><span class="cyes">✓</span></div><div class="cr c"><span class="cno">✗</span></div></div>
+      <div class="cmp-row"><div class="cr">AI compliance scanning</div><div class="cr c"><span class="cyes">✓</span></div><div class="cr c"><span class="cno">✗</span></div></div>
+      <div class="cmp-row"><div class="cr">Crypto / Web3 regulatory</div><div class="cr c"><span class="cyes">✓</span></div><div class="cr c"><span class="cno">✗</span></div></div>
+      <div class="cmp-row"><div class="cr">Forensic investigation reports</div><div class="cr c"><span class="cyes">✓</span></div><div class="cr c"><span class="cno">✗</span></div></div>
+      <div class="cmp-row"><div class="cr">Built by a practicing lawyer</div><div class="cr c"><span class="cyes">✓</span></div><div class="cr c"><span class="cno">✗</span></div></div>
+      <div class="cmp-row"><div class="cr">Instant download — 60 seconds</div><div class="cr c"><span class="cyes">✓</span></div><div class="cr c">Partial</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<section class="section">
+  <div class="container">
+    <div class="cta-banner">
+      <h2>Ready for a <em>Legal First</em> platform?</h2>
+      <p>Get your first template today. Lawyer-drafted. AI-refined. Instant download.</p>
+      <div class="cta-btns">
+        <button class="btn-hero btn-hero-p" onclick="showPage('docstack')">Browse Templates from $49</button>
+        <button class="btn-hero btn-hero-g" onclick="showPage('brai')">Run Free Compliance Scan</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /p-home -->
+
+<!-- ════════════════════════════════════════
+     PAGE: FEATURES
+════════════════════════════════════════ -->
+<div class="page" id="p-features">
+<div class="inner-page"><div class="container">
+  <div class="eyebrow"><div class="eline"></div><span class="elabel">All Features</span></div>
+  <h1>Everything in <em>one platform</em></h1>
+  <p class="lede">Three products covering the full legal lifecycle — documents, compliance, and forensics.</p>
+  <div class="prod-grid" style="margin-bottom:60px">
+    <div class="pcard"><span class="ptag pt-sky">DOCUMENT STUDIO</span><div class="pname">DocStack</div><p class="pdesc">8 institutional real estate templates. JV, NDA, LOI, Capital Call, LLC Operating Agreement. DOCX + PDF in 60 seconds.</p><ul style="list-style:none;margin-bottom:20px"><li style="font-size:13px;color:var(--muted);padding:5px 0;border-bottom:1px solid rgba(125,211,252,0.05)">✓ AI-customized to your deal details</li><li style="font-size:13px;color:var(--muted);padding:5px 0;border-bottom:1px solid rgba(125,211,252,0.05)">✓ Inline legal editor</li><li style="font-size:13px;color:var(--muted);padding:5px 0">✓ DOCX + PDF instant download</li></ul><button class="btn-primary" onclick="showPage('docstack')">Browse templates →</button></div>
+    <div class="pcard"><span class="ptag pt-ind">COMPLIANCE STUDIO</span><div class="pname">BRAI</div><p class="pdesc">Real-time blockchain regulatory intelligence. Scan against VARA, MiCA, SEC, and MAS simultaneously.</p><ul style="list-style:none;margin-bottom:20px"><li style="font-size:13px;color:var(--muted);padding:5px 0;border-bottom:1px solid rgba(125,211,252,0.05)">✓ 4 jurisdictions per scan</li><li style="font-size:13px;color:var(--muted);padding:5px 0;border-bottom:1px solid rgba(125,211,252,0.05)">✓ Risk flag identification</li><li style="font-size:13px;color:var(--muted);padding:5px 0">✓ PDF compliance report</li></ul><button class="btn-primary" onclick="showPage('brai')">Run free scan →</button></div>
+    <div class="pcard"><span class="ptag pt-teal">FORENSIC STUDIO</span><div class="pname">TRACR</div><p class="pdesc">Pay-per-report AI forensic investigation. Wallet tracing, transaction analysis, court-ready reports.</p><ul style="list-style:none;margin-bottom:20px"><li style="font-size:13px;color:var(--muted);padding:5px 0;border-bottom:1px solid rgba(125,211,252,0.05)">✓ Blockchain wallet tracing</li><li style="font-size:13px;color:var(--muted);padding:5px 0;border-bottom:1px solid rgba(125,211,252,0.05)">✓ Fraud pattern detection</li><li style="font-size:13px;color:var(--muted);padding:5px 0">✓ Court-admissible format</li></ul><button class="btn-primary" onclick="showPage('tracr')">Join waitlist →</button></div>
+  </div>
+</div></div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE: DOCSTACK
+════════════════════════════════════════ -->
+<div class="page" id="p-docstack">
+<div class="inner-page"><div class="container">
+  <div class="eyebrow"><div class="eline"></div><span class="elabel">Document Studio</span></div>
+  <h1><em>DocStack</em> Templates</h1>
+  <p class="lede">8 institutional real estate templates. Lawyer-drafted, AI-refined. Download DOCX + PDF in 60 seconds.</p>
+  <div class="prod-grid">
+    <div class="pcard"><span class="ptag pt-sky">$49</span><div class="pname">JV Agreement</div><p class="pdesc">Joint Venture Agreement for real estate projects. Full equity split, governance, exit clauses. US, UAE, EU versions.</p><button class="btn-primary" style="width:100%">Download Now — $49 →</button></div>
+    <div class="pcard"><span class="ptag pt-sky">$49</span><div class="pname">NDA</div><p class="pdesc">Non-Disclosure Agreement for real estate investment deals. Multi-jurisdiction. GDPR-compliant version included.</p><button class="btn-primary" style="width:100%">Download Now — $49 →</button></div>
+    <div class="pcard"><span class="ptag pt-sky">$49</span><div class="pname">LOI</div><p class="pdesc">Letter of Intent for commercial real estate. Clear, enforceable, institutionally structured. UK, US, UAE.</p><button class="btn-primary" style="width:100%">Download Now — $49 →</button></div>
+    <div class="pcard"><span class="ptag pt-sky">$49</span><div class="pname">Capital Call</div><p class="pdesc">Capital Call Agreement for real estate syndication. Investor obligations, default provisions, cure periods.</p><button class="btn-primary" style="width:100%">Download Now — $49 →</button></div>
+    <div class="pcard"><span class="ptag pt-sky">$49</span><div class="pname">LLC Operating</div><p class="pdesc">LLC Operating Agreement for real estate investment entities. Member rights, profit allocation, management.</p><button class="btn-primary" style="width:100%">Download Now — $49 →</button></div>
+    <div class="pcard featured"><div class="price-badge">BEST VALUE</div><span class="ptag pt-teal">$297</span><div class="pname">Full Bundle</div><p class="pdesc">All 8 templates + PDF samples + clause library. Everything you need for institutional real estate deals.</p><button class="btn-hero btn-hero-p" style="width:100%">Get Full Bundle — $297 →</button></div>
+  </div>
+  <div style="margin-top:40px;padding:24px;border-radius:12px;border:1px solid rgba(94,234,212,0.2);background:rgba(94,234,212,0.03)">
+    <div style="font-size:13px;color:var(--teal);margin-bottom:8px">⚖️ Legal Disclaimer</div>
+    <p style="font-size:12px;color:var(--muted);line-height:1.75">Templates only — not legal advice. No attorney-client relationship is created. Always have qualified counsel review before execution. BizLegal AI is not a law firm.</p>
+  </div>
+</div></div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE: BRAI
+════════════════════════════════════════ -->
+<div class="page" id="p-brai">
+<div class="inner-page"><div class="container">
+  <div class="eyebrow"><div class="eline"></div><span class="elabel">Compliance Studio</span></div>
+  <h1><em>BRAI</em> — Blockchain Regulatory Intelligence</h1>
+  <p class="lede">Scan your Web3 project against VARA, MiCA, SEC, and MAS in real time. Know your risks before they cost you.</p>
+  <div class="ww-grid" style="margin-bottom:48px">
+    <div class="ww-card ww-after">
+      <div class="ww-title">What BRAI Scans</div>
+      <div class="ww-item"><span class="ico-yes">✓</span> UAE — VARA (Virtual Asset Regulatory Authority)</div>
+      <div class="ww-item"><span class="ico-yes">✓</span> EU — MiCA (Markets in Crypto-Assets)</div>
+      <div class="ww-item"><span class="ico-yes">✓</span> USA — SEC regulatory framework</div>
+      <div class="ww-item"><span class="ico-yes">✓</span> Singapore — MAS guidelines</div>
+      <div class="ww-item"><span class="ico-yes">✓</span> UK — FCA crypto asset regime</div>
+    </div>
+    <div class="ww-card ww-after" style="border-color:rgba(165,180,252,0.2)">
+      <div class="ww-title" style="color:var(--indigo)">Report Includes</div>
+      <div class="ww-item"><span class="ico-yes">✓</span> Risk flag identification per jurisdiction</div>
+      <div class="ww-item"><span class="ico-yes">✓</span> Compliance gap analysis</div>
+      <div class="ww-item"><span class="ico-yes">✓</span> Required actions & timeline</div>
+      <div class="ww-item"><span class="ico-yes">✓</span> Jurisdiction comparison matrix</div>
+      <div class="ww-item"><span class="ico-yes">✓</span> PDF export for legal team</div>
+    </div>
+  </div>
+  <div class="cta-banner">
+    <h2>Run your <em>free compliance scan</em></h2>
+    <p>Submit your project details. Get a compliance overview in seconds.</p>
+    <div class="cta-btns"><a href="https://brai.bizlegal-ai.com" class="btn-hero btn-hero-p">Launch BRAI Scanner →</a></div>
+  </div>
+</div></div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE: TRACR
+════════════════════════════════════════ -->
+<div class="page" id="p-tracr">
+<div class="inner-page"><div class="container">
+  <div class="eyebrow"><div class="eline"></div><span class="elabel">Forensic Studio</span></div>
+  <h1><em>TRACR</em> — AI Forensic Investigation</h1>
+  <p class="lede">Pay-per-report forensic tool for lawyers and investigators. Wallet tracing, fraud analysis, court-ready reports in hours, not weeks.</p>
+  <div class="pricing-grid">
+    <div class="price-card"><div class="price-name">Single Report</div><div class="price-amount">$99<span></span></div><div class="price-period">per report</div><ul class="price-features"><li><span class="pf-yes">✓</span>1 wallet / entity investigation</li><li><span class="pf-yes">✓</span>Transaction flow analysis</li><li><span class="pf-yes">✓</span>PDF court-ready report</li><li><span class="pf-yes">✓</span>Delivered within 24h</li></ul><button class="btn-primary" style="width:100%">Order Report →</button></div>
+    <div class="price-card featured"><div class="price-badge">MOST POPULAR</div><div class="price-name">Law Firm Bundle</div><div class="price-amount">$399<span></span></div><div class="price-period">5 reports</div><ul class="price-features"><li><span class="pf-yes">✓</span>5 investigations</li><li><span class="pf-yes">✓</span>Priority 12h delivery</li><li><span class="pf-yes">✓</span>Expert review notes</li><li><span class="pf-yes">✓</span>Branded PDF export</li></ul><button class="btn-hero btn-hero-p" style="width:100%">Get Bundle →</button></div>
+    <div class="price-card"><div class="price-name">Enterprise</div><div class="price-amount">Custom</div><div class="price-period">monthly contract</div><ul class="price-features"><li><span class="pf-yes">✓</span>Unlimited reports</li><li><span class="pf-yes">✓</span>API access</li><li><span class="pf-yes">✓</span>White-label PDF</li><li><span class="pf-yes">✓</span>Dedicated support</li></ul><button class="btn-ghost" style="width:100%" onclick="showPage('contact')">Contact Us →</button></div>
+  </div>
+</div></div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE: PRICING
+════════════════════════════════════════ -->
+<div class="page" id="p-pricing">
+<div class="inner-page"><div class="container">
+  <div class="eyebrow"><div class="eline"></div><span class="elabel">Pricing</span></div>
+  <h1>Simple, <em>transparent</em> pricing</h1>
+  <p class="lede">No subscriptions required for DocStack. Pay per template or grab the bundle. BRAI and TRACR have separate plans.</p>
+  <div class="pricing-grid">
+    <div class="price-card"><div class="price-name">Single Template</div><div class="price-amount">$49</div><div class="price-period">one-time</div><ul class="price-features"><li><span class="pf-yes">✓</span>1 lawyer-drafted template</li><li><span class="pf-yes">✓</span>DOCX + PDF</li><li><span class="pf-yes">✓</span>AI-customized to your deal</li><li><span class="pf-yes">✓</span>Instant download</li></ul><button class="btn-primary" style="width:100%" onclick="showPage('docstack')">Choose Template →</button></div>
+    <div class="price-card featured"><div class="price-badge">BEST VALUE</div><div class="price-name">Full Bundle</div><div class="price-amount">$297</div><div class="price-period">one-time · all 8 templates</div><ul class="price-features"><li><span class="pf-yes">✓</span>All 8 templates</li><li><span class="pf-yes">✓</span>Clause library</li><li><span class="pf-yes">✓</span>PDF sample reports</li><li><span class="pf-yes">✓</span>Priority support</li></ul><button class="btn-hero btn-hero-p" style="width:100%" onclick="showPage('docstack')">Get Full Bundle →</button></div>
+    <div class="price-card"><div class="price-name">BRAI Compliance</div><div class="price-amount">$<span style="font-size:28px">TBD</span></div><div class="price-period">subscription</div><ul class="price-features"><li><span class="pf-yes">✓</span>Unlimited compliance scans</li><li><span class="pf-yes">✓</span>4 jurisdictions</li><li><span class="pf-yes">✓</span>PDF reports</li><li><span class="pf-yes">✓</span>Free scan to start</li></ul><button class="btn-primary" style="width:100%" onclick="showPage('brai')">Start Free →</button></div>
+  </div>
+</div></div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE: FAQ
+════════════════════════════════════════ -->
+<div class="page" id="p-faq">
+<div class="inner-page"><div class="container" style="max-width:760px">
+  <div class="eyebrow"><div class="eline"></div><span class="elabel">FAQ</span></div>
+  <h1>Frequently Asked <em>Questions</em></h1>
+  <p class="lede">Everything you need to know about BizLegal AI, DocStack, BRAI, and TRACR.</p>
+
+  <h2>DocStack — Templates</h2>
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Are these templates real lawyer-drafted documents? <span class="faq-icon">+</span></button><div class="faq-a"><p>Yes. Every template was originally drafted by a licensed attorney with 20+ years of commercial real estate and corporate law experience. They have then been refined and optimized using AI (Claude API) for speed and consistency. However, they are templates — not legal advice for your specific situation.</p></div></div>
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">What jurisdictions are the templates designed for? <span class="faq-icon">+</span></button><div class="faq-a"><p>Our templates are designed for use in the United States, UAE (DIFC), European Union, United Kingdom, Singapore, and Canada. Each template notes which jurisdictions it is most appropriate for. For cross-border transactions involving multiple jurisdictions, we recommend reviewing with local counsel.</p></div></div>
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">What format do I receive the documents in? <span class="faq-icon">+</span></button><div class="faq-a"><p>You receive both a DOCX (Microsoft Word / Google Docs compatible) and a PDF version. The DOCX is fully editable so you can make adjustments with your counsel. The PDF is formatted for signing or sharing immediately.</p></div></div>
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Is there a money-back guarantee? <span class="faq-icon">+</span></button><div class="faq-a"><p>Yes. We offer a 7-day money-back guarantee. If the template is not suitable for your transaction, contact us at <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="24454d0a484145405c1514644349454d480a474b49">[email&#160;protected]</a> within 7 days of purchase and we will issue a full refund.</p></div></div>
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Can I use the templates for multiple deals? <span class="faq-icon">+</span></button><div class="faq-a"><p>A single purchase gives you a personal license for use on one transaction. For multiple deals or firm-wide use, please purchase the Full Bundle or contact us for an enterprise license.</p></div></div>
+
+  <h2>BRAI — Compliance</h2>
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">What regulations does BRAI scan against? <span class="faq-icon">+</span></button><div class="faq-a"><p>BRAI currently scans against four major crypto/Web3 regulatory frameworks: UAE VARA (Virtual Asset Regulatory Authority), EU MiCA (Markets in Crypto-Assets Regulation), US SEC guidance on digital assets, and Singapore MAS (Monetary Authority of Singapore) digital payment token frameworks.</p></div></div>
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Is the BRAI scan a legal opinion? <span class="faq-icon">+</span></button><div class="faq-a"><p>No. BRAI is an AI-powered compliance screening tool — it is not a legal opinion and does not constitute legal advice. It is a first-pass analysis tool to help identify potential regulatory issues. Always consult with qualified legal counsel before making regulatory decisions.</p></div></div>
+
+  <h2>TRACR — Forensics</h2>
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">What information do I need to provide for a TRACR report? <span class="faq-icon">+</span></button><div class="faq-a"><p>You need to provide the blockchain wallet address(es) or transaction hashes to be investigated, the blockchain network (Ethereum, Bitcoin, etc.), the nature of the investigation (fraud, theft, dispute), and any relevant timeline information.</p></div></div>
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Are TRACR reports admissible in court? <span class="faq-icon">+</span></button><div class="faq-a"><p>TRACR reports are formatted to meet general evidentiary standards and include methodology documentation. However, admissibility depends on the jurisdiction and specific court. We recommend having a qualified expert witness review and authenticate the report for formal legal proceedings.</p></div></div>
+
+  <div style="margin-top:48px;padding:24px;border-radius:12px;border:1px solid rgba(125,211,252,0.15);background:rgba(125,211,252,0.03);text-align:center">
+    <div style="font-size:14px;color:var(--text);margin-bottom:12px">Still have questions?</div>
+    <button class="btn-primary" onclick="showPage('contact')">Contact Us →</button>
+  </div>
+</div></div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE: GUIDES
+════════════════════════════════════════ -->
+<div class="page" id="p-guides">
+<div class="inner-page"><div class="container">
+  <div class="eyebrow"><div class="eline"></div><span class="elabel">Free Legal Guides</span></div>
+  <h1>Learn from the <em>platform</em></h1>
+  <p class="lede">Free, lawyer-written guides on real estate contracts, crypto compliance, and cross-border deals.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px">
+    <div>
+      <h3 style="font-size:11px;letter-spacing:0.2em;color:var(--teal);margin-bottom:14px;text-transform:uppercase">UAE / DIFC</h3>
+      <a href="/guides/uae/joint-venture-agreement-real-estate-uae" class="fstep" style="display:flex;justify-content:space-between;margin-bottom:6px;text-decoration:none"><span style="font-size:13px;color:var(--muted)">Joint Venture Agreement for Real Estate in UAE</span><span style="color:var(--sky)">→</span></a>
+      <a href="/guides/uae/vara-token-distribution-agreement-uae" class="fstep" style="display:flex;justify-content:space-between;margin-bottom:6px;text-decoration:none"><span style="font-size:13px;color:var(--muted)">VARA Token Distribution Agreement UAE</span><span style="color:var(--sky)">→</span></a>
+      <a href="/guides/uae/nda-real-estate-investment-uae" class="fstep" style="display:flex;justify-content:space-between;margin-bottom:20px;text-decoration:none"><span style="font-size:13px;color:var(--muted)">NDA for Real Estate Investment in UAE</span><span style="color:var(--sky)">→</span></a>
+      <h3 style="font-size:11px;letter-spacing:0.2em;color:var(--teal);margin-bottom:14px;text-transform:uppercase">European Union</h3>
+      <a href="/guides/european-union/mica-token-sale-agreement-template" class="fstep" style="display:flex;justify-content:space-between;text-decoration:none"><span style="font-size:13px;color:var(--muted)">MiCA Token Sale Agreement Template EU</span><span style="color:var(--sky)">→</span></a>
+    </div>
+    <div>
+      <h3 style="font-size:11px;letter-spacing:0.2em;color:var(--teal);margin-bottom:14px;text-transform:uppercase">United States</h3>
+      <a href="/guides/united-states/operating-agreement-llc-real-estate" class="fstep" style="display:flex;justify-content:space-between;margin-bottom:6px;text-decoration:none"><span style="font-size:13px;color:var(--muted)">Real Estate LLC Operating Agreement Guide</span><span style="color:var(--sky)">→</span></a>
+      <a href="/guides/united-states/capital-call-agreement-real-estate" class="fstep" style="display:flex;justify-content:space-between;margin-bottom:6px;text-decoration:none"><span style="font-size:13px;color:var(--muted)">Capital Call Agreement Real Estate: US Guide</span><span style="color:var(--sky)">→</span></a>
+      <a href="/guides/united-states/joint-venture-agreement-real-estate-us" class="fstep" style="display:flex;justify-content:space-between;margin-bottom:20px;text-decoration:none"><span style="font-size:13px;color:var(--muted)">Real Estate Joint Venture Agreement Template</span><span style="color:var(--sky)">→</span></a>
+      <h3 style="font-size:11px;letter-spacing:0.2em;color:var(--teal);margin-bottom:14px;text-transform:uppercase">UK · Singapore · Canada</h3>
+      <a href="/guides/united-kingdom/loi-commercial-real-estate-uk" class="fstep" style="display:flex;justify-content:space-between;margin-bottom:6px;text-decoration:none"><span style="font-size:13px;color:var(--muted)">Commercial Real Estate LOI Template UK</span><span style="color:var(--sky)">→</span></a>
+      <a href="/guides/singapore/capital-call-agreement-singapore" class="fstep" style="display:flex;justify-content:space-between;text-decoration:none"><span style="font-size:13px;color:var(--muted)">Capital Call Agreement Singapore</span><span style="color:var(--sky)">→</span></a>
+    </div>
+  </div>
+</div></div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE: DISCLAIMER
+════════════════════════════════════════ -->
+<div class="page" id="p-disclaimer">
+<div class="inner-page"><div class="container" style="max-width:760px">
+  <h1>Legal <em>Disclaimer</em></h1>
+  <p class="lede">Please read this disclaimer carefully before using BizLegal AI.</p>
+  <h2>Not Legal Advice</h2>
+  <p>BizLegal AI is a technology platform that provides legal document templates and AI-powered compliance screening tools. The content, templates, reports, and information provided through this platform do not constitute legal advice and do not create an attorney-client relationship between you and BizLegal AI or any of its representatives.</p>
+  <h2>Templates Are Starting Points</h2>
+  <p>All document templates provided by DocStack are general-purpose starting points drafted to institutional standards. They are not tailored to your specific legal situation, jurisdiction-specific requirements beyond those noted, or the particular facts of your transaction. Before executing any document generated through this platform, you should consult with a qualified attorney licensed in the relevant jurisdiction(s).</p>
+  <h2>BRAI Compliance Screening</h2>
+  <p>BRAI provides automated regulatory screening based on publicly available regulatory frameworks. This screening is not a legal opinion, regulatory approval, or guarantee of compliance. Regulatory requirements change frequently and the platform may not reflect the most current regulatory guidance. BRAI results should be used as a preliminary screening tool only.</p>
+  <h2>TRACR Forensic Reports</h2>
+  <p>TRACR forensic reports are generated using AI-powered blockchain analysis tools. These reports may be used to support legal proceedings but are not substitutes for expert witness testimony. Admissibility of any report in legal proceedings depends on applicable rules of evidence in the relevant jurisdiction.</p>
+  <h2>No Warranty</h2>
+  <p>BizLegal AI provides all services and content on an "as is" basis without warranty of any kind. To the maximum extent permitted by applicable law, BizLegal AI disclaims all warranties, express or implied.</p>
+  <h2>Contact</h2>
+  <p>For questions about this disclaimer: <a href="/cdn-cgi/l/email-protection#6b0a0245070e0a0f135a5b2b0c060a020745080406" style="color:var(--sky)"><span class="__cf_email__" data-cfemail="7c1d155210191d18044d4c3c1b111d1510521f1311">[email&#160;protected]</span></a></p>
+</div></div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE: PRIVACY
+════════════════════════════════════════ -->
+<div class="page" id="p-privacy">
+<div class="inner-page"><div class="container" style="max-width:760px">
+  <h1>Privacy <em>Policy</em></h1>
+  <p class="lede">Last updated: January 2025. We respect your privacy and are committed to protecting your personal data.</p>
+  <h2>What We Collect</h2>
+  <p>When you use BizLegal AI, we may collect: your email address (for document delivery and account purposes), deal details you enter into document templates (processed but not stored after delivery), payment information (processed by Lemon Squeezy — we do not store card details), and usage data (page views, feature usage) via anonymized analytics.</p>
+  <h2>How We Use Your Data</h2>
+  <ul><li>To generate and deliver your purchased documents</li><li>To run compliance scans through BRAI</li><li>To send transactional emails related to your purchase</li><li>To improve our platform and services</li><li>We do not sell your data to third parties</li></ul>
+  <h2>Data Storage</h2>
+  <p>Your data is stored on Supabase (PostgreSQL) servers. Document generation is processed via the Anthropic Claude API. Emails are sent via SendGrid. All providers maintain their own data processing agreements.</p>
+  <h2>Your Rights</h2>
+  <p>You have the right to access, correct, or delete your personal data. To exercise these rights, contact us at <a href="/cdn-cgi/l/email-protection#45242c6b292024213d7475052228242c296b262a28" style="color:var(--sky)"><span class="__cf_email__" data-cfemail="08696126646d696c703938486f65696164266b6765">[email&#160;protected]</span></a>. EU/UK users have additional rights under GDPR/UK GDPR.</p>
+  <h2>Cookies</h2>
+  <p>We use essential cookies for platform functionality and anonymized analytics cookies. We do not use advertising cookies or third-party tracking cookies.</p>
+  <h2>Contact</h2>
+  <p><a href="/cdn-cgi/l/email-protection#33525a1d5f5652574b020373545e525a5f1d505c5e" style="color:var(--sky)"><span class="__cf_email__" data-cfemail="1f7e7631737a7e7b672e2f5f78727e7673317c7072">[email&#160;protected]</span></a></p>
+</div></div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE: TERMS
+════════════════════════════════════════ -->
+<div class="page" id="p-terms">
+<div class="inner-page"><div class="container" style="max-width:760px">
+  <h1>Terms of <em>Service</em></h1>
+  <p class="lede">Last updated: January 2025. By using BizLegal AI you agree to these terms.</p>
+  <h2>1. Service Description</h2>
+  <p>BizLegal AI provides legal document templates (DocStack), blockchain compliance screening (BRAI), and forensic investigation reports (TRACR). These are technology services, not legal services.</p>
+  <h2>2. License</h2>
+  <p>Upon purchase, you receive a non-exclusive, non-transferable personal license to use the purchased template for one transaction. For firm-wide or multiple-use licenses, contact us separately.</p>
+  <h2>3. Prohibited Uses</h2>
+  <ul><li>Reselling or redistributing our templates without authorization</li><li>Using our platform for illegal purposes</li><li>Attempting to reverse-engineer our AI systems</li><li>Misrepresenting our documents as your own original work for commercial sale</li></ul>
+  <h2>4. Payment and Refunds</h2>
+  <p>Payments are processed by Lemon Squeezy. We offer a 7-day money-back guarantee for DocStack templates. BRAI and TRACR refund policies are noted within each product.</p>
+  <h2>5. Limitation of Liability</h2>
+  <p>To the maximum extent permitted by law, BizLegal AI shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of our platform or documents.</p>
+  <h2>6. Governing Law</h2>
+  <p>These terms are governed by the laws of Israel. Disputes shall be resolved in the courts of Israel, except where mandatory consumer protection laws of your jurisdiction apply.</p>
+  <h2>7. Contact</h2>
+  <p><a href="/cdn-cgi/l/email-protection#82e3ebaceee7e3e6fab3b2c2e5efe3ebeeace1edef" style="color:var(--sky)"><span class="__cf_email__" data-cfemail="57363e793b3236332f666717303a363e3b7934383a">[email&#160;protected]</span></a></p>
+</div></div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE: ABOUT
+════════════════════════════════════════ -->
+<div class="page" id="p-about">
+<div class="inner-page"><div class="container" style="max-width:800px">
+  <div class="eyebrow"><div class="eline"></div><span class="elabel">About</span></div>
+  <h1>Built by a <em>lawyer</em>, for lawyers</h1>
+  <p class="lede">BizLegal AI was founded by a practicing attorney with 20+ years of commercial real estate and corporate law experience across Israel, Europe, and the Middle East.</p>
+  <h2>The Problem We Solve</h2>
+  <p>Legal documents in global real estate and Web3 transactions are expensive ($3,000–$8,000 per contract), slow (2–4 weeks), and fragmented across jurisdictions. Most legal tech either oversimplifies or ignores the nuances of international practice.</p>
+  <h2>Our Approach</h2>
+  <p>We combine 20 years of hard-won legal expertise with AI to deliver institutional-quality documents at a fraction of the cost. Every template started life as a real document used in real transactions. AI speeds up and refines — the legal thinking is human.</p>
+  <h2>The Team</h2>
+  <p>We are a lean, lawyer-led team with deep expertise in real estate law, blockchain regulation, and cross-border transactions across Israel, Portugal (EU), UAE, and the US.</p>
+  <h2>Contact</h2>
+  <p><a href="/cdn-cgi/l/email-protection#bddcd493d1d8dcd9c58c8dfddad0dcd4d193ded2d0" style="color:var(--sky)"><span class="__cf_email__" data-cfemail="5d3c347331383c39256c6d1d3a303c3431733e3230">[email&#160;protected]</span></a></p>
+</div></div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE: CONTACT
+════════════════════════════════════════ -->
+<div class="page" id="p-contact">
+<div class="inner-page"><div class="container" style="max-width:640px">
+  <div class="eyebrow"><div class="eline"></div><span class="elabel">Contact</span></div>
+  <h1>Get in <em>touch</em></h1>
+  <p class="lede">Questions about templates, compliance, forensic reports, or enterprise licensing? We reply within 24 hours.</p>
+  <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:40px">
+    <div style="padding:22px;border-radius:12px;border:1px solid #112240;background:rgba(7,9,26,0.7)">
+      <div style="font-size:11px;color:var(--sky);letter-spacing:0.15em;margin-bottom:6px;text-transform:uppercase">Email</div>
+      <a href="/cdn-cgi/l/email-protection#d7b6bef9bbb2b6b3afe6e797b0bab6bebbf9b4b8ba" style="font-size:16px;color:var(--white)"><span class="__cf_email__" data-cfemail="54353d7a383135302c6564143339353d387a373b39">[email&#160;protected]</span></a>
+    </div>
+    <div style="padding:22px;border-radius:12px;border:1px solid #112240;background:rgba(7,9,26,0.7)">
+      <div style="font-size:11px;color:var(--sky);letter-spacing:0.15em;margin-bottom:6px;text-transform:uppercase">DocStack — Templates</div>
+      <a href="https://docstack.bizlegal-ai.com" style="font-size:15px;color:var(--muted)">docstack.bizlegal-ai.com</a>
+    </div>
+    <div style="padding:22px;border-radius:12px;border:1px solid #112240;background:rgba(7,9,26,0.7)">
+      <div style="font-size:11px;color:var(--indigo);letter-spacing:0.15em;margin-bottom:6px;text-transform:uppercase">BRAI — Compliance Scanner</div>
+      <a href="https://brai.bizlegal-ai.com" style="font-size:15px;color:var(--muted)">brai.bizlegal-ai.com</a>
+    </div>
+  </div>
+  <div class="cta-banner">
+    <h2>Start with a <em>free scan</em></h2>
+    <p>No commitment. See BRAI in action before you buy.</p>
+    <div class="cta-btns"><button class="btn-hero btn-hero-p" onclick="showPage('brai')">Launch BRAI Free →</button></div>
+  </div>
+</div></div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE: SOLUTIONS
+════════════════════════════════════════ -->
+<div class="page" id="p-solutions">
+<div class="inner-page"><div class="container">
+  <div class="eyebrow"><div class="eline"></div><span class="elabel">Solutions</span></div>
+  <h1>Built for <em>your industry</em></h1>
+  <p class="lede" style="margin-bottom:48px">From real estate to Web3 to law firms — one platform for every legal workflow.</p>
+  <div class="ind-grid">
+    <div class="icard"><div class="iicon">🏗️</div><div class="iname">Real Estate</div><p class="idesc">JV agreements, LOIs, capital call documents structured for institutional deals in US, UAE, EU, UK, Singapore, and Canada.</p><span class="ilink" onclick="showPage('docstack')">View templates →</span></div>
+    <div class="icard"><div class="iicon">⛓️</div><div class="iname">Web3 / Crypto</div><p class="idesc">BRAI compliance scanning for token projects, DeFi protocols, NFT platforms. VARA, MiCA, SEC, MAS coverage.</p><span class="ilink" onclick="showPage('brai')">Run free scan →</span></div>
+    <div class="icard"><div class="iicon">🏦</div><div class="iname">Financial Services</div><p class="idesc">Cross-border investment documents, fund subscription agreements, regulatory compliance reports for financial institutions.</p><span class="ilink" onclick="showPage('contact')">Learn more →</span></div>
+    <div class="icard"><div class="iicon">⚖️</div><div class="iname">Law Firms</div><p class="idesc">TRACR forensic reports for litigation support. AI-powered blockchain investigation for client matters.</p><span class="ilink" onclick="showPage('tracr')">Order report →</span></div>
+    <div class="icard"><div class="iicon">🌐</div><div class="iname">Cross-Border</div><p class="idesc">Israel–Portugal–UAE–EU multi-jurisdiction structuring. Unique expertise combining common law and civil law traditions.</p><span class="ilink" onclick="showPage('contact')">Consult →</span></div>
+    <div class="icard"><div class="iicon">🏢</div><div class="iname">Enterprise</div><p class="idesc">Custom compliance bundles, white-label reports, API access, and legal workflow automation for large organizations.</p><span class="ilink" onclick="showPage('contact')">Contact us →</span></div>
+  </div>
+</div></div>
+</div>
+
+<!-- ════════════════════════════════════════
+     FOOTER (shared)
+════════════════════════════════════════ -->
+<footer>
+  <div class="container">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <div class="flogo">BizLegal<em>AI</em></div>
+        <p>Legal-first platform for global real estate, Web3 compliance, and cross-border investment. Built by a lawyer. Powered by AI.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <span style="font-size:11px;color:var(--sky);cursor:pointer" onclick="showPage('docstack')">DocStack</span>
+          <span style="color:var(--border)">·</span>
+          <span style="font-size:11px;color:var(--indigo);cursor:pointer" onclick="showPage('brai')">BRAI</span>
+          <span style="color:var(--border)">·</span>
+          <span style="font-size:11px;color:var(--teal);cursor:pointer" onclick="showPage('tracr')">TRACR</span>
+        </div>
+      </div>
+      <div class="foot-cols">
+        <div>
+          <div class="fcol-title">Products</div>
+          <span class="fcol-a" onclick="showPage('docstack')">DocStack</span>
+          <span class="fcol-a" onclick="showPage('brai')">BRAI</span>
+          <span class="fcol-a" onclick="showPage('tracr')">TRACR</span>
+          <span class="fcol-a" onclick="showPage('pricing')">Pricing</span>
+        </div>
+        <div>
+          <div class="fcol-title">Solutions</div>
+          <span class="fcol-a" onclick="showPage('solutions')">Real Estate</span>
+          <span class="fcol-a" onclick="showPage('solutions')">Web3 / Crypto</span>
+          <span class="fcol-a" onclick="showPage('solutions')">Law Firms</span>
+          <span class="fcol-a" onclick="showPage('solutions')">Cross-Border</span>
+        </div>
+        <div>
+          <div class="fcol-title">Resources</div>
+          <span class="fcol-a" onclick="showPage('guides')">Free Guides</span>
+          <span class="fcol-a" onclick="showPage('faq')">FAQ</span>
+          <span class="fcol-a" onclick="showPage('features')">Features</span>
+        </div>
+        <div>
+          <div class="fcol-title">Company</div>
+          <span class="fcol-a" onclick="showPage('about')">About Us</span>
+          <span class="fcol-a" onclick="showPage('contact')">Contact</span>
+          <span class="fcol-a" onclick="showPage('home')">Partners</span>
+        </div>
+        <div>
+          <div class="fcol-title">Legal</div>
+          <span class="fcol-a" onclick="showPage('terms')">Terms</span>
+          <span class="fcol-a" onclick="showPage('privacy')">Privacy</span>
+          <span class="fcol-a" onclick="showPage('disclaimer')">Disclaimer</span>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span class="foot-copy">© 2025 BizLegal AI · Templates only — not legal advice</span>
+      <div class="foot-legal">
+        <a onclick="showPage('terms')">Terms</a>
+        <a onclick="showPage('privacy')">Privacy</a>
+        <a onclick="showPage('disclaimer')">Disclaimer</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</div><!-- /site -->
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ── WEBGL ──
+const canvas=document.getElementById('gl')
+const renderer=new THREE.WebGLRenderer({canvas,antialias:false})
+renderer.setPixelRatio(Math.min(devicePixelRatio,2))
+renderer.setClearColor(new THREE.Color(0x04060e))
+const scene=new THREE.Scene(),camera=new THREE.OrthographicCamera(-1,1,1,-1,0,-1)
+const u={resolution:{value:[innerWidth,innerHeight]},time:{value:0}}
+const geo=new THREE.BufferGeometry()
+geo.setAttribute('position',new THREE.BufferAttribute(new Float32Array([-1,-1,0,1,-1,0,-1,1,0,1,-1,0,-1,1,0,1,1,0]),3))
+scene.add(new THREE.Mesh(geo,new THREE.RawShaderMaterial({
+  vertexShader:`attribute vec3 position;void main(){gl_Position=vec4(position,1.0);}`,
+  fragmentShader:`precision highp float;uniform vec2 resolution;uniform float time;
+  void main(){
+    vec2 p=(gl_FragCoord.xy*2.0-resolution)/min(resolution.x,resolution.y);
+    float d1=0.08/abs(p.y+sin((p.x+time*0.55)*1.1)*0.36);vec3 sky=vec3(0.28,0.72,1.0)*d1;
+    float d2=0.055/abs(p.y+sin((p.x*0.8+time*0.85+1.4)*1.35)*0.26);vec3 teal=vec3(0.10,0.88,0.76)*d2;
+    float d3=0.035/abs(p.y+sin((p.x*1.2-time*0.38+3.0)*0.88)*0.20);vec3 cyn=vec3(0.16,0.92,1.0)*d3;
+    float d4=0.025/abs(p.y*1.5+sin((p.x*0.55+time*0.28+5.0)*0.65)*0.16);vec3 deep=vec3(0.04,0.52,0.58)*d4;
+    float ab=length(p)*0.05;
+    float rr=0.05/abs(p.y+sin((p.x*(1.0+ab)+time*0.55)*1.1)*0.36);
+    float bb=0.05/abs(p.y+sin((p.x*(1.0-ab)+time*0.55)*1.1)*0.36);
+    vec3 col=sky+teal+cyn+deep;col.r+=rr*0.10;col.b+=bb*0.18;
+    col*=1.0-smoothstep(0.6,1.7,length(p));col*=1.3;
+    gl_FragColor=vec4(col,1.0);}`,
+  uniforms:u,side:THREE.DoubleSide
+})))
+const rsz=()=>{renderer.setSize(innerWidth,innerHeight,false);u.resolution.value=[innerWidth,innerHeight]}
+rsz();window.addEventListener('resize',rsz)
+;(function loop(){u.time.value+=0.007;renderer.render(scene,camera);requestAnimationFrame(loop)})()
+
+// ── PAGE ROUTING ──
+const pages={home:'p-home',features:'p-features',docstack:'p-docstack',brai:'p-brai',tracr:'p-tracr',pricing:'p-pricing',faq:'p-faq',guides:'p-guides',disclaimer:'p-disclaimer',privacy:'p-privacy',terms:'p-terms',about:'p-about',contact:'p-contact',solutions:'p-solutions'}
+function showPage(name){
+  Object.values(pages).forEach(id=>{const el=document.getElementById(id);if(el)el.classList.remove('active')})
+  const target=document.getElementById(pages[name]||pages.home)
+  if(target){target.classList.add('active');window.scrollTo({top:0,behavior:'smooth'})}
+}
+function goTo(name){showPage(name)}
+
+// ── STICKY BAR ──
+let sShown=false
+window.addEventListener('scroll',()=>{
+  if(scrollY>400&&!sShown){document.getElementById('sBar').classList.add('show');sShown=true}
+})
+
+// ── EXIT POPUP ──
+let eShown=false
+function closeExit(){document.getElementById('exitOv').classList.remove('show');sessionStorage.setItem('ex','1')}
+document.addEventListener('mouseleave',e=>{
+  if(e.clientY<10&&!eShown&&!sessionStorage.getItem('ex')){
+    eShown=true;setTimeout(()=>document.getElementById('exitOv').classList.add('show'),400)
+  }
+})
+document.getElementById('exitOv').addEventListener('click',e=>{if(e.target===e.currentTarget)closeExit()})
+
+// ── TABS ──
+function tabClick(el){document.querySelectorAll('.htab').forEach(t=>t.classList.remove('act'));el.classList.add('act')}
+
+// ── FAQ ──
+function toggleFaq(btn){btn.parentElement.classList.toggle('open')}
+
+// ── LANGUAGE SWITCHER ──
+let currentLang='en'
+const langData={
+  en:{badge:'Before you go',h3:'Get the JV Agreement <em>checklist free</em>',p:'The framework behind $10M+ deals in UAE, US, and EU. Enter your email and we\'ll send it instantly.',send:'Get Free →',scan:'Or run a free compliance scan',dismiss:'No thanks, I prefer paying full lawyer rates',ph:'your@email.com'},
+  pt:{badge:'Antes de sair',h3:'Receba o checklist de JV <em>grátis</em>',p:'O framework por trás de negócios de $10M+ nos EAU, EUA e UE. Insira o seu email.',send:'Receber →',scan:'Ou execute um scan de conformidade gratuito',dismiss:'Não obrigado, prefiro pagar as taxas completas',ph:'o.seu@email.com'},
+  es:{badge:'Antes de salir',h3:'Obtén el checklist de JV <em>gratis</em>',p:'El framework detrás de deals de $10M+ en EAU, EE.UU. y UE. Ingresa tu email.',send:'Obtener →',scan:'O ejecuta un scan de cumplimiento gratuito',dismiss:'No gracias, prefiero pagar las tarifas completas',ph:'tu@correo.com'}
+}
+function setLang(lang){
+  currentLang=lang
+  ;['btn-en','btn-pt','btn-es'].forEach(id=>{
+    const el=document.getElementById(id);if(!el)return
+    const on=id==='btn-'+lang
+    el.style.background=on?'rgba(125,211,252,0.15)':'transparent'
+    el.style.borderColor=on?'rgba(125,211,252,0.4)':'#1a3050'
+    el.style.color=on?'var(--sky)':'var(--muted)'
+  })
+  document.querySelectorAll('[data-'+lang+']').forEach(el=>{el.innerHTML=el.getAttribute('data-'+lang)})
+  const d=langData[lang]
+  ;['badge','h3','p','send','scan','dismiss'].forEach(k=>{
+    const id=k==='badge'?'exit-badge':k==='h3'?'exit-h3':k==='p'?'exit-p':k==='send'?'exit-send-btn':k==='scan'?'exit-scan-btn':'exit-dismiss'
+    const el=document.getElementById(id);if(el)el.innerHTML=d[k]
+  })
+  const ei=document.getElementById('exitEmail');if(ei)ei.placeholder=d.ph
+}
+function submitExitEmail(){
+  const email=document.getElementById('exitEmail').value
+  if(!email||!email.includes('@')){document.getElementById('exitEmail').style.borderColor='rgba(248,113,113,0.5)';return}
+  console.log('Lead:',email)
+  document.getElementById('exitThanks').style.display='block'
+  document.getElementById('exitEmail').style.display='none'
+  document.getElementById('exit-send-btn').style.display='none'
+  setTimeout(closeExit,2500)
+}
+</script>
+</body>
+</html>

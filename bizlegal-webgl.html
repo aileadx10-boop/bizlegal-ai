@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BizLegal AI</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@300;400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --accent: #4ade80;
+  --accent2: #22c55e;
+  --text: #f0f0f0;
+  --muted: rgba(255,255,255,0.35);
+  --dim: rgba(255,255,255,0.08);
+}
+
+body {
+  background: #000;
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* ── WEBGL CANVAS ── */
+#shader-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  opacity: 0.55;
+}
+
+/* ── OVERLAY ── */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  background: radial-gradient(ellipse at 50% 0%, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.75) 70%);
+  pointer-events: none;
+}
+
+/* ── CONTENT ── */
+.content {
+  position: relative;
+  z-index: 10;
+}
+
+/* ── NAV ── */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 18px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.logo {
+  font-family: 'DM Serif Display', serif;
+  font-size: 18px;
+  letter-spacing: 0.02em;
+  color: #fff;
+}
+.logo em { color: var(--accent); font-style: italic; }
+
+.nav-links { display: flex; gap: 32px; align-items: center; }
+.nav-links a {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: #fff; }
+
+/* ── LIQUID GLASS BUTTON ── */
+.glass-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 100px;
+  padding: 10px 24px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fff;
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(12px) url("#glass-filter");
+  box-shadow:
+    0 0 6px rgba(0,0,0,0.03),
+    0 2px 6px rgba(0,0,0,0.08),
+    inset 1px 1px 1px -0.5px rgba(255,255,255,0.4),
+    inset -1px -1px 1px -0.5px rgba(255,255,255,0.2),
+    inset 0 0 6px 6px rgba(255,255,255,0.04),
+    0 0 12px rgba(0,0,0,0.15);
+  transition: all 0.25s cubic-bezier(0.1, 0.4, 0.2, 1);
+  text-decoration: none;
+  overflow: hidden;
+}
+.glass-btn:hover {
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.4);
+  transform: translateY(-1px);
+  box-shadow:
+    0 4px 20px rgba(74,222,128,0.15),
+    inset 1px 1px 1px -0.5px rgba(255,255,255,0.5),
+    inset 0 0 6px 6px rgba(255,255,255,0.06);
+}
+.glass-btn:active { transform: translateY(1px) scale(0.98); }
+
+.glass-btn-primary {
+  background: rgba(74,222,128,0.15);
+  border-color: rgba(74,222,128,0.5);
+  color: var(--accent);
+  box-shadow:
+    0 0 20px rgba(74,222,128,0.12),
+    inset 1px 1px 1px -0.5px rgba(74,222,128,0.4),
+    inset 0 0 6px 6px rgba(74,222,128,0.04);
+}
+.glass-btn-primary:hover {
+  background: rgba(74,222,128,0.25);
+  box-shadow:
+    0 0 30px rgba(74,222,128,0.25),
+    inset 1px 1px 1px -0.5px rgba(74,222,128,0.5);
+  color: #fff;
+}
+
+.glass-btn-xl {
+  padding: 14px 36px;
+  font-size: 12px;
+  letter-spacing: 0.15em;
+}
+
+/* SVG Glass Filter */
+.glass-filters { position: absolute; width: 0; height: 0; }
+
+/* ── HERO ── */
+.hero {
+  min-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 80px 40px 60px;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: 100px;
+  border: 1px solid rgba(74,222,128,0.25);
+  background: rgba(74,222,128,0.06);
+  backdrop-filter: blur(8px);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 40px;
+  animation: fadeUp 0.6s ease both;
+}
+.badge-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(74,222,128,0.4)} 50%{opacity:0.7;box-shadow:0 0 0 6px rgba(74,222,128,0)} }
+
+h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(48px, 8vw, 96px);
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+  margin-bottom: 28px;
+  animation: fadeUp 0.6s 0.1s ease both;
+}
+h1 .line-dim { color: rgba(255,255,255,0.2); display: block; }
+h1 .line-accent { color: var(--accent); font-style: italic; display: block; }
+h1 .line-white { color: #fff; display: block; }
+
+.hero-sub {
+  font-size: 13px;
+  color: var(--muted);
+  max-width: 520px;
+  line-height: 1.8;
+  margin-bottom: 48px;
+  letter-spacing: 0.02em;
+  animation: fadeUp 0.6s 0.2s ease both;
+}
+
+.hero-ctas {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 72px;
+  animation: fadeUp 0.6s 0.3s ease both;
+}
+
+/* ── STATS ── */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  overflow: hidden;
+  backdrop-filter: blur(16px);
+  width: 100%;
+  max-width: 700px;
+  animation: fadeUp 0.6s 0.4s ease both;
+}
+.stat {
+  padding: 22px 24px;
+  background: rgba(0,0,0,0.5);
+  text-align: center;
+}
+.stat-val {
+  font-family: 'DM Serif Display', serif;
+  font-size: 28px;
+  color: #fff;
+  margin-bottom: 4px;
+  line-height: 1;
+}
+.stat-lbl {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.2);
+}
+
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(20px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+/* ── SECTIONS ── */
+section {
+  padding: 80px 40px;
+  max-width: 1100px;
+  margin: 0 auto;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.sec-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 48px;
+}
+.sec-line { width: 28px; height: 1px; background: rgba(255,255,255,0.12); }
+.sec-label {
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.2);
+}
+
+/* ── PRODUCTS ── */
+.products { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+
+.product-card {
+  position: relative;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 16px;
+  padding: 28px;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(20px);
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+.product-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  background: radial-gradient(ellipse at 50% 0%, rgba(74,222,128,0.06) 0%, transparent 65%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.product-card:hover { border-color: rgba(74,222,128,0.25); transform: translateY(-3px); }
+.product-card:hover::before { opacity: 1; }
+
+.p-tag {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 100px;
+  border: 1px solid;
+  margin-bottom: 18px;
+}
+.tag-live { color: #4ade80; border-color: rgba(74,222,128,0.3); background: rgba(74,222,128,0.06); }
+.tag-beta { color: #60a5fa; border-color: rgba(96,165,250,0.3); background: rgba(96,165,250,0.06); }
+.tag-soon { color: #fbbf24; border-color: rgba(251,191,36,0.3); background: rgba(251,191,36,0.06); }
+
+.p-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 24px;
+  color: #fff;
+  margin-bottom: 10px;
+  letter-spacing: 0.01em;
+}
+.p-desc {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 24px;
+  letter-spacing: 0.02em;
+}
+.p-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.p-price { font-size: 11px; color: rgba(255,255,255,0.15); }
+.p-cta {
+  font-size: 11px;
+  color: var(--accent);
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  transition: color 0.2s;
+}
+.p-cta:hover { color: #fff; }
+
+/* ── JURISDICTIONS ── */
+.juris-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+
+.juris-card {
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: 18px 20px;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: border-color 0.2s, background 0.2s;
+}
+.juris-card:hover {
+  border-color: rgba(74,222,128,0.2);
+  background: rgba(74,222,128,0.03);
+}
+.j-code {
+  font-family: 'DM Serif Display', serif;
+  font-size: 17px;
+  color: #fff;
+}
+.j-sub { font-size: 9px; color: rgba(255,255,255,0.2); margin-top: 3px; letter-spacing: 0.08em; }
+.j-count { font-size: 9px; color: rgba(255,255,255,0.12); letter-spacing: 0.1em; }
+
+/* ── GUIDES ── */
+.guide-group { margin-bottom: 32px; }
+.guide-region {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(74,222,128,0.5);
+  margin-bottom: 8px;
+}
+.guide-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  text-decoration: none;
+  transition: all 0.15s;
+}
+.guide-item:hover {
+  background: rgba(255,255,255,0.02);
+  border-color: rgba(255,255,255,0.06);
+}
+.guide-title { font-size: 11px; color: rgba(255,255,255,0.4); transition: color 0.15s; letter-spacing: 0.02em; }
+.guide-item:hover .guide-title { color: #fff; }
+.guide-arrow { font-size: 11px; color: rgba(255,255,255,0.12); transition: color 0.15s; flex-shrink: 0; margin-left: 12px; }
+.guide-item:hover .guide-arrow { color: var(--accent); }
+
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid rgba(255,255,255,0.05);
+  padding: 36px 40px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  position: relative;
+  z-index: 10;
+  backdrop-filter: blur(20px);
+  background: rgba(0,0,0,0.6);
+}
+.footer-logo { font-family: 'DM Serif Display', serif; font-size: 14px; color: rgba(255,255,255,0.3); }
+.footer-logo em { color: var(--accent); font-style: italic; }
+.footer-links { display: flex; gap: 24px; }
+.footer-links a { font-size: 10px; color: rgba(255,255,255,0.15); text-decoration: none; letter-spacing: 0.1em; transition: color 0.2s; }
+.footer-links a:hover { color: #fff; }
+.footer-copy { font-size: 9px; color: rgba(255,255,255,0.08); letter-spacing: 0.1em; }
+.footer-disclaimer { width: 100%; font-size: 9px; color: rgba(255,255,255,0.06); line-height: 1.6; letter-spacing: 0.05em; }
+
+@media(max-width:768px) {
+  .products, .juris-grid { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: repeat(2,1fr); }
+  nav { padding: 16px 20px; }
+  .nav-links { display: none; }
+  h1 { font-size: 42px; }
+}
+</style>
+</head>
+<body>
+
+<!-- SVG Glass Filter -->
+<svg class="glass-filters" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="glass-filter" x="0%" y="0%" width="100%" height="100%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.05 0.05" numOctaves="1" seed="1" result="turbulence"/>
+      <feGaussianBlur in="turbulence" stdDeviation="2" result="blurredNoise"/>
+      <feDisplacementMap in="SourceGraphic" in2="blurredNoise" scale="40" xChannelSelector="R" yChannelSelector="B" result="displaced"/>
+      <feGaussianBlur in="displaced" stdDeviation="2" result="finalBlur"/>
+      <feComposite in="finalBlur" in2="finalBlur" operator="over"/>
+    </filter>
+  </defs>
+</svg>
+
+<!-- WebGL Canvas -->
+<canvas id="shader-canvas"></canvas>
+
+<!-- Dark overlay -->
+<div class="overlay"></div>
+
+<!-- Content -->
+<div class="content">
+
+  <!-- NAV -->
+  <nav>
+    <div class="logo">BizLegal<em>AI</em></div>
+    <div class="nav-links">
+      <a href="#guides">Guides</a>
+      <a href="https://docstack.bizlegal-ai.com">DocStack</a>
+      <a href="https://brai.bizlegal-ai.com">BRAI</a>
+      <a href="https://tracr.bizlegal-ai.com">TRACR</a>
+    </div>
+    <a href="https://docstack.bizlegal-ai.com" class="glass-btn glass-btn-primary">Get templates</a>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-badge">
+      <div class="badge-dot"></div>
+      Lawyer-drafted · AI-refined · Multi-jurisdiction
+    </div>
+
+    <h1>
+      <span class="line-dim">Legal documents</span>
+      <span class="line-dim">for global</span>
+      <span class="line-accent">real estate</span>
+      <span class="line-white">and investment</span>
+    </h1>
+
+    <p class="hero-sub">
+      JV agreements, NDAs, LOIs, capital call agreements —
+      structured for US, UAE, EU, UK, Singapore and Canada.
+      Download, fill in, sign.
+    </p>
+
+    <div class="hero-ctas">
+      <a href="https://docstack.bizlegal-ai.com" class="glass-btn glass-btn-primary glass-btn-xl">
+        Browse templates from $49
+      </a>
+      <a href="#guides" class="glass-btn glass-btn-xl">
+        Read free guides
+      </a>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="stat-val">8</div><div class="stat-lbl">Templates</div></div>
+      <div class="stat"><div class="stat-val">6</div><div class="stat-lbl">Jurisdictions</div></div>
+      <div class="stat"><div class="stat-val">$49</div><div class="stat-lbl">Starting price</div></div>
+      <div class="stat"><div class="stat-val">$2k+</div><div class="stat-lbl">Saved vs lawyer</div></div>
+    </div>
+  </div>
+
+  <!-- PRODUCTS -->
+  <section>
+    <div class="sec-eyebrow"><div class="sec-line"></div><span class="sec-label">Products</span></div>
+    <div class="products">
+      <div class="product-card">
+        <span class="p-tag tag-live">Live</span>
+        <div class="p-name">DocStack</div>
+        <p class="p-desc">8 lawyer-drafted real estate templates. JV, NDA, LOI, Capital Call. DOCX + PDF, instant download.</p>
+        <div class="p-footer">
+          <span class="p-price">From $49</span>
+          <a href="https://docstack.bizlegal-ai.com" class="p-cta">Browse templates →</a>
+        </div>
+      </div>
+      <div class="product-card">
+        <span class="p-tag tag-beta">Beta</span>
+        <div class="p-name">BRAI</div>
+        <p class="p-desc">Blockchain Regulatory Intelligence. Compliance scanning for VARA, MiCA, SEC, MAS projects instantly.</p>
+        <div class="p-footer">
+          <span class="p-price">Subscription</span>
+          <a href="https://brai.bizlegal-ai.com" class="p-cta">Run free scan →</a>
+        </div>
+      </div>
+      <div class="product-card">
+        <span class="p-tag tag-soon">Soon</span>
+        <div class="p-name">TRACR</div>
+        <p class="p-desc">AI forensic investigation. Wallet tracing, fraud analysis, court-ready reports for lawyers and investigators.</p>
+        <div class="p-footer">
+          <span class="p-price">$99 / report</span>
+          <a href="#" class="p-cta">Join waitlist →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- JURISDICTIONS -->
+  <section>
+    <div class="sec-eyebrow"><div class="sec-line"></div><span class="sec-label">Jurisdictions</span></div>
+    <div class="juris-grid">
+      <div class="juris-card"><div><div class="j-code">UAE</div><div class="j-sub">VARA / DIFC</div></div><div class="j-count">3 docs</div></div>
+      <div class="juris-card"><div><div class="j-code">USA</div><div class="j-sub">SEC / Delaware</div></div><div class="j-count">3 docs</div></div>
+      <div class="juris-card"><div><div class="j-code">EU</div><div class="j-sub">MiCA / GDPR</div></div><div class="j-count">1 doc</div></div>
+      <div class="juris-card"><div><div class="j-code">UK</div><div class="j-sub">FCA / Companies Act</div></div><div class="j-count">1 doc</div></div>
+      <div class="juris-card"><div><div class="j-code">SGP</div><div class="j-sub">MAS / ACRA</div></div><div class="j-count">1 doc</div></div>
+      <div class="juris-card"><div><div class="j-code">CAN</div><div class="j-sub">CSA / FINTRAC</div></div><div class="j-count">1 doc</div></div>
+    </div>
+  </section>
+
+  <!-- GUIDES -->
+  <section id="guides">
+    <div class="sec-eyebrow"><div class="sec-line"></div><span class="sec-label">Free legal guides</span></div>
+    <div class="guide-group">
+      <div class="guide-region">UAE / DIFC</div>
+      <a href="/guides/uae/joint-venture-agreement-real-estate-uae" class="guide-item"><span class="guide-title">Joint Venture Agreement for Real Estate in UAE</span><span class="guide-arrow">→</span></a>
+      <a href="/guides/uae/vara-token-distribution-agreement-uae" class="guide-item"><span class="guide-title">VARA Token Distribution Agreement UAE</span><span class="guide-arrow">→</span></a>
+      <a href="/guides/uae/nda-real-estate-investment-uae" class="guide-item"><span class="guide-title">NDA for Real Estate Investment in UAE</span><span class="guide-arrow">→</span></a>
+    </div>
+    <div class="guide-group">
+      <div class="guide-region">United States</div>
+      <a href="/guides/united-states/operating-agreement-llc-real-estate" class="guide-item"><span class="guide-title">Real Estate LLC Operating Agreement Guide</span><span class="guide-arrow">→</span></a>
+      <a href="/guides/united-states/capital-call-agreement-real-estate" class="guide-item"><span class="guide-title">Capital Call Agreement Real Estate: US Legal Guide</span><span class="guide-arrow">→</span></a>
+      <a href="/guides/united-states/joint-venture-agreement-real-estate-us" class="guide-item"><span class="guide-title">Real Estate Joint Venture Agreement Template</span><span class="guide-arrow">→</span></a>
+    </div>
+    <div class="guide-group">
+      <div class="guide-region">European Union</div>
+      <a href="/guides/european-union/mica-token-sale-agreement-template" class="guide-item"><span class="guide-title">MiCA Token Sale Agreement Template EU</span><span class="guide-arrow">→</span></a>
+    </div>
+    <div class="guide-group">
+      <div class="guide-region">United Kingdom</div>
+      <a href="/guides/united-kingdom/loi-commercial-real-estate-uk" class="guide-item"><span class="guide-title">Commercial Real Estate LOI Template UK</span><span class="guide-arrow">→</span></a>
+    </div>
+    <div class="guide-group">
+      <div class="guide-region">Singapore / MAS</div>
+      <a href="/guides/singapore/capital-call-agreement-singapore" class="guide-item"><span class="guide-title">Capital Call Agreement Singapore</span><span class="guide-arrow">→</span></a>
+    </div>
+    <div class="guide-group">
+      <div class="guide-region">Canada</div>
+      <a href="/guides/canada/joint-venture-agreement-real-estate-canada" class="guide-item"><span class="guide-title">Joint Venture Agreement Real Estate Canada</span><span class="guide-arrow">→</span></a>
+    </div>
+  </section>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">BizLegal<em>AI</em></div>
+  <div class="footer-links">
+    <a href="https://docstack.bizlegal-ai.com">DocStack</a>
+    <a href="https://brai.bizlegal-ai.com">BRAI</a>
+    <a href="https://tracr.bizlegal-ai.com">TRACR</a>
+  </div>
+  <span class="footer-copy">© 2025 BizLegal AI</span>
+  <p class="footer-disclaimer">Templates only — not legal advice. No attorney-client relationship is created. Always have qualified counsel review before execution.</p>
+</footer>
+
+<script>
+// ── WEBGL SHADER (Three.js) ──
+const canvas = document.getElementById('shader-canvas')
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: false })
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+renderer.setClearColor(new THREE.Color(0x000000))
+
+const scene = new THREE.Scene()
+const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, -1)
+
+const vertexShader = `
+  attribute vec3 position;
+  void main() {
+    gl_Position = vec4(position, 1.0);
+  }
+`
+
+const fragmentShader = `
+  precision highp float;
+  uniform vec2 resolution;
+  uniform float time;
+  uniform float xScale;
+  uniform float yScale;
+  uniform float distortion;
+
+  void main() {
+    vec2 p = (gl_FragCoord.xy * 2.0 - resolution) / min(resolution.x, resolution.y);
+    float d = length(p) * distortion;
+
+    float rx = p.x * (1.0 + d);
+    float gx = p.x;
+    float bx = p.x * (1.0 - d);
+
+    float r = 0.04 / abs(p.y + sin((rx + time) * xScale) * yScale);
+    float g = 0.05 / abs(p.y + sin((gx + time) * xScale) * yScale);
+    float b = 0.03 / abs(p.y + sin((bx + time) * xScale) * yScale);
+
+    // Shift toward green
+    gl_FragColor = vec4(r * 0.3, g * 1.2, b * 0.5, 1.0);
+  }
+`
+
+const uniforms = {
+  resolution: { value: [window.innerWidth, window.innerHeight] },
+  time: { value: 0.0 },
+  xScale: { value: 1.2 },
+  yScale: { value: 0.4 },
+  distortion: { value: 0.08 },
+}
+
+const positions = [-1,-1,0, 1,-1,0, -1,1,0, 1,-1,0, -1,1,0, 1,1,0]
+const geo = new THREE.BufferGeometry()
+geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(positions), 3))
+
+const mat = new THREE.RawShaderMaterial({ vertexShader, fragmentShader, uniforms, side: THREE.DoubleSide })
+scene.add(new THREE.Mesh(geo, mat))
+
+function resize() {
+  const w = window.innerWidth, h = window.innerHeight
+  renderer.setSize(w, h, false)
+  uniforms.resolution.value = [w, h]
+}
+resize()
+window.addEventListener('resize', resize)
+
+function animate() {
+  uniforms.time.value += 0.008
+  renderer.render(scene, camera)
+  requestAnimationFrame(animate)
+}
+animate()
+</script>
+</body>
+</html>
