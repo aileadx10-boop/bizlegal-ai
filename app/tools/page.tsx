@@ -99,8 +99,7 @@ export default function ToolsPage() {
                     display: 'flex', flexDirection: 'column', gap: '16px',
                     position: 'relative', overflow: 'hidden',
                   }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-4px)'; (e.currentTarget as HTMLDivElement).style.boxShadow = `0 20px 60px ${c.bg}` }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.transform = 'none'; (e.currentTarget as HTMLDivElement).style.boxShadow = 'none' }}
+                    className="tool-hub-card"
                   >
                     <div style={{ position: 'absolute', top: '-40px', right: '-40px', width: '200px', height: '200px', borderRadius: '50%', background: `radial-gradient(ellipse, ${c.bg} 0%, transparent 70%)`, pointerEvents: 'none' }} />
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
