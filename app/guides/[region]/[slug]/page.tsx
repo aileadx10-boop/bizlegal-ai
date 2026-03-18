@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: {
     .single()
 
   return {
-    title: data?.title ?? 'BizLegal AI — Legal Guide',
+    title: data?.title ?? 'DOR INNOVATIONS — Legal Guide',
     description: data?.meta ?? data?.meta_desc ?? '',
   }
 }

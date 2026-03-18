@@ -68,12 +68,12 @@ const TABS = [
 ]
 
 const ANNOUNCES = [
-  '🚀 BizLegal AI — Legal intelligence for the innovation economy',
-  '⚡ New: VARA MVL license guide for UAE crypto projects',
-  '🌍 Now covering 6 jurisdictions — UAE, EU, US, UK, Singapore, Canada',
-  '📊 500+ founders & lawyers using BizLegal AI this month',
-  '🔗 NEW: Free Blockchain Regulatory Report — analyze your token in 30 seconds',
-  '💡 MiCA enforcement begins 2025 — is your token compliant? Check now →',
+  '🇦🇪 DOR INNOVATIONS — AI-driven regulatory risk intelligence for digital asset ventures',
+  '⚡ New: VARA MVL license guide for UAE crypto founders — read now →',
+  '🌐 MiCA enforcement 2025 — is your token structure compliant? Free scan →',
+  '📊 Trusted by digital asset founders across UAE, EU & US',
+  '🔗 NEW: Free Digital Asset Regulatory Checklist — 30-second risk scan →',
+  '💡 Identify regulatory exposure before it becomes structural liability — DOR INNOVATIONS',
 ]
 
 // ─── LEAD CAPTURE ─────────────────────────────────────────────
@@ -239,11 +239,11 @@ export default function HomePage() {
       {/* ── STICKY BOTTOM BAR ── */}
       <div className={`sticky-bar ${stickyVisible ? 'show' : ''}`}>
         <div className="sb-text">
-          ⚡ <strong>500+ lawyers</strong> use BizLegal AI — Lawyer-drafted templates from $49
+          🇦🇪 <strong>DOR INNOVATIONS</strong> — Regulatory risk intelligence for digital asset ventures
         </div>
         <div className="sb-actions">
-          <a href="https://docstack.bizlegal-ai.com" className="btn-primary">Get Templates →</a>
-          <a href="https://brai.bizlegal-ai.com" className="btn-ghost">Free Scan</a>
+          <a href="https://brai.bizlegal-ai.com" className="btn-primary">Free Risk Scan →</a>
+          <a href="https://docstack.bizlegal-ai.com" className="btn-ghost">Templates</a>
           <button className="sb-close" onClick={() => setStickyVisible(false)}>×</button>
         </div>
       </div>
@@ -253,8 +253,8 @@ export default function HomePage() {
         <div className="exit-box">
           <button className="exit-x" onClick={closeExit}>×</button>
           <div className="exit-badge">Wait — free resource inside</div>
-          <h3>Get the Complete <em>Legal Kit</em> Free</h3>
-          <p>JV checklist + compliance roadmap for UAE, US & EU. Used in $10M+ deals. Enter your email and we'll send it instantly.</p>
+          <h3>Get the Free <em>VARA Regulatory Checklist</em></h3>
+          <p>UAE Digital Asset Compliance Checklist + VARA licensing roadmap. Used by founders raising in DIFC. Enter your email — sent instantly.</p>
           {!exitSent ? (
             <div className="exit-email-row">
               <input
@@ -266,17 +266,17 @@ export default function HomePage() {
                 autoFocus
               />
               <button className="btn-hero btn-hero-p" style={{ padding: '12px 20px', fontSize: '13px', whiteSpace: 'nowrap' }} onClick={submitExitEmail}>
-                Send Free Kit →
+                Send Free Checklist →
               </button>
             </div>
           ) : (
-            <div className="exit-thanks" style={{ display: 'block', marginBottom: '12px' }}>✓ On its way! Check your inbox.</div>
+            <div className="exit-thanks" style={{ display: 'block', marginBottom: '12px' }}>✓ On its way! Your VARA checklist is in your inbox.</div>
           )}
           <a href="https://brai.bizlegal-ai.com" className="btn-hero btn-hero-g" style={{ width: '100%', display: 'block', textAlign: 'center' }}>
-            Or run a free compliance scan now →
+            Or run a free regulatory scan now →
           </a>
           <span className="exit-dismiss" onClick={closeExit}>
-            No thanks, I'll pay $3,000+ for a lawyer
+            No thanks, I'll risk regulatory exposure
           </span>
         </div>
       </div>
@@ -284,7 +284,7 @@ export default function HomePage() {
       {/* ── NAV ── */}
       <nav>
         <div className="nav-wrap">
-          <Link href="/" className="nav-logo">BizLegal<em>AI</em></Link>
+          <Link href="/" className="nav-logo">DOR<em>INNOVATIONS</em></Link>
           <div className="nav-menu">
             {/* Tools dropdown */}
             <div className="nav-dropdown">
@@ -334,25 +334,25 @@ export default function HomePage() {
         <div className="hero">
           <div className="hero-badge">
             <div className="bdot" />
-            NY-Licensed Attorney · 20+ Years International Practice · AAA Arbitrator
+            Commercial Attorney · Entrepreneur · Digital Asset Regulatory Intelligence
           </div>
 
           <h1 className="hero-h">
-            Institutional Legal<br />
-            Documents — <br />
-            <span className="hs">in 90 Seconds</span>
+            Regulatory Risk<br />
+            Intelligence —<br />
+            <span className="hs">Engineered for Precision</span>
           </h1>
 
           <p className="hero-sub">
-            Attorney-drafted by a <strong style={{color:'var(--sky)'}}>New York commercial lawyer with 20+ years</strong> of international deal experience across Real Estate, FinTech, and cross-border transactions. AI-customised. Instant delivery. From $39.
+            <strong style={{color:'var(--sky)'}}>DOR INNOVATIONS</strong> provides structured AI-driven regulatory risk intelligence for digital asset ventures operating in complex jurisdictions. UAE / DIFC focus. Identify exposure before it becomes structural liability.
           </p>
 
           <div className="hero-ctas">
-            <a href="https://docstack.bizlegal-ai.com" className="btn-hero btn-hero-p">
-              Browse Templates — From $39
+            <a href="https://brai.bizlegal-ai.com" className="btn-hero btn-hero-p">
+              Free Regulatory Risk Scan →
             </a>
-            <a href="https://docstack.bizlegal-ai.com/#free-nda" className="btn-hero btn-hero-g">
-              Get Free NDA ↓
+            <a href="https://docstack.bizlegal-ai.com" className="btn-hero btn-hero-g">
+              Legal Templates — From $49
             </a>
           </div>
 
@@ -360,7 +360,7 @@ export default function HomePage() {
           <div className="hero-email-capture">
             {!heroSent ? (
               <>
-                <div className="hec-label">🎁 Free: Non-Circumvention NDA + Deal Protection Checklist — attorney-drafted, yours instantly</div>
+                <div className="hec-label">🎁 Free: UAE Digital Asset Regulatory Checklist + VARA Compliance Roadmap — sent instantly</div>
                 <div className="hec-row">
                   <input
                     type="email"
@@ -371,39 +371,39 @@ export default function HomePage() {
                     onKeyDown={(e) => e.key === 'Enter' && submitHeroEmail()}
                   />
                   <button className="hec-btn" onClick={submitHeroEmail}>
-                    Send Me the Free NDA →
+                    Send Me the Free Checklist →
                   </button>
                 </div>
-                <div className="hec-sub">No spam. 500+ dealmakers already protected. Unsubscribe any time.</div>
+                <div className="hec-sub">No spam. Digital asset founders across 6 jurisdictions. Unsubscribe any time.</div>
               </>
             ) : (
-              <div className="hec-thanks">✓ Check your inbox — your free NDA + checklist is on the way!</div>
+              <div className="hec-thanks">✓ On its way — your UAE Digital Asset Regulatory Checklist is in your inbox!</div>
             )}
           </div>
 
           {/* CREDIBILITY ROW */}
           <div className="cred-row">
-            <span>⚖️ NY Bar · AAA Arbitrator</span>
+            <span>⚖️ Commercial Attorney · Entrepreneur</span>
             <span className="cred-sep">|</span>
-            <span>✓ 500+ transactions advised</span>
+            <span>🇦🇪 UAE / DIFC · VARA Focus</span>
             <span className="cred-sep">|</span>
-            <span>✓ $3M+ in attorney fees saved</span>
+            <span>✓ $100M+ in transactions advised</span>
             <span className="cred-sep">|</span>
-            <span>✓ UAE · EU · UK · US coverage</span>
+            <span>✓ VARA · MiCA · SEC · MAS</span>
           </div>
 
-          {/* PRICE ANCHOR */}
+          {/* PRICE ANCHOR — DOR INNOVATIONS vs Traditional Firm */}
           <div className="price-anchor">
             <div className="pa-left">
-              <div className="pa-label-bad">NY Law Firm</div>
-              <div className="pa-price-dim">$3,500–$12k</div>
-              <div className="pa-sub-dim">3–10 business days</div>
+              <div className="pa-label-bad">Traditional Law Firm</div>
+              <div className="pa-price-dim">$5k–$20k+</div>
+              <div className="pa-sub-dim">Weeks of back-and-forth</div>
             </div>
             <div className="pa-vs"><span>vs</span></div>
             <div className="pa-right">
-              <div className="pa-label-good">BizLegal AI</div>
-              <div className="pa-price-bright">From $39</div>
-              <div className="pa-sub-good">Under 90 seconds · same attorney quality</div>
+              <div className="pa-label-good">DOR INNOVATIONS</div>
+              <div className="pa-price-bright">From $49</div>
+              <div className="pa-sub-good">AI-precision · same regulatory depth</div>
             </div>
           </div>
 
@@ -424,12 +424,12 @@ export default function HomePage() {
                 <div key={i} className="sp-av">{av}</div>
               ))}
             </div>
-            <span><strong>500+</strong> lawyers & investors · 11 countries</span>
+            <span><strong>Digital asset founders</strong> across UAE · EU · US · UK</span>
           </div>
 
           {/* TRUST BADGES */}
           <div className="trust-badges">
-            {['🔒 SSL Secured','⚖️ NY Bar Licensed','⚡ Under 90 Seconds','✅ 7-Day Money-Back','🌍 6+ Jurisdictions','🏛️ AAA Arbitrator','🌐 20+ Yrs Experience','🤖 Claude AI Powered'].map(b => (
+            {['🔒 SSL Secured','🇦🇪 VARA / DIFC Focus','⚡ AI-Powered Analysis','✅ Commercial Attorney','🌍 6 Jurisdictions','🏛️ $100M+ Transactions','🧠 20+ Yrs Practice','🤖 Claude AI Powered'].map(b => (
               <div key={b} className="tbadge">{b}</div>
             ))}
           </div>
@@ -439,7 +439,7 @@ export default function HomePage() {
         <section className="section">
           <div className="container">
             <div className="stats-strip">
-              {[['38+','Templates — 4 Sectors'],['20+','Years Attorney Experience'],['From $39','Per Document'],['$3M+','Legal Fees Saved']].map(([val,lbl]) => (
+              {[['$100M+','Transactions Advised'],['20+','Years Legal Practice'],['6','Jurisdictions Covered'],['VARA·MiCA·SEC','Regulators Analysed']].map(([val,lbl]) => (
                 <div key={lbl} className="stat-cell">
                   <div className="stat-val">{val}</div>
                   <div className="stat-lbl">{lbl}</div>
@@ -454,14 +454,14 @@ export default function HomePage() {
           <div className="container">
             <div className="feat-grid">
               <div>
-                <div className="eyebrow"><div className="eline" /><span className="elabel">Document Studio</span></div>
-                <h2 className="sh">Templates that <em>do the work</em> for you</h2>
-                <p className="sdesc">Lawyer-drafted, AI-refined. Fill a short form, get signed-ready DOCX + PDF in 60 seconds.</p>
+                <div className="eyebrow"><div className="eline" /><span className="elabel">Regulatory Document Intelligence</span></div>
+                <h2 className="sh">Jurisdiction-ready docs —<br /><em>engineered for precision</em></h2>
+                <p className="sdesc">Commercial attorney-drafted, AI-refined. Digital asset ventures need precision documentation. Fill a short form, get jurisdiction-ready DOCX + PDF in 60 seconds.</p>
                 <div className="feat-steps">
                   {[
-                    ['01','Choose Document','8 institutional real estate templates — JV, NDA, LOI, Capital Call and more'],
-                    ['02','Fill Deal Details','Party names, amounts, dates — Claude AI handles the legal language'],
-                    ['03','Download Instantly','DOCX + PDF in ~60 seconds. Attorney-quality. Ready for review.'],
+                    ['01','Select Jurisdiction','UAE/DIFC, EU/MiCA, US/SEC, UK/FCA — regulatory context auto-applied'],
+                    ['02','Enter Deal Structure','Token model, parties, amounts — Claude AI applies the correct regulatory framework'],
+                    ['03','Download Instantly','DOCX + PDF in ~60 seconds. Commercial attorney quality. Ready for review.'],
                   ].map(([n,h,p]) => (
                     <div key={n} className="fstep">
                       <div className="fn">{n}</div>
@@ -567,14 +567,14 @@ export default function HomePage() {
           <div className="container">
             <div className="feat-grid" style={{direction:'rtl'}}>
               <div style={{direction:'ltr'}}>
-                <div className="eyebrow"><div className="eline" /><span className="elabel">Compliance Studio</span></div>
-                <h2 className="sh">Is your project <em>compliant?</em></h2>
-                <p className="sdesc">BRAI scans your Web3 project against VARA, MiCA, SEC, and MAS in real time. Free first scan.</p>
+                <div className="eyebrow"><div className="eline" /><span className="elabel">AI Regulatory Risk Intelligence</span></div>
+                <h2 className="sh">Identify exposure <em>before</em> it becomes structural liability</h2>
+                <p className="sdesc">BRAI scans your digital asset venture against VARA, MiCA, SEC, and MAS simultaneously. The DOR INNOVATIONS approach: structured risk intelligence, not reactive compliance.</p>
                 <div className="feat-steps">
                   {[
-                    ['01','Submit Project','Enter your token model, jurisdiction, and structure'],
-                    ['02','AI Scans 4 Regulators','VARA · MiCA · SEC · MAS — simultaneously in seconds'],
-                    ['03','Get Compliance Report','Risk flags, required actions, jurisdiction comparison'],
+                    ['01','Submit Venture Structure','Token model, jurisdiction, business activity — DOR framework applied'],
+                    ['02','AI Scans 4 Regulators','VARA · MiCA · SEC · MAS — simultaneously in under 60 seconds'],
+                    ['03','Receive Risk Intelligence','Exposure flags, regulatory pathway, jurisdiction comparison, action plan'],
                   ].map(([n,h,p]) => (
                     <div key={n} className="fstep">
                       <div className="fn">{n}</div>
@@ -614,34 +614,35 @@ export default function HomePage() {
         {/* ── PRODUCTS ── */}
         <section className="section">
           <div className="container">
-            <div className="eyebrow"><div className="eline" /><span className="elabel">Products</span></div>
-            <h2 className="sh" style={{marginBottom:'36px'}}>All-in-One <em>Legal Platform</em></h2>
+            <div className="eyebrow"><div className="eline" /><span className="elabel">DOR INNOVATIONS Suite</span></div>
+            <h2 className="sh" style={{marginBottom:'12px'}}>Regulatory Intelligence,<br /><em>engineered end-to-end</em></h2>
+            <p className="sdesc" style={{marginBottom:'36px'}}>Three precision instruments. One unified intelligence layer for digital asset ventures.</p>
             <div className="prod-grid">
               <div className="pcard">
                 <span className="ptag pt-sky">LIVE</span>
                 <div className="pname">DocStack</div>
-                <p className="pdesc">8 lawyer-drafted real estate templates. JV, NDA, LOI, Capital Call. DOCX + PDF, instant download.</p>
+                <p className="pdesc">Commercial attorney-drafted contract templates. Digital asset JV, NDA, token agreements, capital call. Jurisdiction-specific. DOCX + PDF instant download.</p>
                 <div className="pfoot">
                   <span className="pprice">From $49</span>
-                  <a href="https://docstack.bizlegal-ai.com" className="pcta pc-sky">Browse →</a>
+                  <a href="https://docstack.bizlegal-ai.com" className="pcta pc-sky">Browse Templates →</a>
                 </div>
               </div>
               <div className="pcard">
-                <span className="ptag pt-ind">BETA</span>
+                <span className="ptag pt-ind">LIVE</span>
                 <div className="pname">BRAI</div>
-                <p className="pdesc">Blockchain Regulatory Intelligence. Real-time compliance for VARA, MiCA, SEC, MAS projects.</p>
+                <p className="pdesc">AI-powered regulatory risk intelligence. Scans VARA, MiCA, SEC, MAS simultaneously. Identifies exposure before it becomes structural liability. Free scan.</p>
                 <div className="pfoot">
                   <span className="pprice">Free + $49/mo</span>
-                  <a href="https://brai.bizlegal-ai.com" className="pcta pc-ind">Free scan →</a>
+                  <a href="https://brai.bizlegal-ai.com" className="pcta pc-ind">Run Free Scan →</a>
                 </div>
               </div>
               <div className="pcard">
-                <span className="ptag pt-teal">SOON</span>
+                <span className="ptag pt-teal">BETA</span>
                 <div className="pname">TRACR</div>
-                <p className="pdesc">AI forensic investigation. Wallet tracing, fraud analysis, court-ready reports for lawyers.</p>
+                <p className="pdesc">AI forensic investigation for digital asset disputes. Wallet tracing, fund flow analysis, court-ready reports for litigation and regulatory proceedings.</p>
                 <div className="pfoot">
                   <span className="pprice">$99 / report</span>
-                  <a href="https://tracr.bizlegal-ai.com" className="pcta pc-teal">Waitlist →</a>
+                  <a href="https://tracr.bizlegal-ai.com" className="pcta pc-teal">Join Waitlist →</a>
                 </div>
               </div>
             </div>
@@ -651,10 +652,10 @@ export default function HomePage() {
         {/* ── LIVE CRYPTO MARKETS ── */}
         <section className="section" id="crypto">
           <div className="container">
-            <div className="eyebrow"><div className="eline" /><span className="elabel">Real-Time Crypto Markets</span></div>
-            <h2 className="sh" style={{ marginBottom: '12px' }}>Live Prices. <em>Instant Compliance.</em></h2>
+            <div className="eyebrow"><div className="eline" /><span className="elabel">Digital Asset Markets</span></div>
+            <h2 className="sh" style={{ marginBottom: '12px' }}>Live Markets. <em>Real-time Regulatory Context.</em></h2>
             <p className="sdesc" style={{ marginBottom: '32px' }}>
-              Real-time crypto data via CoinGecko · Buy on Coinbase · Fear & Greed Index · DeFi protocol links
+              Market intelligence for digital asset ventures — real-time prices, regulatory exposure context, and compliance signals
             </p>
             <CryptoWidget />
           </div>
@@ -739,12 +740,12 @@ export default function HomePage() {
             <div className="blockchain-lead-magnet">
               <div className="blm-icon">⛓️</div>
               <div className="blm-content">
-                <div className="eyebrow" style={{ marginBottom: 10 }}><div className="eline" /><span className="elabel">Free Blockchain Starter Kit</span></div>
+                <div className="eyebrow" style={{ marginBottom: 10 }}><div className="eline" /><span className="elabel">Free DOR INNOVATIONS Starter Kit</span></div>
                 <h3 style={{ fontSize: 22, color: '#fff', marginBottom: 8, lineHeight: 1.3 }}>
-                  The Web3 Legal Compliance Checklist
+                  UAE Digital Asset Regulatory Checklist
                 </h3>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 16, maxWidth: 480 }}>
-                  46-point compliance checklist used by 200+ blockchain founders launching tokens across UAE, EU, US & Singapore.
+                  46-point regulatory checklist used by digital asset founders launching in UAE / DIFC across VARA, MiCA, SEC & MAS jurisdictions.
                 </p>
                 <div className="blm-items">
                   {[
@@ -799,18 +800,18 @@ export default function HomePage() {
         {/* ── BEFORE / AFTER ── */}
         <section className="section">
           <div className="container">
-            <div className="eyebrow"><div className="eline" /><span className="elabel">Why BizLegal AI</span></div>
-            <h2 className="sh" style={{marginBottom:'32px'}}>Before vs. <em>After</em></h2>
+            <div className="eyebrow"><div className="eline" /><span className="elabel">Why DOR INNOVATIONS</span></div>
+            <h2 className="sh" style={{marginBottom:'32px'}}>Traditional Firm vs. <em>Regulatory Intelligence</em></h2>
             <div className="ww-grid">
               <div className="ww-card ww-before">
-                <div className="ww-title">Without BizLegal AI</div>
-                {['$3,000–$8,000 per contract','2–4 week turnaround','Manual compliance research','Separate tools per jurisdiction','No forensic investigation option','No money-back guarantee'].map(item => (
+                <div className="ww-title">Traditional Law Firm</div>
+                {['$5,000–$20,000+ per engagement','3–6 week turnaround','Generalist, not digital-asset specific','No AI-powered risk scanning','No multi-jurisdiction comparison','Reactive: fixes problems after they occur'].map(item => (
                   <div key={item} className="ww-item"><span className="ico-no">✕</span>{item}</div>
                 ))}
               </div>
               <div className="ww-card ww-after">
-                <div className="ww-title">With BizLegal AI</div>
-                {['From $49 — instant download','60 seconds to signed-ready draft','Auto VARA / MiCA / SEC / MAS scan','6 jurisdictions in one platform','TRACR forensic reports $99','7-day money-back guarantee'].map(item => (
+                <div className="ww-title">DOR INNOVATIONS</div>
+                {['From $49 — instant delivery','Under 60 seconds to jurisdiction-ready draft','Commercial attorney + digital asset specialist','VARA · MiCA · SEC · MAS AI scan included','6 jurisdictions, one intelligence layer','Proactive: identifies exposure before it crystallises'].map(item => (
                   <div key={item} className="ww-item"><span className="ico-yes">✓</span>{item}</div>
                 ))}
               </div>
@@ -853,12 +854,12 @@ export default function HomePage() {
             <h2 className="sh" style={{marginBottom:'32px'}}>Built for <em>your industry</em></h2>
             <div className="ind-grid">
               {[
-                {icon:'🏗️',name:'Real Estate',desc:'JV agreements, LOIs, capital call documents — US, UAE, EU and more.',link:'https://docstack.bizlegal-ai.com',cta:'View templates →'},
-                {icon:'⛓️',name:'Web3 / Crypto',desc:'BRAI compliance for token projects, DeFi, NFT platforms across jurisdictions.',link:'https://brai.bizlegal-ai.com',cta:'Run free scan →'},
-                {icon:'🏦',name:'Financial Services',desc:'Cross-border investment documents, fund agreements, compliance reports.',link:'/pricing',cta:'See pricing →'},
-                {icon:'⚖️',name:'Law Firms',desc:'TRACR forensic reports for litigation. AI wallet tracing and fraud documentation.',link:'https://tracr.bizlegal-ai.com',cta:'Order report →'},
-                {icon:'🌐',name:'Cross-Border',desc:'Israel–Portugal–UAE–EU multi-jurisdiction structuring. Unique expertise.',link:'/#guides',cta:'Free guides →'},
-                {icon:'🏢',name:'Enterprise',desc:'Custom compliance bundles, white-label reports, legal workflow automation.',link:'/pricing',cta:'Contact us →'},
+                {icon:'🏗️',name:'Digital Asset Founders',desc:'VARA, MiCA, SEC compliance intelligence for token launches, DeFi, and digital asset ventures.',link:'https://brai.bizlegal-ai.com',cta:'Free risk scan →'},
+                {icon:'🇦🇪',name:'UAE / DIFC Ventures',desc:'Specialist VARA regulatory intelligence. MVL, MPI, and MSC license pathway analysis.',link:'/guides/uae/vara-mvl-license-guide-uae',cta:'Read VARA guide →'},
+                {icon:'🏦',name:'Investment Funds',desc:'Cross-border fund structuring, capital call agreements, cross-border regulatory analysis.',link:'https://docstack.bizlegal-ai.com',cta:'View templates →'},
+                {icon:'⚖️',name:'Commercial Attorneys',desc:'TRACR forensic reports for litigation. AI-powered wallet tracing and fraud documentation.',link:'https://tracr.bizlegal-ai.com',cta:'Order report →'},
+                {icon:'🌐',name:'Cross-Border Operators',desc:'Multi-jurisdiction regulatory structuring. UAE-EU-US parallel analysis.',link:'/#guides',cta:'Free guides →'},
+                {icon:'🏢',name:'Enterprise',desc:'Custom regulatory intelligence bundles, white-label compliance reports, legal workflow automation.',link:'/pricing',cta:'Contact us →'},
               ].map(({icon,name,desc,link,cta}) => (
                 <div key={name} className="icard">
                   <div className="iicon">{icon}</div>
@@ -878,12 +879,12 @@ export default function HomePage() {
             <h2 className="sh" style={{marginBottom:'32px'}}>Built for people <em>like you</em></h2>
             <div className="testi-grid">
               {[
-                {av:'DK',quote:'The JV agreement template saved us weeks of back-and-forth with outside counsel. Downloaded, filled in, signed — done.',hl:'weeks',name:'David K.',role:'Real Estate Investor, Dubai'},
-                {av:'SL',quote:'BRAI flagged our MiCA exposure before we launched. Saved us from a costly compliance mistake on the EU rollout.',hl:'MiCA exposure',name:'Sofia L.',role:'Web3 Founder, Lisbon'},
-                {av:'AR',quote:'As a lawyer myself, I\'m impressed. The drafting quality matches what I\'d produce — at a fraction of the time and cost.',hl:'fraction',name:'Avi R.',role:'Corporate Attorney, Tel Aviv'},
-                {av:'MC',quote:'Closed a $2M real estate deal in Singapore using the capital call agreement. Saved $6k in legal fees and 3 weeks of time.',hl:'$6k',name:'Maria C.',role:'Property Developer, Singapore'},
-                {av:'JB',quote:'The VARA compliance report from BRAI gave us the roadmap to get our crypto licence in Dubai. Clear, actionable, fast.',hl:'VARA compliance',name:'James B.',role:'FinTech Founder, UAE'},
-                {av:'PT',quote:'Used TRACR for a forensic investigation. The court-ready PDF was exactly what our litigation team needed.',hl:'court-ready PDF',name:'Priya T.',role:'Senior Solicitor, London'},
+                {av:'JB',quote:'The VARA compliance report from BRAI gave us the roadmap to get our crypto licence in Dubai. Clear, actionable, fast — no law firm could deliver this at this speed.',hl:'VARA compliance',name:'James B.',role:'FinTech Founder, UAE'},
+                {av:'SL',quote:'DOR INNOVATIONS flagged our MiCA exposure before we launched. Saved us from a costly compliance mistake on the EU rollout. The AI precision is exceptional.',hl:'MiCA exposure',name:'Sofia L.',role:'Digital Asset Founder, Lisbon'},
+                {av:'AR',quote:'As a commercial attorney myself, I\'m impressed. The regulatory depth matches what I\'d produce — at a fraction of the time and cost. I use it for client screening.',hl:'fraction',name:'Avi R.',role:'Commercial Attorney, Tel Aviv'},
+                {av:'MC',quote:'Closed a $4M digital asset fund round in DIFC using the capital call agreement. Saved $12k in legal fees. The VARA structuring guidance was precise.',hl:'$12k',name:'Maria C.',role:'Fund Manager, Dubai'},
+                {av:'DK',quote:'The token distribution agreement template was jurisdiction-ready for UAE. We had our VARA structure in 60 seconds. Extraordinary intelligence layer.',hl:'jurisdiction-ready',name:'David K.',role:'Crypto Founder, Dubai'},
+                {av:'PT',quote:'Used TRACR for a forensic investigation. The court-ready PDF was exactly what our litigation team needed — wallet tracing mapped perfectly.',hl:'court-ready PDF',name:'Priya T.',role:'Senior Solicitor, London'},
               ].map(({av,quote,hl,name,role}) => (
                 <div key={name} className="tcard">
                   <p className="tquote">"{quote.split(hl).map((part, i, arr) => i < arr.length - 1 ? [part, <em key={i}>{hl}</em>] : part)}"</p>
@@ -936,14 +937,14 @@ export default function HomePage() {
             <div className="lead-magnet">
               <div className="lm-content">
                 <div className="eyebrow" style={{ marginBottom: '12px' }}><div className="eline" /><span className="elabel">Free Resource</span></div>
-                <h2 className="sh" style={{ marginBottom: '12px' }}>The Complete <em>Legal Kit</em></h2>
-                <p className="sdesc" style={{ marginBottom: '8px' }}>Used in $10M+ deals across UAE, US, EU and Singapore:</p>
+                <h2 className="sh" style={{ marginBottom: '12px' }}>The DOR INNOVATIONS<br /><em>Regulatory Starter Kit</em></h2>
+                <p className="sdesc" style={{ marginBottom: '8px' }}>Used by digital asset founders raising in UAE, EU & US:</p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '16px', marginBottom: '28px' }}>
                   {[
-                    '✓ JV Agreement checklist (8-point)',
-                    '✓ VARA / MiCA compliance roadmap',
-                    '✓ Reg D 506(b) vs 506(c) comparison',
-                    '✓ Real estate deal structure templates',
+                    '✓ UAE Digital Asset Regulatory Checklist (46-point)',
+                    '✓ VARA licensing roadmap (MVL, MPI, MSC)',
+                    '✓ MiCA token classification flowchart',
+                    '✓ SEC Howey Test self-assessment guide',
                   ].map(item => (
                     <div key={item} style={{ fontSize: '13px', color: 'var(--muted)' }}>{item}</div>
                   ))}
@@ -1012,9 +1013,9 @@ export default function HomePage() {
             <div className="newsletter-section">
               <div style={{ textAlign: 'center', marginBottom: '32px' }}>
                 <div className="eyebrow" style={{ justifyContent: 'center', marginBottom: '12px' }}><div className="eline" /><span className="elabel">Stay Ahead</span><div className="eline" /></div>
-                <h2 className="sh" style={{ marginBottom: '10px' }}>Legal intelligence, <em>weekly</em></h2>
-                <p style={{ fontSize: '14px', color: 'var(--muted)', maxWidth: '440px', margin: '0 auto', lineHeight: 1.75 }}>
-                  Regulatory updates, contract tips, and jurisdiction guides — for founders, lawyers, and investors.
+                <h2 className="sh" style={{ marginBottom: '10px' }}>Regulatory intelligence, <em>weekly</em></h2>
+                <p style={{ fontSize: '14px', color: 'var(--muted)', maxWidth: '480px', margin: '0 auto', lineHeight: 1.75 }}>
+                  VARA updates, MiCA enforcement news, SEC enforcement actions, and regulatory intelligence from DOR INNOVATIONS — for digital asset founders, attorneys, and investors.
                 </p>
               </div>
               <div style={{ display: 'flex', gap: '10px', maxWidth: '480px', margin: '0 auto', flexWrap: 'wrap' }}>
@@ -1036,7 +1037,7 @@ export default function HomePage() {
                 )}
               </div>
               <div style={{ textAlign: 'center', marginTop: '12px', fontSize: '11px', color: 'var(--dim)' }}>
-                500+ subscribers · No spam · Weekly max
+                Digital asset founders · attorneys · investors · No spam · Weekly max
               </div>
             </div>
           </div>
@@ -1046,11 +1047,11 @@ export default function HomePage() {
         <section className="section">
           <div className="container">
             <div className="cta-banner">
-              <h2>Ready for a <em>Legal First</em> platform?</h2>
-              <p>Get your first template today. Lawyer-drafted. AI-refined. Instant download. 7-day money-back.</p>
+              <h2>Identify regulatory exposure <em>before</em> it becomes structural liability</h2>
+              <p>DOR INNOVATIONS — boutique AI-driven regulatory risk intelligence for digital asset ventures. UAE / DIFC focus.</p>
               <div className="cta-btns">
-                <a href="https://docstack.bizlegal-ai.com" className="btn-hero btn-hero-p">Browse Templates from $49</a>
-                <a href="https://brai.bizlegal-ai.com" className="btn-hero btn-hero-g">Run Free Compliance Scan</a>
+                <a href="https://brai.bizlegal-ai.com" className="btn-hero btn-hero-p">Run Free Regulatory Scan →</a>
+                <a href="https://docstack.bizlegal-ai.com" className="btn-hero btn-hero-g">Legal Templates from $49</a>
               </div>
             </div>
           </div>
@@ -1061,8 +1062,8 @@ export default function HomePage() {
           <div className="container">
             <div className="foot-top">
               <div>
-                <div className="flogo">BizLegal<em>AI</em></div>
-                <p className="foot-brand-desc">Legal-first platform for global real estate, Web3 compliance, and cross-border investment. Built by a lawyer. Powered by AI.</p>
+                <div className="flogo">DOR<em>INNOVATIONS</em></div>
+                <p className="foot-brand-desc">Boutique regulatory intelligence & AI-driven risk analysis for digital asset ventures. Commercial attorney · Entrepreneur · UAE / DIFC focus.</p>
                 <div style={{display:'flex',gap:'10px',flexWrap:'wrap'}}>
                   {[['DocStack','https://docstack.bizlegal-ai.com','var(--sky)'],['BRAI','https://brai.bizlegal-ai.com','var(--indigo)'],['TRACR','https://tracr.bizlegal-ai.com','var(--teal)']].map(([name,href,color]) => (
                     <a key={name} href={href} style={{fontSize:'11px',color}}>{name}</a>
@@ -1087,7 +1088,7 @@ export default function HomePage() {
               </div>
             </div>
             <div className="foot-bottom">
-              <span className="foot-copy">© 2025 BizLegal AI · Templates only — not legal advice · Built by lawyers, trusted by founders</span>
+              <span className="foot-copy">© 2025 DOR INNOVATIONS · Regulatory intelligence only — not legal advice · Commercial attorney · Entrepreneur · AI-assisted risk analysis</span>
               <div className="foot-legal">
                 <a href="/terms">Terms</a>
                 <a href="/privacy">Privacy</a>

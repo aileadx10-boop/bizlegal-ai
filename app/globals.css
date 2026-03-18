@@ -1312,3 +1312,217 @@ footer {
   transform: translateY(-4px);
   box-shadow: 0 20px 60px rgba(94,234,212,0.12);
 }
+
+/* ── DOR INNOVATIONS BRAND ENHANCEMENTS ── */
+
+/* Logo wordmark */
+.nav-logo, .flogo {
+  font-family: 'Geist Mono', monospace;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--white);
+  text-decoration: none;
+}
+.nav-logo em, .flogo em {
+  font-style: normal;
+  background: linear-gradient(135deg, var(--sky), var(--teal));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Regulatory focus badge */
+.reg-focus-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 100px;
+  border: 1px solid rgba(125,211,252,0.2);
+  background: rgba(125,211,252,0.05);
+  font-size: 11px;
+  font-family: 'Geist Mono', monospace;
+  color: var(--sky);
+  letter-spacing: 0.08em;
+}
+
+/* Risk score meter */
+.risk-meter {
+  height: 6px;
+  background: rgba(125,211,252,0.08);
+  border-radius: 100px;
+  overflow: hidden;
+  position: relative;
+}
+.risk-meter-fill {
+  height: 100%;
+  border-radius: 100px;
+  background: linear-gradient(90deg, #4ade80, #f59e0b, #f87171);
+  transition: width 1s ease;
+}
+
+/* Jurisdiction flag row */
+.jurisdiction-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.juri-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-family: 'Geist Mono', monospace;
+  border: 1px solid rgba(125,211,252,0.12);
+  background: rgba(125,211,252,0.04);
+  color: var(--muted);
+  transition: all 0.2s;
+}
+.juri-chip:hover {
+  border-color: rgba(125,211,252,0.3);
+  color: var(--sky);
+  background: rgba(125,211,252,0.08);
+}
+.juri-chip.active {
+  border-color: rgba(94,234,212,0.4);
+  color: var(--teal);
+  background: rgba(94,234,212,0.08);
+}
+
+/* Intelligence card */
+.intel-card {
+  padding: 28px;
+  border-radius: 18px;
+  border: 1px solid rgba(125,211,252,0.1);
+  background: rgba(7,9,26,0.6);
+  backdrop-filter: blur(12px);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+.intel-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(125,211,252,0.3), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.intel-card:hover::before { opacity: 1; }
+.intel-card:hover {
+  border-color: rgba(125,211,252,0.2);
+  box-shadow: 0 20px 60px rgba(4,6,14,0.8), 0 0 40px rgba(125,211,252,0.04);
+  transform: translateY(-2px);
+}
+
+/* Precision line — decorative separator */
+.precision-line {
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--sky), var(--teal));
+  border-radius: 1px;
+  margin: 16px 0;
+}
+
+/* UAE flag accent */
+.uae-accent {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: rgba(0,115,68,0.1);
+  border: 1px solid rgba(0,115,68,0.2);
+  font-size: 11px;
+  font-family: 'Geist Mono', monospace;
+  color: #4ade80;
+}
+
+/* Regulatory scan live indicator */
+@keyframes scanPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.3); }
+}
+.scan-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-family: 'Geist Mono', monospace;
+  color: var(--teal);
+  letter-spacing: 0.1em;
+}
+.scan-live-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--teal);
+  animation: scanPulse 2s infinite;
+}
+
+/* Precision grid — 2-col card layout for capabilities */
+.precision-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+@media (max-width: 768px) {
+  .precision-grid { grid-template-columns: 1fr; }
+}
+
+/* DOR tagline */
+.dor-tagline {
+  font-size: 11px;
+  font-family: 'Geist Mono', monospace;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-top: 8px;
+}
+
+/* Hero gradient overlay for DOR brand */
+.dor-hero-gradient {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(125,211,252,0.06) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+/* Conversion: urgency strip */
+.urgency-strip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: rgba(251,191,36,0.06);
+  border: 1px solid rgba(251,191,36,0.15);
+  font-size: 12px;
+  color: #fbbf24;
+  font-family: 'Geist Mono', monospace;
+}
+
+/* Conversion: social counter */
+.social-counter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.social-counter-num {
+  font-family: 'Gloock', serif;
+  font-size: 20px;
+  color: var(--white);
+  line-height: 1;
+}
+
+/* Mobile responsiveness for DOR */
+@media (max-width: 768px) {
+  .about-founder-grid { grid-template-columns: 1fr !important; }
+}

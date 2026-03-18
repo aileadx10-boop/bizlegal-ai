@@ -6,7 +6,7 @@ const FAQS = [
   {
     cat: 'Products & Pricing',
     items: [
-      { q: 'How much does BizLegal AI cost?', a: 'DocStack contract templates start from $49 per document — instant DOCX + PDF download. BRAI compliance scanning is free for your first scan, then $49/month for unlimited scans. TRACR forensic investigation reports are $99 each, delivered in 24–48 hours.' },
+      { q: 'How much does DOR INNOVATIONS cost?', a: 'DocStack contract templates start from $49 per document — instant DOCX + PDF download. BRAI compliance scanning is free for your first scan, then $49/month for unlimited scans. TRACR forensic investigation reports are $99 each, delivered in 24–48 hours.' },
       { q: 'Is there a free trial?', a: 'Yes. BRAI offers a completely free first compliance scan — no credit card required. You can scan your protocol, whitepaper, or platform for VARA, MiCA, SEC, MAS, and FCA compliance instantly.' },
       { q: 'Do you offer refunds?', a: 'DocStack templates come with a 7-day satisfaction guarantee. If the template does not meet your legal need, contact us for a full refund. TRACR and BRAI subscriptions are non-refundable after use, but we will work with you to resolve any issues.' },
       { q: 'Can I use a template for multiple jurisdictions?', a: 'Some templates are jurisdiction-specific (e.g., UAE VARA registration agreement, EU MiCA whitepaper). Others are international. Each template listing clearly states its jurisdiction scope. Custom multi-jurisdiction bundles are available on request.' },
@@ -43,7 +43,7 @@ const FAQS = [
     items: [
       { q: 'Is my data secure?', a: 'Yes. Data is encrypted in transit (TLS 1.3) and at rest (AES-256). We do not store contract text submitted to our AI tools beyond the session. Lead email addresses are stored in Supabase with row-level security. We never sell your data.' },
       { q: 'Do you store contracts I submit for analysis?', a: 'No. Contract text submitted to the SaaS Risk Scanner, Contract Fixer, and other tools is processed in-memory and never persisted to any database. API requests go directly to Anthropic and are not logged by us.' },
-      { q: 'Are you GDPR compliant?', a: 'Yes. BizLegal AI operates under GDPR as a data controller. You have the right to access, rectify, and erase your personal data. Our Privacy Policy outlines full data handling practices. Contact privacy@bizlegal-ai.com for data requests.' },
+      { q: 'Are you GDPR compliant?', a: 'Yes. DOR INNOVATIONS operates under GDPR as a data controller. You have the right to access, rectify, and erase your personal data. Our Privacy Policy outlines full data handling practices. Contact privacy@bizlegal-ai.com for data requests.' },
     ],
   },
 ]

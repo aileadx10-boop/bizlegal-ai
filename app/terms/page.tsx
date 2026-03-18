@@ -2,8 +2,8 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Terms & Conditions — BizLegal AI',
-  description: 'Terms and conditions for using BizLegal AI legal intelligence platform, tools, and templates.',
+  title: 'Terms & Conditions — DOR INNOVATIONS',
+  description: 'Terms and conditions for using DOR INNOVATIONS legal intelligence platform, tools, and templates.',
 }
 
 const UPDATED = '18 March 2025'
@@ -31,13 +31,13 @@ export default function TermsPage() {
           </h1>
           <p style={{ fontSize: '13px', color: 'var(--dim)', marginBottom: '48px', fontFamily: 'Geist Mono, monospace' }}>Last updated: {UPDATED}</p>
 
-          <p style={p}>Please read these Terms and Conditions carefully before using BizLegal AI (&quot;Platform&quot;, &quot;Service&quot;). By accessing or using our services, you agree to be bound by these terms. If you disagree with any part, do not use our services.</p>
+          <p style={p}>Please read these Terms and Conditions carefully before using DOR INNOVATIONS (&quot;Platform&quot;, &quot;Service&quot;). By accessing or using our services, you agree to be bound by these terms. If you disagree with any part, do not use our services.</p>
 
           <h2 style={h}>1. Acceptance of Terms</h2>
           <p style={p}>By creating an account, purchasing a product, or using any free tool on bizlegal-ai.com, you represent that you are at least 18 years old, have the legal capacity to enter into contracts, and agree to these Terms and our Privacy Policy.</p>
 
           <h2 style={h}>2. Nature of Services — Not Legal Advice</h2>
-          <p style={p}><strong style={{ color: '#f87171' }}>IMPORTANT: BizLegal AI provides legal information and AI-assisted legal tools. We do not provide legal advice. No solicitor-client relationship is formed by using our platform.</strong></p>
+          <p style={p}><strong style={{ color: '#f87171' }}>IMPORTANT: DOR INNOVATIONS provides legal information and AI-assisted legal tools. We do not provide legal advice. No solicitor-client relationship is formed by using our platform.</strong></p>
           <p style={p}>Our templates are drafted by qualified solicitors as general professional documents. They are not tailored to your specific circumstances. For high-value transactions, complex disputes, or jurisdictions outside our coverage, you should engage qualified local legal counsel.</p>
           <p style={p}>AI tool outputs (risk scores, compliance analyses, generated letters) are informational only and should not be relied upon as definitive legal opinion.</p>
 
@@ -68,7 +68,7 @@ export default function TermsPage() {
           </ul>
 
           <h2 style={h}>6. Intellectual Property</h2>
-          <p style={p}>All content on BizLegal AI — including template drafts, AI tool architecture, written guides, compliance databases, and branding — is owned by or licensed to BizLegal AI. You acquire no ownership rights by purchasing or using our services.</p>
+          <p style={p}>All content on DOR INNOVATIONS — including template drafts, AI tool architecture, written guides, compliance databases, and branding — is owned by or licensed to DOR INNOVATIONS. You acquire no ownership rights by purchasing or using our services.</p>
           <p style={p}>Content you submit to our AI tools remains yours. You grant us a temporary, limited license to process it for the purpose of delivering the service.</p>
 
           <h2 style={h}>7. Limitation of Liability</h2>
@@ -76,7 +76,7 @@ export default function TermsPage() {
           <p style={p}>Our aggregate liability for any claim arising from these terms is limited to the amount you paid to us in the 3 months preceding the claim, or $49, whichever is greater.</p>
 
           <h2 style={h}>8. Indemnification</h2>
-          <p style={p}>You agree to indemnify and hold harmless BizLegal AI, its directors, solicitors, and contractors from any claims, damages, or expenses arising from your use of our services, violation of these terms, or infringement of third-party rights.</p>
+          <p style={p}>You agree to indemnify and hold harmless DOR INNOVATIONS, its directors, solicitors, and contractors from any claims, damages, or expenses arising from your use of our services, violation of these terms, or infringement of third-party rights.</p>
 
           <h2 style={h}>9. Governing Law & Dispute Resolution</h2>
           <p style={p}>These terms are governed by the laws of England and Wales. For disputes involving consumers, mandatory local consumer protection laws of your country also apply. Disputes shall first be attempted through good-faith mediation. If unresolved, disputes under $10,000 may be referred to binding online arbitration.</p>

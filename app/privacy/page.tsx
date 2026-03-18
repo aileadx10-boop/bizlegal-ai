@@ -2,8 +2,8 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy — BizLegal AI',
-  description: 'How BizLegal AI collects, uses, and protects your personal data. GDPR, CCPA, and LGPD compliant.',
+  title: 'Privacy Policy — DOR INNOVATIONS',
+  description: 'How DOR INNOVATIONS collects, uses, and protects your personal data. GDPR, CCPA, and LGPD compliant.',
 }
 
 const UPDATED = '18 March 2025'
@@ -33,7 +33,7 @@ export default function PrivacyPage() {
           <p style={{ fontSize: '13px', color: 'var(--dim)', marginBottom: '48px', fontFamily: 'Geist Mono, monospace' }}>Last updated: {UPDATED}</p>
 
           <div style={s}>
-            <p style={p}>BizLegal AI (&quot;we&quot;, &quot;us&quot;, &quot;our&quot;) is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our website at <strong style={{ color: 'var(--sky)' }}>bizlegal-ai.com</strong> and our legal intelligence tools.</p>
+            <p style={p}>DOR INNOVATIONS (&quot;we&quot;, &quot;us&quot;, &quot;our&quot;) is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our website at <strong style={{ color: 'var(--sky)' }}>bizlegal-ai.com</strong> and our legal intelligence tools.</p>
             <p style={p}>By using our services, you agree to the collection and use of information in accordance with this policy. This policy complies with the EU General Data Protection Regulation (GDPR), the California Consumer Privacy Act (CCPA), Brazil&apos;s LGPD, and applicable UK and UAE data protection laws.</p>
           </div>
 

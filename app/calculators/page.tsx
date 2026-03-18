@@ -34,7 +34,7 @@ function LegalFeeCalc() {
         <span style={{ fontSize: '28px' }}>💰</span>
         <div>
           <h2 style={{ fontFamily: 'Gloock, serif', fontSize: '22px', color: 'var(--white)', marginBottom: '2px' }}>Legal Fee Calculator</h2>
-          <p style={{ fontSize: '12px', color: 'var(--muted)' }}>Compare BizLegal AI vs traditional law firm costs</p>
+          <p style={{ fontSize: '12px', color: 'var(--muted)' }}>Compare DOR INNOVATIONS vs traditional law firm costs</p>
         </div>
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
@@ -67,7 +67,7 @@ function LegalFeeCalc() {
         <div style={{ marginTop: '20px', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' }}>
           {[
             { label: 'Traditional Lawyer', val: `$${result.trad.toLocaleString()}`, color: '#f87171' },
-            { label: 'BizLegal AI', val: `$${result.biz}`, color: 'var(--teal)' },
+            { label: 'DOR INNOVATIONS', val: `$${result.biz}`, color: 'var(--teal)' },
             { label: 'Your Saving', val: `$${result.saving.toLocaleString()}`, color: 'var(--sky)' },
           ].map(s => (
             <div key={s.label} style={{ textAlign: 'center', padding: '16px', borderRadius: '10px', border: `1px solid ${s.color}25`, background: `${s.color}06` }}>
@@ -183,7 +183,7 @@ function ROICalc() {
         <span style={{ fontSize: '28px' }}>📈</span>
         <div>
           <h2 style={{ fontFamily: 'Gloock, serif', fontSize: '22px', color: 'var(--white)', marginBottom: '2px' }}>ROI Calculator</h2>
-          <p style={{ fontSize: '12px', color: 'var(--muted)' }}>Calculate your legal cost savings with BizLegal AI</p>
+          <p style={{ fontSize: '12px', color: 'var(--muted)' }}>Calculate your legal cost savings with DOR INNOVATIONS</p>
         </div>
       </div>
       <div style={{ marginBottom: '12px' }}>

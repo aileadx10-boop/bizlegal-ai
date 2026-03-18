@@ -1,11 +1,11 @@
 // app/pricing/page.tsx
-// BizLegal AI — Pricing Page
+// DOR INNOVATIONS — Pricing Page
 
 import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Pricing — BizLegal AI | Legal Templates from $49',
+  title: 'Pricing — DOR INNOVATIONS | Legal Templates from $49',
   description: 'Transparent pricing for AI-powered legal templates, compliance scanning, and forensic investigation. DocStack from $49. BRAI free scan. TRACR $99/report.',
 }
 
@@ -211,12 +211,12 @@ export default function PricingPage() {
         <div style={{ marginBottom: '80px' }}>
           <div style={{ textAlign: 'center', marginBottom: '36px' }}>
             <h2 style={{ fontFamily: "'Gloock', serif", fontSize: 'clamp(28px,3.5vw,44px)', color: '#fff', marginBottom: '10px' }}>
-              BizLegal AI vs. <em style={{ color: 'var(--sky)', fontStyle: 'italic' }}>Traditional Lawyers</em>
+              DOR INNOVATIONS vs. <em style={{ color: 'var(--sky)', fontStyle: 'italic' }}>Traditional Lawyers</em>
             </h2>
           </div>
           <div style={{ border: '1px solid var(--border2)', borderRadius: '16px', overflow: 'hidden' }}>
             <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', background: 'rgba(4,6,14,0.8)', borderBottom: '1px solid var(--border)' }}>
-              {['Feature', 'Traditional', 'BizLegal AI'].map((h, i) => (
+              {['Feature', 'Traditional', 'DOR INNOVATIONS'].map((h, i) => (
                 <div key={h} style={{ padding: '16px 24px', fontSize: '11px', letterSpacing: '0.15em', textTransform: 'uppercase', color: i === 2 ? 'var(--sky)' : 'var(--muted)', fontWeight: 700, textAlign: i > 0 ? 'center' : 'left' }}>{h}</div>
               ))}
             </div>
@@ -282,7 +282,7 @@ export default function PricingPage() {
             <Link href="/privacy" className="fcol-a">Privacy</Link>
           </div>
           <div style={{ textAlign: 'center', marginTop: '16px', fontSize: '11px', color: 'var(--dim)' }}>
-            © 2025 BizLegal AI · Templates only — not legal advice
+            © 2025 DOR INNOVATIONS · Templates only — not legal advice
           </div>
         </div>
       </footer>

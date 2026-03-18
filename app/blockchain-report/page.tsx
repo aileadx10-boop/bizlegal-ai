@@ -546,7 +546,7 @@ export default function BlockchainReportPage() {
               <div style={{ background: 'rgba(7,9,26,0.8)', border: '1px solid var(--border)', borderRadius: 14, padding: 24 }}>
                 <div style={{ fontSize: 11, color: 'var(--muted)', fontFamily: 'Geist Mono, monospace', marginBottom: 8 }}>ESTIMATED TOTAL COMPLIANCE COST</div>
                 <div style={{ fontSize: 22, fontWeight: 700, color: 'var(--sky)', fontFamily: 'Geist Mono, monospace', marginBottom: 8 }}>{report.estimatedTotalCost}</div>
-                <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.6 }}>Cross-jurisdiction legal setup. BizLegal AI templates from $49 can reduce this significantly.</p>
+                <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.6 }}>Cross-jurisdiction legal setup. DOR INNOVATIONS templates from $49 can reduce this significantly.</p>
                 <a href="https://docstack.bizlegal-ai.com" style={{ display: 'inline-block', marginTop: 12, padding: '8px 16px', background: 'rgba(125,211,252,0.08)', border: '1px solid rgba(125,211,252,0.25)', borderRadius: 6, color: 'var(--sky)', fontSize: 12, textDecoration: 'none' }}>Get Templates from $49 →</a>
               </div>
               <div style={{ background: 'rgba(7,9,26,0.8)', border: '1px solid var(--border)', borderRadius: 14, padding: 24 }}>

@@ -2,8 +2,8 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Accessibility Statement — BizLegal AI',
-  description: 'BizLegal AI accessibility commitment, WCAG 2.1 conformance, and contact for accessibility support.',
+  title: 'Accessibility Statement — DOR INNOVATIONS',
+  description: 'DOR INNOVATIONS accessibility commitment, WCAG 2.1 conformance, and contact for accessibility support.',
 }
 
 export default function AccessibilityPage() {
@@ -38,7 +38,7 @@ export default function AccessibilityPage() {
           </h1>
           <p style={{ fontSize: '13px', color: 'var(--dim)', marginBottom: '48px', fontFamily: 'Geist Mono, monospace' }}>Last updated: 18 March 2025</p>
 
-          <p style={p}>BizLegal AI is committed to ensuring digital accessibility for people with disabilities. We continually work to improve the user experience for all visitors and apply relevant accessibility standards.</p>
+          <p style={p}>DOR INNOVATIONS is committed to ensuring digital accessibility for people with disabilities. We continually work to improve the user experience for all visitors and apply relevant accessibility standards.</p>
 
           <h2 style={h}>Conformance Status</h2>
           <div style={{ padding: '20px 24px', borderRadius: '12px', border: '1px solid rgba(94,234,212,0.2)', background: 'rgba(94,234,212,0.04)', marginBottom: '20px' }}>
@@ -65,7 +65,7 @@ export default function AccessibilityPage() {
           </ul>
 
           <h2 style={h}>Technical Specifications</h2>
-          <p style={p}>BizLegal AI relies on the following technologies for conformance:</p>
+          <p style={p}>DOR INNOVATIONS relies on the following technologies for conformance:</p>
           <ul style={{ paddingLeft: '20px' }}>
             <li style={li}>HTML5 with semantic markup</li>
             <li style={li}>CSS3 with logical properties for RTL support</li>
@@ -83,7 +83,7 @@ export default function AccessibilityPage() {
           </ul>
 
           <h2 style={h}>Feedback & Contact</h2>
-          <p style={p}>We welcome your feedback on the accessibility of BizLegal AI. If you experience any barriers, please tell us:</p>
+          <p style={p}>We welcome your feedback on the accessibility of DOR INNOVATIONS. If you experience any barriers, please tell us:</p>
           <div style={{ padding: '20px 24px', borderRadius: '12px', border: '1px solid rgba(125,211,252,0.15)', background: 'rgba(7,9,26,0.6)', marginTop: '8px' }}>
             <p style={{ ...p, marginBottom: '6px' }}><strong style={{ color: 'var(--sky)' }}>Email:</strong> accessibility@bizlegal-ai.com</p>
             <p style={{ ...p, marginBottom: '6px' }}><strong style={{ color: 'var(--sky)' }}>Response time:</strong> Within 5 business days</p>

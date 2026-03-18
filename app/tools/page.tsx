@@ -2,7 +2,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Free Legal AI Tools — BizLegal AI',
+  title: 'Free Legal AI Tools — DOR INNOVATIONS',
   description: 'Free AI-powered legal tools: SaaS Terms Risk Scanner, Freelancer Contract Fixer, Website Compliance Checker, Debt Collection Letter Generator.',
 }
 
