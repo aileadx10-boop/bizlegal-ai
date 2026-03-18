@@ -334,26 +334,25 @@ export default function HomePage() {
         <div className="hero">
           <div className="hero-badge">
             <div className="bdot" />
-            Legal First · AI-Powered · Multi-Jurisdiction
+            NY-Licensed Attorney · 20+ Years International Practice · AAA Arbitrator
           </div>
 
           <h1 className="hero-h">
-            Legal Intelligence<br />
-            for the<br />
-            <span className="hs">Innovation Economy</span>
+            Institutional Legal<br />
+            Documents — <br />
+            <span className="hs">in 90 Seconds</span>
           </h1>
 
           <p className="hero-sub">
-            Where law meets technology. AI-powered legal tools for Web3,
-            real estate and global innovation — built by lawyers, trusted by founders.
+            Attorney-drafted by a <strong style={{color:'var(--sky)'}}>New York commercial lawyer with 20+ years</strong> of international deal experience across Real Estate, FinTech, and cross-border transactions. AI-customised. Instant delivery. From $39.
           </p>
 
           <div className="hero-ctas">
             <a href="https://docstack.bizlegal-ai.com" className="btn-hero btn-hero-p">
-              Generate Contract — $49
+              Browse Templates — From $39
             </a>
-            <a href="https://brai.bizlegal-ai.com" className="btn-hero btn-hero-g">
-              Run Free Compliance Scan
+            <a href="https://docstack.bizlegal-ai.com/#free-nda" className="btn-hero btn-hero-g">
+              Get Free NDA ↓
             </a>
           </div>
 
@@ -361,7 +360,7 @@ export default function HomePage() {
           <div className="hero-email-capture">
             {!heroSent ? (
               <>
-                <div className="hec-label">Get our free legal kit — JV checklist + compliance roadmap</div>
+                <div className="hec-label">🎁 Free: Non-Circumvention NDA + Deal Protection Checklist — attorney-drafted, yours instantly</div>
                 <div className="hec-row">
                   <input
                     type="email"
@@ -372,39 +371,39 @@ export default function HomePage() {
                     onKeyDown={(e) => e.key === 'Enter' && submitHeroEmail()}
                   />
                   <button className="hec-btn" onClick={submitHeroEmail}>
-                    Get Free Kit →
+                    Send Me the Free NDA →
                   </button>
                 </div>
-                <div className="hec-sub">No spam. Used by 500+ lawyers & founders.</div>
+                <div className="hec-sub">No spam. 500+ dealmakers already protected. Unsubscribe any time.</div>
               </>
             ) : (
-              <div className="hec-thanks">✓ Check your inbox — legal kit on its way!</div>
+              <div className="hec-thanks">✓ Check your inbox — your free NDA + checklist is on the way!</div>
             )}
           </div>
 
           {/* CREDIBILITY ROW */}
           <div className="cred-row">
-            <span>✓ Trusted in 11+ jurisdictions</span>
+            <span>⚖️ NY Bar · AAA Arbitrator</span>
             <span className="cred-sep">|</span>
-            <span>✓ 2,400+ documents generated</span>
+            <span>✓ 500+ transactions advised</span>
             <span className="cred-sep">|</span>
-            <span>✓ $3M+ legal fees saved</span>
+            <span>✓ $3M+ in attorney fees saved</span>
             <span className="cred-sep">|</span>
-            <span>✓ 7-day money-back</span>
+            <span>✓ UAE · EU · UK · US coverage</span>
           </div>
 
           {/* PRICE ANCHOR */}
           <div className="price-anchor">
             <div className="pa-left">
-              <div className="pa-label-bad">Traditional lawyer</div>
-              <div className="pa-price-dim">$3–8k</div>
-              <div className="pa-sub-dim">2–3 weeks turnaround</div>
+              <div className="pa-label-bad">NY Law Firm</div>
+              <div className="pa-price-dim">$3,500–$12k</div>
+              <div className="pa-sub-dim">3–10 business days</div>
             </div>
             <div className="pa-vs"><span>vs</span></div>
             <div className="pa-right">
               <div className="pa-label-good">BizLegal AI</div>
-              <div className="pa-price-bright">$49</div>
-              <div className="pa-sub-good">60 seconds · instant download</div>
+              <div className="pa-price-bright">From $39</div>
+              <div className="pa-sub-good">Under 90 seconds · same attorney quality</div>
             </div>
           </div>
 
@@ -430,7 +429,7 @@ export default function HomePage() {
 
           {/* TRUST BADGES */}
           <div className="trust-badges">
-            {['🔒 SSL Secured','⚖️ Lawyer-Drafted','⚡ Instant Download','✅ 7-Day Money-Back','🌍 6 Jurisdictions','🤖 Claude AI Powered'].map(b => (
+            {['🔒 SSL Secured','⚖️ NY Bar Licensed','⚡ Under 90 Seconds','✅ 7-Day Money-Back','🌍 6+ Jurisdictions','🏛️ AAA Arbitrator','🌐 20+ Yrs Experience','🤖 Claude AI Powered'].map(b => (
               <div key={b} className="tbadge">{b}</div>
             ))}
           </div>
@@ -440,7 +439,7 @@ export default function HomePage() {
         <section className="section">
           <div className="container">
             <div className="stats-strip">
-              {[['150+','SEO Legal Guides'],['6','Jurisdictions'],['$49','Starting price'],['$3M+','Legal fees saved']].map(([val,lbl]) => (
+              {[['38+','Templates — 4 Sectors'],['20+','Years Attorney Experience'],['From $39','Per Document'],['$3M+','Legal Fees Saved']].map(([val,lbl]) => (
                 <div key={lbl} className="stat-cell">
                   <div className="stat-val">{val}</div>
                   <div className="stat-lbl">{lbl}</div>
