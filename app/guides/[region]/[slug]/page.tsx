@@ -7,15 +7,21 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import GuideClient from './GuideClient'
 
-const sb = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_KEY!
-)
+// Force dynamic rendering — never pre-render at build time
+// (Supabase env vars only exist at runtime, not build time)
+export const dynamic = 'force-dynamic'
+
+function getClient() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_KEY!
+  )
+}
 
 export async function generateMetadata({ params }: {
   params: { region: string; slug: string }
 }): Promise<Metadata> {
-  const { data } = await sb
+  const { data } = await getClient()
     .from('seo_pages')
     .select('title, meta, meta_desc')
     .eq('slug', `guides/${params.region}/${params.slug}`)
@@ -32,7 +38,7 @@ export default async function GuidePage({ params }: {
 }) {
   const slug = `guides/${params.region}/${params.slug}`
 
-  const { data: page } = await sb
+  const { data: page } = await getClient()
     .from('seo_pages')
     .select('*')
     .eq('slug', slug)

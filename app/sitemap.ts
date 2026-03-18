@@ -5,14 +5,13 @@
 import { createClient } from '@supabase/supabase-js'
 import type { MetadataRoute } from 'next'
 
-const sb = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_KEY!
-)
-
 export const revalidate = 3600 // refresh sitemap every hour
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const sb = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_KEY!
+  )
   const baseUrl = 'https://bizlegal-ai.com'
 
   // Static pages
