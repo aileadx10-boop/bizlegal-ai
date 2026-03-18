@@ -4,10 +4,10 @@ import './globals.css'
 export const metadata: Metadata = {
   metadataBase: new URL('https://bizlegal-ai.com'),
   title: {
-    default: 'BizLegal AI — Generate Lawyer-Grade Contracts in 60 Seconds',
+    default: 'BizLegal AI — Legal Intelligence for the Innovation Economy',
     template: '%s | BizLegal AI',
   },
-  description: 'AI legal templates for real estate, Web3 and global deals. Download DOCX + PDF instantly. Built on 20 years of legal practice. From $49. VARA, MiCA, SEC, MAS compliance scanning free.',
+  description: 'Where law meets technology. AI-powered legal intelligence for Web3, real estate and global innovation. Contract templates from $49. Free compliance scanning. Built by lawyers, trusted by founders.',
   keywords: 'legal templates, real estate contracts, AI legal, JV agreement, NDA, compliance, VARA, MiCA, SEC, MAS, DIFC, DFSA, FCA, CSA, FINTRAC, Delaware LLC, blockchain compliance',
   authors: [{ name: 'BizLegal AI' }],
   creator: 'BizLegal AI',
@@ -18,8 +18,8 @@ export const metadata: Metadata = {
     googleBot: { index: true, follow: true, 'max-image-preview': 'large' },
   },
   openGraph: {
-    title: 'BizLegal AI — Lawyer-Grade Contracts in 60 Seconds',
-    description: 'AI legal templates for real estate and cross-border deals. VARA, MiCA, SEC compliance scanning. From $49.',
+    title: 'BizLegal AI — Legal Intelligence for the Innovation Economy',
+    description: 'AI-powered legal intelligence for Web3, real estate and global innovation. Compliance scanning, contracts, forensics.',
     url: 'https://bizlegal-ai.com',
     siteName: 'BizLegal AI',
     type: 'website',

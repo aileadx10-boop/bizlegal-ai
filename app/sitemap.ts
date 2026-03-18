@@ -31,8 +31,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .eq('published', true)
     .order('created_at', { ascending: false })
 
+  // slug already contains 'guides/region/page-name' prefix from DB
   const guideRoutes: MetadataRoute.Sitemap = (pages ?? []).map(page => ({
-    url: `${baseUrl}/guides/${page.slug}`,
+    url: `${baseUrl}/${page.slug}`,
     lastModified: new Date(page.updated_at ?? page.created_at),
     changeFrequency: 'monthly' as const,
     priority: 0.9,

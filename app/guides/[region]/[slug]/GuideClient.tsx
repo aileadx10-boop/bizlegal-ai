@@ -24,15 +24,24 @@ interface JurisdictionData {
   timeline: { step: string; weeks: number }[]
 }
 
+interface PageContent {
+  intro?: string
+  sections?: { heading: string; body: string }[]
+  clauses?: string[]
+  faq?: { q: string; a: string }[]
+}
+
 interface Props {
   page: {
     title: string
-    content: string
+    content: PageContent
     cta_type: string
+    cta?: string
     jurisdiction: string
     topic: string
     keywords: string[]
-    meta: string
+    meta?: string
+    meta_desc?: string
   }
   jurisdiction: string
   slug: string
@@ -73,18 +82,23 @@ export default function GuideClient({ page, jurisdiction, jurisdictionData }: Pr
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null)
   const [leadEmail, setLeadEmail] = useState('')
   const [leadSent, setLeadSent] = useState(false)
-  const cta = CTA_CONFIG[page.cta_type as keyof typeof CTA_CONFIG] ?? CTA_CONFIG.docstack
+  const ctaKey = (page.cta_type ?? page.cta ?? 'docstack') as keyof typeof CTA_CONFIG
+  const cta = CTA_CONFIG[ctaKey] ?? CTA_CONFIG.docstack
+  const metaText = page.meta ?? page.meta_desc ?? ''
 
   const submitLead = useCallback(async () => {
     if (!leadEmail.includes('@')) return
     setLeadSent(true)
-    await captureLead(leadEmail, 'guide_page', page.cta_type)
-  }, [leadEmail, page.cta_type])
+    await captureLead(leadEmail, 'guide_page', ctaKey)
+  }, [leadEmail, ctaKey])
+
   const jd = jurisdictionData
   const totalWeeks = jd.timeline.reduce((a, b) => a + b.weeks, 0)
 
-  // Parse content into sections
-  const sections = parseContent(page.content)
+  // Parse JSONB content structure
+  const content: PageContent = typeof page.content === 'string'
+    ? JSON.parse(page.content)
+    : (page.content ?? {})
 
   return (
     <div style={{
@@ -170,7 +184,7 @@ export default function GuideClient({ page, jurisdiction, jurisdictionData }: Pr
           </h1>
 
           <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.75, maxWidth: '600px', marginBottom: '28px' }}>
-            {page.meta}
+            {metaText}
           </p>
 
           {/* Quick stats row */}
@@ -242,76 +256,36 @@ export default function GuideClient({ page, jurisdiction, jurisdictionData }: Pr
           </div>
         </div>
 
-        {/* ── MAIN CONTENT ── */}
+        {/* ── MAIN CONTENT (JSONB) ── */}
         <div style={{ marginBottom: '40px' }}>
-          {sections.map((section, i) => (
-            <div key={i}>
-              {section.type === 'h2' && (
-                <h2 style={{
-                  fontFamily: "'Gloock', serif",
-                  fontSize: '26px',
-                  color: '#fff',
-                  marginTop: '40px',
-                  marginBottom: '14px',
-                  letterSpacing: '-0.01em',
-                }}>
-                  {section.content}
-                </h2>
-              )}
-              {section.type === 'h3' && (
-                <h3 style={{
-                  fontSize: '16px',
-                  color: 'var(--sky)',
-                  marginTop: '28px',
-                  marginBottom: '10px',
-                  letterSpacing: '0.04em',
-                  textTransform: 'uppercase',
-                  fontFamily: "'Geist Mono', monospace",
-                }}>
-                  {section.content}
-                </h3>
-              )}
-              {section.type === 'p' && (
-                <p style={{
-                  fontSize: '15px',
-                  color: 'var(--muted)',
-                  lineHeight: 1.8,
-                  marginBottom: '16px',
-                }}>
-                  {section.content}
-                </p>
-              )}
-              {section.type === 'ul' && (
-                <ul style={{ listStyle: 'none', marginBottom: '16px' }}>
-                  {section.items?.map((item, j) => (
-                    <li key={j} style={{
-                      fontSize: '14px',
-                      color: 'var(--muted)',
-                      padding: '6px 0 6px 20px',
-                      borderBottom: '1px solid rgba(125,211,252,0.04)',
-                      position: 'relative',
-                    }}>
-                      <span style={{
-                        position: 'absolute', left: 0,
-                        color: 'var(--teal)', fontSize: '12px',
-                      }}>→</span>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              )}
 
-              {/* ── MID-PAGE CTA + EMAIL CAPTURE (after section 2) ── */}
-              {i === 2 && (
+          {/* Intro paragraph */}
+          {content.intro && (
+            <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '28px' }}>
+              {content.intro}
+            </p>
+          )}
+
+          {/* Sections */}
+          {(content.sections ?? []).map((section, i) => (
+            <div key={i}>
+              <h2 style={{
+                fontFamily: "'Gloock', serif", fontSize: '26px', color: '#fff',
+                marginTop: '40px', marginBottom: '14px', letterSpacing: '-0.01em',
+              }}>
+                {section.heading}
+              </h2>
+              <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '16px' }}>
+                {section.body}
+              </p>
+
+              {/* Mid-content CTA + lead capture after section 1 */}
+              {i === 1 && (
                 <>
                   <MidCTABanner cta={cta} />
-                  {/* Inline email lead capture */}
                   <div style={{
-                    margin: '24px 0',
-                    padding: '24px 28px',
-                    borderRadius: '12px',
-                    background: 'rgba(94,234,212,0.04)',
-                    border: '1px solid rgba(94,234,212,0.2)',
+                    margin: '24px 0', padding: '24px 28px', borderRadius: '12px',
+                    background: 'rgba(94,234,212,0.04)', border: '1px solid rgba(94,234,212,0.2)',
                   }}>
                     <div style={{ fontSize: '13px', color: '#fff', fontWeight: 600, marginBottom: '4px' }}>
                       Get this template + our full {jurisdictionData.name} legal kit free
@@ -322,8 +296,7 @@ export default function GuideClient({ page, jurisdiction, jurisdictionData }: Pr
                     {!leadSent ? (
                       <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                         <input
-                          type="email"
-                          placeholder="your@email.com"
+                          type="email" placeholder="your@email.com"
                           value={leadEmail}
                           onChange={(e) => setLeadEmail(e.target.value)}
                           onKeyDown={(e) => e.key === 'Enter' && submitLead()}
@@ -334,15 +307,12 @@ export default function GuideClient({ page, jurisdiction, jurisdictionData }: Pr
                             fontSize: '12px', fontFamily: "'Geist Mono', monospace", outline: 'none',
                           }}
                         />
-                        <button
-                          onClick={submitLead}
-                          style={{
-                            padding: '10px 18px', borderRadius: '7px',
-                            background: 'rgba(94,234,212,0.1)', border: '1px solid rgba(94,234,212,0.4)',
-                            color: 'var(--teal)', fontFamily: "'Geist Mono', monospace",
-                            fontSize: '12px', fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap',
-                          }}
-                        >
+                        <button onClick={submitLead} style={{
+                          padding: '10px 18px', borderRadius: '7px',
+                          background: 'rgba(94,234,212,0.1)', border: '1px solid rgba(94,234,212,0.4)',
+                          color: 'var(--teal)', fontFamily: "'Geist Mono', monospace",
+                          fontSize: '12px', fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap',
+                        }}>
                           Get Free Kit →
                         </button>
                       </div>
@@ -360,6 +330,54 @@ export default function GuideClient({ page, jurisdiction, jurisdictionData }: Pr
               )}
             </div>
           ))}
+
+          {/* Key clauses list */}
+          {(content.clauses ?? []).length > 0 && (
+            <div style={{ marginTop: '32px' }}>
+              <h2 style={{
+                fontFamily: "'Gloock', serif", fontSize: '26px', color: '#fff',
+                marginBottom: '14px', letterSpacing: '-0.01em',
+              }}>
+                Key Clauses
+              </h2>
+              <ul style={{ listStyle: 'none', marginBottom: '16px' }}>
+                {(content.clauses ?? []).map((clause, j) => (
+                  <li key={j} style={{
+                    fontSize: '14px', color: 'var(--muted)', padding: '8px 0 8px 20px',
+                    borderBottom: '1px solid rgba(125,211,252,0.04)', position: 'relative',
+                  }}>
+                    <span style={{ position: 'absolute', left: 0, color: 'var(--teal)', fontSize: '12px' }}>→</span>
+                    {clause}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* FAQ */}
+          {(content.faq ?? []).length > 0 && (
+            <div style={{ marginTop: '40px' }}>
+              <h2 style={{
+                fontFamily: "'Gloock', serif", fontSize: '26px', color: '#fff',
+                marginBottom: '20px', letterSpacing: '-0.01em',
+              }}>
+                Frequently Asked Questions
+              </h2>
+              {(content.faq ?? []).map((item, k) => (
+                <div key={k} style={{
+                  marginBottom: '16px', padding: '20px 24px', borderRadius: '10px',
+                  background: 'rgba(7,9,26,0.6)', border: '1px solid var(--border)',
+                }}>
+                  <div style={{ fontSize: '14px', color: '#fff', fontWeight: 600, marginBottom: '8px' }}>
+                    {item.q}
+                  </div>
+                  <div style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75 }}>
+                    {item.a}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* ── JURISDICTION COMPARISON INFOGRAPHIC ── */}
@@ -530,37 +548,3 @@ function ComparisonTable({ jurisdiction, color }: { jurisdiction: string; color:
   )
 }
 
-// ─── CONTENT PARSER ──────────────────────────────────────────
-function parseContent(html: string) {
-  const sections: any[] = []
-  const div = html
-    .replace(/<h2>/gi, '\n[H2]')
-    .replace(/<\/h2>/gi, '[/H2]\n')
-    .replace(/<h3>/gi, '\n[H3]')
-    .replace(/<\/h3>/gi, '[/H3]\n')
-    .replace(/<p>/gi, '\n[P]')
-    .replace(/<\/p>/gi, '[/P]\n')
-    .replace(/<li>/gi, '\n[LI]')
-    .replace(/<\/li>/gi, '[/LI]\n')
-    .replace(/<\/?[^>]+>/gi, '')
-
-  const lines = div.split('\n').filter(l => l.trim())
-
-  for (const line of lines) {
-    const h2 = line.match(/\[H2\](.*?)\[\/H2\]/)
-    const h3 = line.match(/\[H3\](.*?)\[\/H3\]/)
-    const p  = line.match(/\[P\](.*?)\[\/P\]/)
-    const li = line.match(/\[LI\](.*?)\[\/LI\]/)
-
-    if (h2) sections.push({ type: 'h2', content: h2[1] })
-    else if (h3) sections.push({ type: 'h3', content: h3[1] })
-    else if (p && p[1].trim()) sections.push({ type: 'p', content: p[1] })
-    else if (li) {
-      const last = sections[sections.length - 1]
-      if (last?.type === 'ul') last.items.push(li[1])
-      else sections.push({ type: 'ul', items: [li[1]] })
-    }
-  }
-
-  return sections
-}

@@ -17,20 +17,20 @@ export async function generateMetadata({ params }: {
 }): Promise<Metadata> {
   const { data } = await sb
     .from('seo_pages')
-    .select('title, meta')
-    .eq('slug', `${params.region}/${params.slug}`)
+    .select('title, meta, meta_desc')
+    .eq('slug', `guides/${params.region}/${params.slug}`)
     .single()
 
   return {
     title: data?.title ?? 'BizLegal AI — Legal Guide',
-    description: data?.meta ?? '',
+    description: data?.meta ?? data?.meta_desc ?? '',
   }
 }
 
 export default async function GuidePage({ params }: {
   params: { region: string; slug: string }
 }) {
-  const slug = `${params.region}/${params.slug}`
+  const slug = `guides/${params.region}/${params.slug}`
 
   const { data: page } = await sb
     .from('seo_pages')

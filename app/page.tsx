@@ -65,7 +65,7 @@ const TABS = [
 ]
 
 const ANNOUNCES = [
-  '🔒 Lawyer-drafted templates · 7-day money-back guarantee',
+  '🚀 BizLegal AI — Legal intelligence for the innovation economy',
   '⚡ New: VARA MVL license guide for UAE crypto projects',
   '🌍 Now covering 6 jurisdictions — UAE, EU, US, UK, Singapore, Canada',
   '📊 500+ founders & lawyers using BizLegal AI this month',
@@ -295,14 +295,14 @@ export default function HomePage() {
           </div>
 
           <h1 className="hero-h">
-            Generate Lawyer-Grade<br />
-            Contracts in<br />
-            <span className="hs">60 Seconds</span>
+            Legal Intelligence<br />
+            for the<br />
+            <span className="hs">Innovation Economy</span>
           </h1>
 
           <p className="hero-sub">
-            AI legal templates for real estate, Web3 and global deals.
-            Download DOCX + PDF instantly. Built on 20 years of legal practice.
+            Where law meets technology. AI-powered legal tools for Web3,
+            real estate and global innovation — built by lawyers, trusted by founders.
           </p>
 
           <div className="hero-ctas">
