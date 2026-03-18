@@ -3,7 +3,17 @@
 // app/guides/[region]/[slug]/GuideClient.tsx
 // Full dynamic guide page: banners, timeline, comparison table, infographics, CTA
 
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
+
+async function captureLead(email: string, source: string, product?: string) {
+  try {
+    await fetch('/api/leads', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, source, page: window.location.pathname, product }),
+    })
+  } catch { /* fail silently */ }
+}
 
 interface JurisdictionData {
   flag: string
@@ -61,7 +71,15 @@ const CTA_CONFIG = {
 
 export default function GuideClient({ page, jurisdiction, jurisdictionData }: Props) {
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null)
+  const [leadEmail, setLeadEmail] = useState('')
+  const [leadSent, setLeadSent] = useState(false)
   const cta = CTA_CONFIG[page.cta_type as keyof typeof CTA_CONFIG] ?? CTA_CONFIG.docstack
+
+  const submitLead = useCallback(async () => {
+    if (!leadEmail.includes('@')) return
+    setLeadSent(true)
+    await captureLead(leadEmail, 'guide_page', page.cta_type)
+  }, [leadEmail, page.cta_type])
   const jd = jurisdictionData
   const totalWeeks = jd.timeline.reduce((a, b) => a + b.weeks, 0)
 
@@ -283,9 +301,62 @@ export default function GuideClient({ page, jurisdiction, jurisdictionData }: Pr
                 </ul>
               )}
 
-              {/* ── MID-PAGE CTA BANNER (after section 2) ── */}
+              {/* ── MID-PAGE CTA + EMAIL CAPTURE (after section 2) ── */}
               {i === 2 && (
-                <MidCTABanner cta={cta} />
+                <>
+                  <MidCTABanner cta={cta} />
+                  {/* Inline email lead capture */}
+                  <div style={{
+                    margin: '24px 0',
+                    padding: '24px 28px',
+                    borderRadius: '12px',
+                    background: 'rgba(94,234,212,0.04)',
+                    border: '1px solid rgba(94,234,212,0.2)',
+                  }}>
+                    <div style={{ fontSize: '13px', color: '#fff', fontWeight: 600, marginBottom: '4px' }}>
+                      Get this template + our full {jurisdictionData.name} legal kit free
+                    </div>
+                    <div style={{ fontSize: '11px', color: 'var(--muted)', marginBottom: '14px' }}>
+                      JV checklist · compliance roadmap · jurisdiction guide
+                    </div>
+                    {!leadSent ? (
+                      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                        <input
+                          type="email"
+                          placeholder="your@email.com"
+                          value={leadEmail}
+                          onChange={(e) => setLeadEmail(e.target.value)}
+                          onKeyDown={(e) => e.key === 'Enter' && submitLead()}
+                          style={{
+                            flex: 1, minWidth: '180px', padding: '10px 14px',
+                            borderRadius: '7px', border: '1px solid var(--border2)',
+                            background: 'rgba(4,6,14,0.8)', color: '#fff',
+                            fontSize: '12px', fontFamily: "'Geist Mono', monospace", outline: 'none',
+                          }}
+                        />
+                        <button
+                          onClick={submitLead}
+                          style={{
+                            padding: '10px 18px', borderRadius: '7px',
+                            background: 'rgba(94,234,212,0.1)', border: '1px solid rgba(94,234,212,0.4)',
+                            color: 'var(--teal)', fontFamily: "'Geist Mono', monospace",
+                            fontSize: '12px', fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap',
+                          }}
+                        >
+                          Get Free Kit →
+                        </button>
+                      </div>
+                    ) : (
+                      <div style={{
+                        padding: '10px 14px', borderRadius: '7px',
+                        background: 'rgba(94,234,212,0.07)', border: '1px solid rgba(94,234,212,0.2)',
+                        color: 'var(--teal)', fontSize: '12px', textAlign: 'center',
+                      }}>
+                        ✓ Legal kit sent to your inbox!
+                      </div>
+                    )}
+                  </div>
+                </>
               )}
             </div>
           ))}
