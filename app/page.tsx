@@ -155,6 +155,7 @@ export default function HomePage() {
   const [nlSent, setNlSent] = useState(false)
   const [barVisible, setBarVisible] = useState(true)
   const [announceIdx, setAnnounceIdx] = useState(0)
+  const [lang, setLang] = useState<'EN'|'PT'|'ES'>('EN')
   const exitShown = useRef(false)
 
   // Rotate announcement bar messages
@@ -268,18 +269,46 @@ export default function HomePage() {
       </div>
 
       {/* ── NAV ── */}
-      <nav style={{ top: barVisible ? '36px' : '0' }}>
+      <nav>
         <div className="nav-wrap">
-          <a href="/" className="nav-logo">BizLegal<em>AI</em></a>
+          <Link href="/" className="nav-logo">BizLegal<em>AI</em></Link>
           <div className="nav-menu">
-            {['Products', 'Solutions', 'Resources', 'Company'].map(item => (
-              <button key={item} className="nav-link">{item}</button>
-            ))}
+            {/* Tools dropdown */}
+            <div className="nav-dropdown">
+              <button className="nav-link">Tools ▾</button>
+              <div className="nav-dropdown-menu">
+                <Link href="/tools" className="nav-dd-item"><span className="nav-dd-icon">🔍</span>SaaS Risk Scanner</Link>
+                <Link href="/tools/contract-fixer" className="nav-dd-item"><span className="nav-dd-icon">🛠️</span>Contract Fixer</Link>
+                <Link href="/tools/website-compliance" className="nav-dd-item"><span className="nav-dd-icon">🌐</span>Website Compliance</Link>
+                <Link href="/tools/debt-collection" className="nav-dd-item"><span className="nav-dd-icon">📬</span>Debt Collection</Link>
+              </div>
+            </div>
+            {/* Products dropdown */}
+            <div className="nav-dropdown">
+              <button className="nav-link">Products ▾</button>
+              <div className="nav-dropdown-menu">
+                <a href="https://docstack.bizlegal-ai.com" className="nav-dd-item"><span className="nav-dd-icon">📄</span>DocStack — Templates</a>
+                <a href="https://brai.bizlegal-ai.com" className="nav-dd-item"><span className="nav-dd-icon">⚡</span>BRAI — Compliance</a>
+                <a href="https://tracr.bizlegal-ai.com" className="nav-dd-item"><span className="nav-dd-icon">🔬</span>TRACR — Forensics</a>
+              </div>
+            </div>
+            <Link href="/calculators" className="nav-link">Calculators</Link>
             <Link href="/pricing" className="nav-link">Pricing</Link>
-            <Link href="/#guides" className="nav-link">Free Guides</Link>
+            <Link href="/faq" className="nav-link">FAQ</Link>
+            <Link href="/about" className="nav-link">About</Link>
           </div>
           <div className="nav-right">
-            <Link href="/pricing" className="btn-ghost">Pricing</Link>
+            <div style={{ display: 'flex', gap: '4px', background: 'rgba(4,6,14,0.6)', border: '1px solid rgba(125,211,252,0.1)', borderRadius: '7px', padding: '3px' }}>
+              {(['EN','PT','ES'] as const).map(l => (
+                <button key={l} onClick={() => setLang(l as 'EN'|'PT'|'ES')} style={{
+                  padding: '4px 8px', borderRadius: '4px', fontSize: '10px',
+                  fontFamily: 'Geist Mono, monospace', fontWeight: 700, cursor: 'pointer', border: 'none',
+                  background: lang === l ? 'rgba(125,211,252,0.15)' : 'transparent',
+                  color: lang === l ? 'var(--sky)' : 'var(--muted)',
+                }}>{l}</button>
+              ))}
+            </div>
+            <a href="https://brai.bizlegal-ai.com" className="btn-ghost">Free Scan</a>
             <a href="https://docstack.bizlegal-ai.com" className="btn-primary">Get Templates →</a>
           </div>
         </div>
@@ -628,10 +657,38 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* ── FREE AI TOOLS ── */}
+        <section className="section">
+          <div className="container">
+            <div className="eyebrow"><div className="eline" /><span className="elabel">Free AI Legal Tools</span></div>
+            <h2 className="sh" style={{ marginBottom: '12px' }}>Lawyer-grade analysis. <em>Instantly free.</em></h2>
+            <p className="sdesc" style={{ marginBottom: '40px' }}>4 AI tools powered by Claude Sonnet. No signup. No credit card. Results in under 30 seconds.</p>
+            <div className="tools-section-grid">
+              {[
+                { icon: '🔍', name: 'SaaS Terms Risk Scanner', desc: 'Paste any SaaS contract — get risk score, red flags, and negotiation points instantly.', href: '/tools/saas-risk-scanner', color: 'var(--sky)' },
+                { icon: '🛠️', name: 'Freelancer Contract Fixer', desc: 'Identifies weak clauses and rewrites them to protect your rights and payment.', href: '/tools/contract-fixer', color: 'var(--teal)' },
+                { icon: '🌐', name: 'Website Compliance Checker', desc: 'GDPR, CCPA, ADA & cookie compliance scan for any URL. Instant scored report.', href: '/tools/website-compliance', color: 'var(--indigo)' },
+                { icon: '📬', name: 'Debt Collection Letter', desc: 'Professional, jurisdiction-compliant debt letters generated in EN, PT & ES.', href: '/tools/debt-collection', color: 'var(--teal)' },
+              ].map(t => (
+                <Link key={t.href} href={t.href} className="tool-mini-card">
+                  <div className="tool-mini-icon">{t.icon}</div>
+                  <div className="tool-mini-name">{t.name}</div>
+                  <div className="tool-mini-desc">{t.desc}</div>
+                  <div className="tool-mini-cta" style={{ color: t.color }}>Try free →</div>
+                </Link>
+              ))}
+            </div>
+            <div style={{ textAlign: 'center', marginTop: '28px', display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <Link href="/tools" className="btn-primary">View All 4 AI Tools →</Link>
+              <Link href="/calculators" className="btn-ghost">Legal Calculators</Link>
+            </div>
+          </div>
+        </section>
+
         {/* ── INDUSTRIES ── */}
         <section className="section">
           <div className="container">
-            <div className="eyebrow"><div className="eline" /><span className="elabel">Who It's For</span></div>
+            <div className="eyebrow"><div className="eline" /><span className="elabel">Who It&apos;s For</span></div>
             <h2 className="sh" style={{marginBottom:'32px'}}>Built for <em>your industry</em></h2>
             <div className="ind-grid">
               {[
@@ -853,11 +910,11 @@ export default function HomePage() {
               </div>
               <div className="foot-cols">
                 {[
-                  {title:'Products',links:[['DocStack','https://docstack.bizlegal-ai.com'],['BRAI','https://brai.bizlegal-ai.com'],['TRACR','https://tracr.bizlegal-ai.com'],['Pricing','/pricing']]},
-                  {title:'Solutions',links:[['Real Estate','#'],['Web3 / Crypto','#'],['Law Firms','#'],['Cross-Border','#']]},
-                  {title:'Resources',links:[['Free Guides','#guides'],['Free Legal Kit','#'],['Newsletter','#'],['FAQ','/faq']]},
-                  {title:'Company',links:[['About Us','/about'],['Contact','/contact'],['Partners','#']]},
-                  {title:'Legal',links:[['Terms','/terms'],['Privacy','/privacy'],['Disclaimer','/disclaimer']]},
+                  {title:'Products',links:[['DocStack — Templates','https://docstack.bizlegal-ai.com'],['BRAI — Compliance','https://brai.bizlegal-ai.com'],['TRACR — Forensics','https://tracr.bizlegal-ai.com'],['Pricing','/pricing']]},
+                  {title:'Free AI Tools',links:[['SaaS Risk Scanner','/tools/saas-risk-scanner'],['Contract Fixer','/tools/contract-fixer'],['Website Compliance','/tools/website-compliance'],['Debt Collection','/tools/debt-collection'],['All Tools','/tools']]},
+                  {title:'Resources',links:[['Free Guides','/#guides'],['Calculators','/calculators'],['FAQ','/faq'],['Newsletter','/#newsletter']]},
+                  {title:'Company',links:[['About Us','/about'],['Contact','mailto:hello@bizlegal-ai.com'],['Accessibility','/accessibility']]},
+                  {title:'Legal',links:[['Terms & Conditions','/terms'],['Privacy Policy','/privacy'],['Accessibility','/accessibility']]},
                 ].map(col => (
                   <div key={col.title}>
                     <div className="fcol-title">{col.title}</div>
@@ -869,11 +926,12 @@ export default function HomePage() {
               </div>
             </div>
             <div className="foot-bottom">
-              <span className="foot-copy">© 2025 BizLegal AI · Templates only — not legal advice</span>
+              <span className="foot-copy">© 2025 BizLegal AI · Templates only — not legal advice · Built by lawyers, trusted by founders</span>
               <div className="foot-legal">
                 <a href="/terms">Terms</a>
                 <a href="/privacy">Privacy</a>
-                <a href="/disclaimer">Disclaimer</a>
+                <a href="/accessibility">Accessibility</a>
+                <a href="/faq">FAQ</a>
               </div>
             </div>
           </div>
