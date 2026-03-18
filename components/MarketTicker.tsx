@@ -16,9 +16,22 @@ function fmt(price: number, type: 'crypto' | 'stock'): string {
   return '$' + price.toFixed(4)
 }
 
+const COINGECKO_IDS: Record<string, string> = {
+  BTC: 'bitcoin', ETH: 'ethereum', SOL: 'solana', BNB: 'binancecoin',
+  XRP: 'ripple', ADA: 'cardano', AVAX: 'avalanche-2', DOT: 'polkadot',
+  LINK: 'chainlink', MATIC: 'matic-network',
+}
+
+const COINBASE_NAMES: Record<string, string> = {
+  BTC: 'bitcoin', ETH: 'ethereum', SOL: 'solana', BNB: 'bnb',
+  XRP: 'xrp', ADA: 'cardano', AVAX: 'avalanche', DOT: 'polkadot',
+}
+
 function TickerItem({ item }: { item: MarketItem }) {
   const pos = item.change >= 0
-  return (
+  const cgId = COINGECKO_IDS[item.symbol]
+  const cbName = COINBASE_NAMES[item.symbol]
+  const inner = (
     <span className="ticker-item">
       <span className="ticker-type">{item.type === 'crypto' ? '◆' : '▲'}</span>
       <span className="ticker-sym">{item.symbol}</span>
@@ -26,8 +39,33 @@ function TickerItem({ item }: { item: MarketItem }) {
       <span className={pos ? 'ticker-up' : 'ticker-dn'}>
         {pos ? '▲' : '▼'} {Math.abs(item.change).toFixed(2)}%
       </span>
+      {item.type === 'crypto' && cbName && (
+        <a
+          href={`https://www.coinbase.com/price/${cbName}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="ticker-buy"
+          onClick={e => e.stopPropagation()}
+        >
+          Buy
+        </a>
+      )}
     </span>
   )
+  if (item.type === 'crypto' && cgId) {
+    return (
+      <a
+        href={`https://www.coingecko.com/en/coins/${cgId}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{ textDecoration: 'none', color: 'inherit' }}
+        title={`View ${item.name} on CoinGecko`}
+      >
+        {inner}
+      </a>
+    )
+  }
+  return inner
 }
 
 export default function MarketTicker() {
