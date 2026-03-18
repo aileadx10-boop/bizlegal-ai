@@ -2,6 +2,9 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
+
+const CryptoWidget = dynamic(() => import('../components/CryptoWidget'), { ssr: false })
 
 // ─── DATA ─────────────────────────────────────────────────────
 const GUIDES = [
@@ -69,6 +72,8 @@ const ANNOUNCES = [
   '⚡ New: VARA MVL license guide for UAE crypto projects',
   '🌍 Now covering 6 jurisdictions — UAE, EU, US, UK, Singapore, Canada',
   '📊 500+ founders & lawyers using BizLegal AI this month',
+  '🔗 NEW: Free Blockchain Regulatory Report — analyze your token in 30 seconds',
+  '💡 MiCA enforcement begins 2025 — is your token compliant? Check now →',
 ]
 
 // ─── LEAD CAPTURE ─────────────────────────────────────────────
@@ -153,6 +158,8 @@ export default function HomePage() {
   const [heroSent, setHeroSent] = useState(false)
   const [nlEmail, setNlEmail] = useState('')
   const [nlSent, setNlSent] = useState(false)
+  const [blockchainEmail, setBlockchainEmail] = useState('')
+  const [blockchainEmailSent, setBlockchainEmailSent] = useState(false)
   const [barVisible, setBarVisible] = useState(true)
   const [announceIdx, setAnnounceIdx] = useState(0)
   const [lang, setLang] = useState<'EN'|'PT'|'ES'>('EN')
@@ -206,6 +213,12 @@ export default function HomePage() {
     setNlSent(true)
     await captureLead(nlEmail, 'newsletter')
   }, [nlEmail])
+
+  const submitBlockchainEmail = useCallback(async () => {
+    if (!blockchainEmail.includes('@')) return
+    setBlockchainEmailSent(true)
+    await captureLead(blockchainEmail, 'blockchain_lead_magnet', 'blockchain_kit')
+  }, [blockchainEmail])
 
   return (
     <>
@@ -281,6 +294,7 @@ export default function HomePage() {
                 <Link href="/tools/contract-fixer" className="nav-dd-item"><span className="nav-dd-icon">🛠️</span>Contract Fixer</Link>
                 <Link href="/tools/website-compliance" className="nav-dd-item"><span className="nav-dd-icon">🌐</span>Website Compliance</Link>
                 <Link href="/tools/debt-collection" className="nav-dd-item"><span className="nav-dd-icon">📬</span>Debt Collection</Link>
+                <Link href="/blockchain-report" className="nav-dd-item" style={{ borderTop: '1px solid var(--border)', marginTop: 4, paddingTop: 10 }}><span className="nav-dd-icon">⛓️</span>Blockchain Report <span style={{ fontSize: 9, background: 'rgba(165,180,252,0.15)', color: 'var(--indigo)', padding: '1px 5px', borderRadius: 3, marginLeft: 4 }}>NEW</span></Link>
               </div>
             </div>
             {/* Products dropdown */}
@@ -630,6 +644,154 @@ export default function HomePage() {
                   <span className="pprice">$99 / report</span>
                   <a href="https://tracr.bizlegal-ai.com" className="pcta pc-teal">Waitlist →</a>
                 </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── LIVE CRYPTO MARKETS ── */}
+        <section className="section" id="crypto">
+          <div className="container">
+            <div className="eyebrow"><div className="eline" /><span className="elabel">Real-Time Crypto Markets</span></div>
+            <h2 className="sh" style={{ marginBottom: '12px' }}>Live Prices. <em>Instant Compliance.</em></h2>
+            <p className="sdesc" style={{ marginBottom: '32px' }}>
+              Real-time crypto data via CoinGecko · Buy on Coinbase · Fear & Greed Index · DeFi protocol links
+            </p>
+            <CryptoWidget />
+          </div>
+        </section>
+
+        {/* ── BLOCKCHAIN REPORT CTA ── */}
+        <section className="section" id="blockchain-report">
+          <div className="container">
+            <div className="blockchain-report-banner">
+              <div className="brb-left">
+                <div className="eyebrow" style={{ marginBottom: '12px' }}>
+                  <div className="eline" /><span className="elabel" style={{ color: 'var(--indigo)' }}>NEW — Tier 1 AI Report</span>
+                </div>
+                <h2 className="sh" style={{ marginBottom: '12px' }}>
+                  Free Blockchain<br /><em>Regulatory Report</em>
+                </h2>
+                <p className="sdesc" style={{ marginBottom: '20px' }}>
+                  Enter your project details. Get instant analysis across VARA, MiCA, SEC, FCA, MAS & CSA —
+                  Howey Test, token classification, required licenses, risk flags, and compliance roadmap.
+                </p>
+                <div className="brb-features">
+                  {[
+                    ['🇦🇪', 'UAE VARA — Virtual Asset License'],
+                    ['🇪🇺', 'EU MiCA — Token Classification'],
+                    ['🇺🇸', 'US SEC — Howey Test Analysis'],
+                    ['🇬🇧', 'UK FCA — Crypto Registration'],
+                    ['🇸🇬', 'Singapore MAS — DPT License'],
+                    ['🇨🇦', 'Canada CSA — Compliance Path'],
+                  ].map(([flag, label]) => (
+                    <div key={String(label)} className="brb-feature">
+                      <span>{flag}</span>
+                      <span style={{ fontSize: 12, color: 'var(--muted)' }}>{label}</span>
+                    </div>
+                  ))}
+                </div>
+                <div style={{ display: 'flex', gap: 12, marginTop: 24, flexWrap: 'wrap' }}>
+                  <Link href="/blockchain-report" className="btn-hero btn-hero-p" style={{ fontSize: 14, padding: '13px 28px', background: 'rgba(165,180,252,0.12)', borderColor: 'rgba(165,180,252,0.4)', color: 'var(--indigo)' }}>
+                    Get Free Preview Report →
+                  </Link>
+                  <Link href="/blockchain-report" className="btn-hero btn-hero-g" style={{ fontSize: 14, padding: '13px 28px' }}>
+                    Full Tier 1 Report — $99
+                  </Link>
+                </div>
+              </div>
+              <div className="brb-right">
+                <div className="mock-win">
+                  <div className="mock-bar">
+                    <div className="mdot" style={{ background: '#ff5f57' }} />
+                    <div className="mdot" style={{ background: '#febc2e' }} />
+                    <div className="mdot" style={{ background: '#28c840' }} />
+                    <span style={{ fontSize: 10, color: 'var(--muted)', marginLeft: 8 }}>blockchain-report.pdf</span>
+                  </div>
+                  <div className="mock-body">
+                    <div style={{ fontSize: 10, color: 'var(--muted)', marginBottom: 14, letterSpacing: '0.1em' }}>BLOCKCHAIN COMPLIANCE REPORT</div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+                      <div>
+                        <div style={{ fontSize: 13, color: '#fff', fontWeight: 600 }}>MetaSwap Protocol</div>
+                        <div style={{ fontSize: 10, color: 'var(--muted)' }}>MSP Token · Ethereum</div>
+                      </div>
+                      <div style={{ textAlign: 'center' }}>
+                        <div style={{ fontSize: 20, fontWeight: 700, color: '#f59e0b', fontFamily: 'Geist Mono, monospace' }}>67</div>
+                        <div style={{ fontSize: 9, color: 'var(--muted)' }}>RISK SCORE</div>
+                      </div>
+                    </div>
+                    <div className="mock-row">🇦🇪 UAE VARA<span className="tag tg-ind">⚠ License Req.</span></div>
+                    <div className="mock-row">🇪🇺 EU MiCA<span className="tag tg-teal">✓ ARToken</span></div>
+                    <div className="mock-row">🇺🇸 SEC Howey<span className="tag tg-warn">✗ Review</span></div>
+                    <div className="mock-row">🇬🇧 FCA<span className="tag tg-teal">✓ Registered</span></div>
+                    <div className="mock-cta" style={{ background: 'rgba(165,180,252,0.07)', borderColor: 'rgba(165,180,252,0.2)', color: 'var(--indigo)' }}>
+                      📋 6 jurisdictions · Risk matrix · Action plan
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── BLOCKCHAIN LEAD MAGNET ── */}
+        <section className="section">
+          <div className="container">
+            <div className="blockchain-lead-magnet">
+              <div className="blm-icon">⛓️</div>
+              <div className="blm-content">
+                <div className="eyebrow" style={{ marginBottom: 10 }}><div className="eline" /><span className="elabel">Free Blockchain Starter Kit</span></div>
+                <h3 style={{ fontSize: 22, color: '#fff', marginBottom: 8, lineHeight: 1.3 }}>
+                  The Web3 Legal Compliance Checklist
+                </h3>
+                <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 16, maxWidth: 480 }}>
+                  46-point compliance checklist used by 200+ blockchain founders launching tokens across UAE, EU, US & Singapore.
+                </p>
+                <div className="blm-items">
+                  {[
+                    '✓ VARA MVL license requirements (UAE)',
+                    '✓ MiCA token classification flowchart',
+                    '✓ SEC Howey Test self-assessment',
+                    '✓ FCA cryptoasset registration steps',
+                    '✓ DeFi regulatory risk matrix',
+                    '✓ Token distribution legal template',
+                  ].map(item => (
+                    <span key={item} className="blm-item">{item}</span>
+                  ))}
+                </div>
+              </div>
+              <div className="blm-form">
+                {!blockchainEmailSent ? (
+                  <>
+                    <div style={{ fontSize: 14, color: '#fff', fontWeight: 600, marginBottom: 12, textAlign: 'center' }}>
+                      Download Free — Instant Access
+                    </div>
+                    <input
+                      type="email"
+                      className="hec-input"
+                      placeholder="your@email.com"
+                      value={blockchainEmail}
+                      onChange={e => setBlockchainEmail(e.target.value)}
+                      onKeyDown={e => e.key === 'Enter' && submitBlockchainEmail()}
+                      style={{ width: '100%', marginBottom: 10 }}
+                    />
+                    <button className="hec-btn" onClick={submitBlockchainEmail} style={{ width: '100%', textAlign: 'center' }}>
+                      Get Free Blockchain Kit →
+                    </button>
+                    <div style={{ fontSize: 11, color: 'var(--dim)', textAlign: 'center', marginTop: 8 }}>
+                      No spam. Used by 200+ Web3 founders.
+                    </div>
+                  </>
+                ) : (
+                  <div style={{ textAlign: 'center' }}>
+                    <div style={{ fontSize: 28, marginBottom: 10 }}>✓</div>
+                    <div style={{ color: 'var(--teal)', fontSize: 14, fontWeight: 600 }}>Kit on its way!</div>
+                    <div style={{ color: 'var(--muted)', fontSize: 12, marginTop: 6 }}>Check your inbox for the blockchain compliance checklist.</div>
+                    <Link href="/blockchain-report" style={{ display: 'inline-block', marginTop: 14, fontSize: 13, color: 'var(--indigo)', textDecoration: 'none' }}>
+                      Run your free compliance report →
+                    </Link>
+                  </div>
+                )}
               </div>
             </div>
           </div>
