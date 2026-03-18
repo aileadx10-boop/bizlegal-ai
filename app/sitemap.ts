@@ -29,6 +29,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/privacy`,                     lastModified: new Date(), changeFrequency: 'yearly',  priority: 0.4 },
     { url: `${baseUrl}/terms`,                       lastModified: new Date(), changeFrequency: 'yearly',  priority: 0.4 },
     { url: `${baseUrl}/accessibility`,               lastModified: new Date(), changeFrequency: 'yearly',  priority: 0.4 },
+    // SEO product & jurisdiction landing pages
+    { url: `${baseUrl}/vara-compliance`,                         lastModified: new Date(), changeFrequency: 'weekly',  priority: 0.95 },
+    { url: `${baseUrl}/vara-mvl-license`,                        lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${baseUrl}/mica-regulation-2025`,                    lastModified: new Date(), changeFrequency: 'weekly',  priority: 0.95 },
+    { url: `${baseUrl}/uae-difc-crypto-regulation`,              lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${baseUrl}/digital-asset-regulatory-intelligence`,   lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${baseUrl}/digital-asset-risk-analysis`,             lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${baseUrl}/cross-border-compliance`,                 lastModified: new Date(), changeFrequency: 'monthly', priority: 0.85 },
+    { url: `${baseUrl}/brai`,                                    lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${baseUrl}/docstack`,                                lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${baseUrl}/tracr`,                                   lastModified: new Date(), changeFrequency: 'monthly', priority: 0.85 },
   ]
 
   // Dynamic guide pages from Supabase
