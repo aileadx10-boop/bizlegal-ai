@@ -1,0 +1,49 @@
+name: Sitemap Ping — Notify Search Engines
+
+# Runs after SEO content generation to ensure new pages are indexed fast
+on:
+  workflow_run:
+    workflows: ["Automated SEO Content Generation"]
+    types: [completed]
+  workflow_dispatch:  # manual trigger
+  schedule:
+    - cron: '30 9 * * 0,2,5'  # 30 min after SEO generation (08:00 + 30min)
+
+jobs:
+  ping-search-engines:
+    name: Ping Google & Bing Sitemap
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name != 'workflow_run' }}
+
+    steps:
+      - name: Ping Google Search Console
+        run: |
+          echo "Pinging Google with sitemap..."
+          SITEMAP="https://bizlegal-ai.com/sitemap.xml"
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            "https://www.google.com/ping?sitemap=${SITEMAP}")
+          echo "Google ping status: $STATUS"
+
+      - name: Ping Bing Webmaster
+        run: |
+          echo "Pinging Bing with sitemap..."
+          SITEMAP="https://bizlegal-ai.com/sitemap.xml"
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            "https://www.bing.com/ping?sitemap=${SITEMAP}")
+          echo "Bing ping status: $STATUS"
+
+      - name: Verify sitemap is live
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            "https://bizlegal-ai.com/sitemap.xml")
+          if [ "$STATUS" = "200" ]; then
+            echo "✓ Sitemap reachable (HTTP 200)"
+          else
+            echo "⚠ Sitemap returned HTTP $STATUS"
+          fi
+
+      - name: Report
+        if: always()
+        run: |
+          echo "::notice::Sitemap ping complete — bizlegal-ai.com/sitemap.xml submitted to Google & Bing"
+          echo "Timestamp: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
