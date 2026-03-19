@@ -3,12 +3,43 @@
 import { useState, useCallback } from 'react'
 import Link from 'next/link'
 
-// ─── DATA ──────────────────────────────────────────────────────
+const SOCIAL = [
+  { name: 'LinkedIn', icon: '💼', url: 'https://www.linkedin.com/company/DorInnovations', color: '#0A66C2', followers: 'Follow' },
+  { name: 'X / Twitter', icon: '𝕏', url: 'https://x.com/DorInnovations', color: '#fff', followers: 'Follow' },
+  { name: 'Instagram', icon: '📸', url: 'https://www.instagram.com/dorinnovations/', color: '#E1306C', followers: 'Follow' },
+  { name: 'YouTube', icon: '▶', url: 'https://www.youtube.com/@DorInnovations', color: '#FF0000', followers: 'Subscribe' },
+  { name: 'Substack', icon: '📨', url: 'https://substack.com/@dorinnovations', color: '#FF6719', followers: 'Subscribe' },
+  { name: 'Facebook', icon: 'f', url: 'https://www.facebook.com/DorInnovations/', color: '#1877F2', followers: 'Follow' },
+  { name: 'Pinterest', icon: '𝐏', url: 'https://www.pinterest.com/DorInnovations/', color: '#E60023', followers: 'Follow' },
+]
+
+const AI_ENGINES = [
+  { name: 'Claude', company: 'Anthropic', badge: '🟠', desc: 'Primary intelligence engine' },
+  { name: 'Gemini', company: 'Google', badge: '🔵', desc: 'Multi-modal analysis' },
+  { name: 'GPT-4', company: 'OpenAI', badge: '🟢', desc: 'Document reasoning' },
+  { name: 'Mistral', company: 'Mistral AI', badge: '🟣', desc: 'EU compliance layer' },
+]
+
+const BLOG_POSTS = [
+  { tag: 'VARA', title: 'VARA MVL License 2025: Complete Application Guide for UAE Digital Asset Founders', date: 'Mar 2025', read: '8 min', href: '/blog/vara-mvl-license-guide-2025' },
+  { tag: 'MiCA', title: 'MiCA Enforcement Begins: What Every Token Issuer Must Do Now', date: 'Mar 2025', read: '6 min', href: '/blog/mica-enforcement-2025' },
+  { tag: 'BRAI', title: 'How BRAI Identifies Regulatory Exposure Before It Crystallises', date: 'Feb 2025', read: '5 min', href: '/blog/brai-regulatory-intelligence' },
+  { tag: 'SEC', title: 'Howey Test 2025: Applying the SEC Framework to Your Token Structure', date: 'Feb 2025', read: '7 min', href: '/blog/howey-test-2025-token-analysis' },
+  { tag: 'DIFC', title: 'DIFC vs ADGM: Which UAE Jurisdiction for Your Digital Asset Venture?', date: 'Jan 2025', read: '6 min', href: '/blog/difc-vs-adgm-digital-assets' },
+  { tag: 'DocStack', title: 'Jurisdiction-Ready Contracts: How DocStack Applies VARA/MiCA Automatically', date: 'Jan 2025', read: '4 min', href: '/blog/docstack-vara-mica-contracts' },
+]
+
+const TEMPLATE_FEATURES = [
+  { icon: '🇦🇪', title: 'VARA / DIFC Templates', count: '12 templates', color: '#fbbf24' },
+  { icon: '🇪🇺', title: 'MiCA / EU Templates', count: '8 templates', color: 'var(--sky)' },
+  { icon: '🇺🇸', title: 'SEC / US Templates', count: '10 templates', color: 'var(--teal)' },
+  { icon: '🇸🇬', title: 'MAS / Singapore', count: '6 templates', color: 'var(--indigo)' },
+]
+
 const GUIDES = [
   { region: 'UAE / DIFC', flag: '🇦🇪', items: [
     { title: 'VARA Token Distribution Agreement UAE', href: '/guides/uae/vara-token-distribution-agreement-uae' },
     { title: 'VARA Compliance Guide — MVL License UAE', href: '/guides/uae/vara-mvl-license-guide-uae' },
-    { title: 'Joint Venture Agreement for Real Estate in UAE', href: '/guides/uae/joint-venture-agreement-real-estate-uae' },
   ]},
   { region: 'European Union', flag: '🇪🇺', items: [
     { title: 'MiCA Token Sale Agreement Template EU', href: '/guides/european-union/mica-token-sale-agreement-template' },
@@ -16,24 +47,16 @@ const GUIDES = [
   ]},
   { region: 'United States', flag: '🇺🇸', items: [
     { title: 'Reg D 506(b) Private Placement Guide', href: '/guides/united-states/reg-d-506b-offering-us' },
-    { title: 'Real Estate LLC Operating Agreement Guide', href: '/guides/united-states/operating-agreement-llc-real-estate' },
   ]},
-  { region: 'Singapore / MAS', flag: '🇸🇬', items: [
+  { region: 'Singapore', flag: '🇸🇬', items: [
     { title: 'MAS DPT License Guide', href: '/guides/singapore/mas-dpt-license-guide-sg' },
-  ]},
-  { region: 'United Kingdom', flag: '🇬🇧', items: [
-    { title: 'FCA Cryptoasset Registration Guide', href: '/guides/united-kingdom/fca-cryptoasset-registration' },
   ]},
 ]
 
 async function captureLead(email: string, source: string) {
   try {
-    await fetch('/api/leads', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, source, page: window.location.pathname }),
-    })
-  } catch { /* fail silently */ }
+    await fetch('/api/leads', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, source, page: window.location.pathname }) })
+  } catch { /* silent */ }
 }
 
 export default function HomePage() {
@@ -42,17 +65,8 @@ export default function HomePage() {
   const [nlEmail, setNlEmail] = useState('')
   const [nlSent, setNlSent] = useState(false)
 
-  const submitHero = useCallback(async () => {
-    if (!heroEmail.includes('@')) return
-    setHeroSent(true)
-    await captureLead(heroEmail, 'hero')
-  }, [heroEmail])
-
-  const submitNl = useCallback(async () => {
-    if (!nlEmail.includes('@')) return
-    setNlSent(true)
-    await captureLead(nlEmail, 'newsletter')
-  }, [nlEmail])
+  const submitHero = useCallback(async () => { if (!heroEmail.includes('@')) return; setHeroSent(true); await captureLead(heroEmail, 'hero') }, [heroEmail])
+  const submitNl = useCallback(async () => { if (!nlEmail.includes('@')) return; setNlSent(true); await captureLead(nlEmail, 'newsletter') }, [nlEmail])
 
   return (
     <div className="page-wrap">
@@ -71,18 +85,27 @@ export default function HomePage() {
               </div>
             </div>
             <div className="nav-dropdown">
-              <button className="nav-link">Tools ▾</button>
+              <button className="nav-link">Resources ▾</button>
               <div className="nav-dropdown-menu">
-                <Link href="/tools" className="nav-dd-item"><span className="nav-dd-icon">🔍</span>SaaS Risk Scanner</Link>
-                <Link href="/tools/contract-fixer" className="nav-dd-item"><span className="nav-dd-icon">🛠️</span>Contract Fixer</Link>
-                <Link href="/tools/website-compliance" className="nav-dd-item"><span className="nav-dd-icon">🌐</span>Website Compliance</Link>
+                <Link href="/blog" className="nav-dd-item"><span className="nav-dd-icon">📝</span>Blog & Insights</Link>
+                <Link href="/templates" className="nav-dd-item"><span className="nav-dd-icon">📋</span>Template Gallery</Link>
+                <Link href="/tools" className="nav-dd-item"><span className="nav-dd-icon">🔍</span>Free AI Tools</Link>
                 <Link href="/blockchain-report" className="nav-dd-item"><span className="nav-dd-icon">⛓️</span>Blockchain Report</Link>
               </div>
             </div>
             <Link href="/pricing" className="nav-link">Pricing</Link>
             <Link href="/about" className="nav-link">About</Link>
           </div>
-          <div className="nav-right">
+          <div className="nav-right" style={{ gap: '8px' }}>
+            <div className="nav-social-strip">
+              {[
+                { icon: '𝕏', url: 'https://x.com/DorInnovations' },
+                { icon: '💼', url: 'https://www.linkedin.com/company/DorInnovations' },
+                { icon: '📸', url: 'https://www.instagram.com/dorinnovations/' },
+              ].map(s => (
+                <a key={s.url} href={s.url} target="_blank" rel="noreferrer" className="nav-social-icon">{s.icon}</a>
+              ))}
+            </div>
             <a href="https://brai.bizlegal-ai.com" className="btn-ghost">Free Scan</a>
             <a href="https://docstack.bizlegal-ai.com" className="btn-primary">Get Templates →</a>
           </div>
@@ -97,14 +120,11 @@ export default function HomePage() {
             Commercial Attorney · UAE / DIFC Focus · AI-Assisted
           </div>
           <h1 className="lx-h1">
-            Regulatory Risk<br />
-            Intelligence —<br />
+            Regulatory Risk<br />Intelligence —<br />
             <em>Engineered for Precision</em>
           </h1>
           <p className="lx-sub">
-            DOR INNOVATIONS provides structured AI-driven regulatory risk intelligence
-            for digital asset ventures. Identify exposure before it becomes structural liability.
-            UAE · EU · US · UK · Singapore · Canada.
+            DOR INNOVATIONS provides structured AI-driven regulatory risk intelligence for digital asset ventures. Identify exposure before it becomes structural liability. UAE · EU · US · UK · Singapore.
           </p>
           <div className="lx-ctas">
             <a href="https://brai.bizlegal-ai.com" className="lx-btn-p">Free Regulatory Scan →</a>
@@ -122,20 +142,64 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ── AI ENGINES ── */}
+      <section className="lx-section" style={{ paddingTop: '48px', paddingBottom: '64px' }}>
+        <div className="container">
+          <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+            <div className="lx-eyebrow">Powered by Leading AI</div>
+            <p style={{ fontSize: '13px', color: 'var(--muted)', fontFamily: 'Geist Mono, monospace' }}>DOR INNOVATIONS runs on the world's most advanced language models</p>
+          </div>
+          <div className="ai-engine-grid">
+            {AI_ENGINES.map(ai => (
+              <div key={ai.name} className="ai-engine-card">
+                <span className="ai-engine-badge">{ai.badge}</span>
+                <div>
+                  <div className="ai-engine-name">{ai.name}</div>
+                  <div className="ai-engine-company">{ai.company}</div>
+                </div>
+                <div className="ai-engine-desc">{ai.desc}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── STATS ── */}
-      <section className="lx-section">
+      <section className="lx-section" style={{ paddingTop: '0', paddingBottom: '80px' }}>
         <div className="container">
           <div className="lx-stats">
+            {[['$100M+','Transactions Advised'],['20+','Years Legal Practice'],['6','Jurisdictions Covered'],['VARA·MiCA·SEC','Regulators Analysed']].map(([v,l]) => (
+              <div key={l} className="lx-stat"><div className="lx-stat-v">{v}</div><div className="lx-stat-l">{l}</div></div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── FRASE.IO-STYLE FEATURE GRID ── */}
+      <section className="lx-section">
+        <div className="container">
+          <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+            <div className="lx-eyebrow">Platform Capabilities</div>
+            <h2 className="lx-h2" style={{ textAlign: 'center' }}>Everything you need — <em>in one place</em></h2>
+            <p style={{ fontSize: '16px', color: 'var(--muted)', maxWidth: '560px', margin: '0 auto', lineHeight: 1.75 }}>Regulatory intelligence, legal templates, forensic investigation — unified across 6 jurisdictions.</p>
+          </div>
+          <div className="frase-grid">
             {[
-              ['$100M+', 'Transactions Advised'],
-              ['20+', 'Years Legal Practice'],
-              ['6', 'Jurisdictions Covered'],
-              ['VARA·MiCA·SEC', 'Regulators Analysed'],
-            ].map(([v, l]) => (
-              <div key={l} className="lx-stat">
-                <div className="lx-stat-v">{v}</div>
-                <div className="lx-stat-l">{l}</div>
-              </div>
+              { icon: '⚡', title: 'AI Risk Scanning', desc: 'BRAI scans VARA, MiCA, SEC, MAS simultaneously. Get a structured risk report in 60 seconds.', cta: 'Try Free →', href: 'https://brai.bizlegal-ai.com', color: 'var(--indigo)' },
+              { icon: '📄', title: 'Legal Templates', desc: 'Commercial attorney-drafted contracts. VARA, MiCA, SEC jurisdiction-ready. DOCX + PDF instant.', cta: 'Browse Templates →', href: 'https://docstack.bizlegal-ai.com', color: 'var(--sky)' },
+              { icon: '🔬', title: 'Forensic Investigation', desc: 'TRACR AI traces wallets, maps fund flows, and produces court-ready blockchain forensic reports.', cta: 'Learn More →', href: '/tracr', color: 'var(--teal)' },
+              { icon: '📝', title: 'Regulatory Guides', desc: 'Deep-dive guides on VARA, MiCA, SEC, FCA, MAS — written by a commercial attorney.', cta: 'Read Guides →', href: '/blog', color: '#fbbf24' },
+              { icon: '🔍', title: 'Free AI Tools', desc: 'SaaS risk scanner, contract fixer, website compliance checker — no signup required.', cta: 'Use Free →', href: '/tools', color: 'var(--teal)' },
+              { icon: '⛓️', title: 'Blockchain Reports', desc: '6-jurisdiction AI compliance analysis. Howey Test, token classification, license requirements.', cta: 'Get Report →', href: '/blockchain-report', color: 'var(--indigo)' },
+              { icon: '🌍', title: 'Cross-Border Strategy', desc: 'UAE → EU → US → Singapore. One intelligence layer for your global digital asset venture.', cta: 'Learn More →', href: '/cross-border-compliance', color: 'var(--sky)' },
+              { icon: '📊', title: 'Weekly Intelligence', desc: 'VARA, MiCA, SEC enforcement updates. Regulatory intelligence newsletter for founders.', cta: 'Subscribe →', href: 'https://substack.com/@dorinnovations', color: '#FF6719' },
+            ].map(f => (
+              <a key={f.title} href={f.href} className="frase-card" style={{ '--fc': f.color } as React.CSSProperties}>
+                <div className="frase-icon">{f.icon}</div>
+                <h3 className="frase-title">{f.title}</h3>
+                <p className="frase-desc">{f.desc}</p>
+                <div className="frase-cta" style={{ color: f.color }}>{f.cta}</div>
+              </a>
             ))}
           </div>
         </div>
@@ -145,80 +209,65 @@ export default function HomePage() {
       <section className="lx-section">
         <div className="container">
           <div className="lx-eyebrow">DOR INNOVATIONS Suite</div>
-          <h2 className="lx-h2">
-            Three precision instruments.<br /><em>One unified intelligence layer.</em>
-          </h2>
+          <h2 className="lx-h2">Three precision instruments.<br /><em>One unified intelligence layer.</em></h2>
           <div className="lx-prod-grid">
-            <div className="lx-prod-card">
-              <div className="lx-prod-badge lx-badge-sky">LIVE</div>
-              <div className="lx-prod-icon">📄</div>
-              <h3 className="lx-prod-name">DocStack</h3>
-              <p className="lx-prod-desc">Commercial attorney-drafted contract templates. Digital asset JV, NDA, token agreements, capital call. DIFC-ready. DOCX + PDF instant download.</p>
-              <div className="lx-prod-foot">
-                <span className="lx-prod-price">From $49</span>
-                <a href="https://docstack.bizlegal-ai.com" className="lx-prod-cta lx-cta-sky">Browse Templates →</a>
+            {[
+              { badge: 'LIVE', badgeCls: 'lx-badge-sky', icon: '📄', name: 'DocStack', desc: 'Commercial attorney-drafted contract templates. Digital asset JV, NDA, token agreements, capital call. DIFC-ready. DOCX + PDF instant download.', price: 'From $49', ctaCls: 'lx-cta-sky', cta: 'Browse Templates →', href: 'https://docstack.bizlegal-ai.com' },
+              { badge: 'LIVE', badgeCls: 'lx-badge-ind', icon: '⚡', name: 'BRAI', desc: 'AI-powered regulatory risk intelligence. Scans VARA, MiCA, SEC, MAS simultaneously. Identifies exposure before it becomes structural liability.', price: 'Free + $49/mo', ctaCls: 'lx-cta-ind', cta: 'Run Free Scan →', href: 'https://brai.bizlegal-ai.com', featured: true },
+              { badge: 'BETA', badgeCls: 'lx-badge-teal', icon: '🔬', name: 'TRACR', desc: 'AI forensic investigation for digital asset disputes. Wallet tracing, fund flow analysis, court-ready reports for litigation and regulatory proceedings.', price: '$99 / report', ctaCls: 'lx-cta-teal', cta: 'Join Waitlist →', href: 'https://tracr.bizlegal-ai.com' },
+            ].map(p => (
+              <div key={p.name} className={`lx-prod-card${p.featured ? ' lx-prod-featured' : ''}`}>
+                <div className={`lx-prod-badge ${p.badgeCls}`}>{p.badge}</div>
+                <div className="lx-prod-icon">{p.icon}</div>
+                <h3 className="lx-prod-name">{p.name}</h3>
+                <p className="lx-prod-desc">{p.desc}</p>
+                <div className="lx-prod-foot">
+                  <span className="lx-prod-price">{p.price}</span>
+                  <a href={p.href} className={`lx-prod-cta ${p.ctaCls}`}>{p.cta}</a>
+                </div>
               </div>
-            </div>
-            <div className="lx-prod-card lx-prod-featured">
-              <div className="lx-prod-badge lx-badge-ind">LIVE</div>
-              <div className="lx-prod-icon">⚡</div>
-              <h3 className="lx-prod-name">BRAI</h3>
-              <p className="lx-prod-desc">AI-powered regulatory risk intelligence. Scans VARA, MiCA, SEC, MAS simultaneously. Identifies exposure before it becomes structural liability.</p>
-              <div className="lx-prod-foot">
-                <span className="lx-prod-price">Free + $49/mo</span>
-                <a href="https://brai.bizlegal-ai.com" className="lx-prod-cta lx-cta-ind">Run Free Scan →</a>
-              </div>
-            </div>
-            <div className="lx-prod-card">
-              <div className="lx-prod-badge lx-badge-teal">BETA</div>
-              <div className="lx-prod-icon">🔬</div>
-              <h3 className="lx-prod-name">TRACR</h3>
-              <p className="lx-prod-desc">AI forensic investigation for digital asset disputes. Wallet tracing, fund flow analysis, court-ready reports for litigation and regulatory proceedings.</p>
-              <div className="lx-prod-foot">
-                <span className="lx-prod-price">$99 / report</span>
-                <a href="https://tracr.bizlegal-ai.com" className="lx-prod-cta lx-cta-teal">Join Waitlist →</a>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ── FEATURE: DOCSTACK ── */}
+      {/* ── TEMPLATE GALLERY TEASER (Frase.io style) ── */}
       <section className="lx-section">
         <div className="container">
-          <div className="lx-feat">
-            <div className="lx-feat-content">
-              <div className="lx-eyebrow">Regulatory Documentation</div>
-              <h2 className="lx-h2">Jurisdiction-ready docs —<br /><em>engineered for precision</em></h2>
-              <p className="lx-body">Commercial attorney-drafted, AI-refined. Select jurisdiction, enter deal structure, receive DOCX + PDF in 60 seconds. VARA, MiCA, SEC, FCA regulatory context auto-applied.</p>
-              <div className="lx-steps">
-                {[
-                  ['01', 'Select Jurisdiction', 'UAE/DIFC, EU/MiCA, US/SEC, UK/FCA — regulatory context auto-applied'],
-                  ['02', 'Enter Deal Structure', 'Token model, parties, amounts — Claude AI applies the correct regulatory framework'],
-                  ['03', 'Download Instantly', 'DOCX + PDF in ~60 seconds. Commercial attorney quality. Ready for review.'],
-                ].map(([n, h, d]) => (
-                  <div key={n} className="lx-step">
-                    <div className="lx-step-n">{n}</div>
-                    <div><strong>{h}</strong><p>{d}</p></div>
+          <div className="tmpl-showcase">
+            <div className="tmpl-content">
+              <div className="lx-eyebrow">Template Library</div>
+              <h2 className="lx-h2">38+ jurisdiction-ready<br /><em>legal templates</em></h2>
+              <p className="lx-body">Commercial attorney-drafted contracts for every digital asset scenario. Select your jurisdiction — VARA, MiCA, SEC, FCA, MAS regulations auto-applied.</p>
+              <div className="tmpl-jurisdictions">
+                {TEMPLATE_FEATURES.map(t => (
+                  <div key={t.title} className="tmpl-juri" style={{ '--tj': t.color } as React.CSSProperties}>
+                    <span>{t.icon}</span>
+                    <div>
+                      <div className="tmpl-juri-name">{t.title}</div>
+                      <div className="tmpl-juri-count">{t.count}</div>
+                    </div>
                   </div>
                 ))}
               </div>
-              <a href="https://docstack.bizlegal-ai.com" className="lx-btn-p" style={{ marginTop: '28px', display: 'inline-block' }}>Browse All Templates →</a>
+              <div style={{ display: 'flex', gap: '12px', marginTop: '32px', flexWrap: 'wrap' }}>
+                <Link href="/templates" className="lx-btn-p">Browse Template Gallery →</Link>
+                <a href="https://docstack.bizlegal-ai.com" className="lx-btn-g">Generate Contract Now</a>
+              </div>
             </div>
-            <div className="lx-feat-vis">
+            <div className="tmpl-preview">
               <div className="lx-mock">
                 <div className="lx-mock-bar">
                   <div className="lx-dot-r" /><div className="lx-dot-y" /><div className="lx-dot-g" />
-                  <span>docstack — templates</span>
+                  <span>docstack — template library</span>
                 </div>
                 <div className="lx-mock-body">
-                  {['Joint Venture Agreement', 'NDA — Real Estate', 'LOI Commercial', 'Capital Call Agreement', 'LLC Operating Agreement'].map(t => (
+                  {['🇦🇪 VARA Token Distribution Agreement','🇪🇺 MiCA Token Sale Agreement','🇺🇸 Reg D Private Placement','🇸🇬 MAS DPT Services Agreement','🌍 Cross-Border JV Agreement','📋 Capital Call Agreement'].map(t => (
                     <div key={t} className="lx-mock-row">
-                      <span>📄 {t}</span>
-                      <span className="lx-tag lx-tag-sky">LIVE</span>
+                      <span style={{ fontSize: '11px' }}>{t}</span>
+                      <span className="lx-tag lx-tag-teal">$49</span>
                     </div>
                   ))}
-                  <div className="lx-mock-cta">⚡ DOCX + PDF in ~60 seconds</div>
                 </div>
               </div>
             </div>
@@ -226,59 +275,47 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── FEATURE: BRAI ── */}
+      {/* ── BLOG LATEST ── */}
       <section className="lx-section">
         <div className="container">
-          <div className="lx-feat lx-feat-rev">
-            <div className="lx-feat-vis">
-              <div className="lx-mock">
-                <div className="lx-mock-bar">
-                  <div className="lx-dot-r" /><div className="lx-dot-y" /><div className="lx-dot-g" />
-                  <span>brai — compliance scan</span>
-                </div>
-                <div className="lx-mock-body">
-                  <div className="lx-mock-row"><span>🇦🇪 VARA (UAE)</span><span className="lx-tag lx-tag-teal">✓ Compliant</span></div>
-                  <div className="lx-mock-row"><span>🇪🇺 MiCA (EU)</span><span className="lx-tag lx-tag-ind">⚠ Review</span></div>
-                  <div className="lx-mock-row"><span>🇺🇸 SEC (USA)</span><span className="lx-tag lx-tag-warn">✗ Action Req.</span></div>
-                  <div className="lx-mock-row"><span>🇸🇬 MAS (SGP)</span><span className="lx-tag lx-tag-teal">✓ Compliant</span></div>
-                  <div className="lx-mock-cta" style={{ color: 'var(--indigo)', borderColor: 'rgba(165,180,252,0.2)' }}>📊 12 Risk Flags · PDF Download</div>
-                </div>
-              </div>
+          <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '40px', flexWrap: 'wrap', gap: '16px' }}>
+            <div>
+              <div className="lx-eyebrow">Regulatory Intelligence</div>
+              <h2 className="lx-h2" style={{ marginBottom: 0 }}>Latest insights from <em>DOR INNOVATIONS</em></h2>
             </div>
-            <div className="lx-feat-content">
-              <div className="lx-eyebrow">AI Regulatory Intelligence</div>
-              <h2 className="lx-h2">Identify exposure <em>before</em> it becomes<br />structural liability</h2>
-              <p className="lx-body">BRAI scans your digital asset venture against VARA, MiCA, SEC, and MAS simultaneously. Structured risk intelligence in under 60 seconds — not reactive compliance after the fact.</p>
-              <div className="lx-checks">
-                {['VARA (UAE/DIFC)', 'MiCA (EU)', 'SEC / CFTC (US)', 'MAS (Singapore)', 'FCA (UK)', 'CSA (Canada)'].map(j => (
-                  <div key={j} className="lx-check"><span className="lx-check-icon">✓</span>{j}</div>
-                ))}
-              </div>
-              <a href="https://brai.bizlegal-ai.com" className="lx-btn-ind" style={{ marginTop: '28px', display: 'inline-block' }}>Run Free Scan →</a>
-            </div>
+            <Link href="/blog" className="lx-btn-g" style={{ flexShrink: 0 }}>View All →</Link>
           </div>
-        </div>
-      </section>
-
-      {/* ── FREE TOOLS ── */}
-      <section className="lx-section">
-        <div className="container">
-          <div className="lx-eyebrow">Free AI Legal Tools</div>
-          <h2 className="lx-h2">Lawyer-grade analysis. <em>Instantly free.</em></h2>
-          <div className="lx-tools-grid">
-            {[
-              { icon: '🔍', name: 'SaaS Terms Risk Scanner', desc: 'Paste any SaaS contract — risk score, red flags, and negotiation points instantly.', href: '/tools/saas-risk-scanner' },
-              { icon: '🛠️', name: 'Contract Fixer', desc: 'Identifies weak clauses and rewrites them to protect your rights and payment.', href: '/tools/contract-fixer' },
-              { icon: '🌐', name: 'Website Compliance', desc: 'GDPR, CCPA, ADA & cookie compliance scan for any URL. Instant scored report.', href: '/tools/website-compliance' },
-              { icon: '⛓️', name: 'Blockchain Report', desc: 'AI regulatory analysis across 6 jurisdictions — VARA, MiCA, SEC, FCA, MAS, CSA.', href: '/blockchain-report' },
-            ].map(t => (
-              <Link key={t.href} href={t.href} className="lx-tool-card">
-                <div className="lx-tool-icon">{t.icon}</div>
-                <div className="lx-tool-name">{t.name}</div>
-                <div className="lx-tool-desc">{t.desc}</div>
-                <div className="lx-tool-cta">Try free →</div>
+          <div className="blog-grid">
+            {BLOG_POSTS.map(post => (
+              <Link key={post.href} href={post.href} className="blog-card">
+                <div className="blog-tag">{post.tag}</div>
+                <h3 className="blog-title">{post.title}</h3>
+                <div className="blog-meta">{post.date} · {post.read} read</div>
               </Link>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── SOCIAL FOLLOW ── */}
+      <section className="lx-section">
+        <div className="container">
+          <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+            <div className="lx-eyebrow">Join the Community</div>
+            <h2 className="lx-h2" style={{ textAlign: 'center' }}>Follow DOR INNOVATIONS —<br /><em>regulatory intelligence, daily</em></h2>
+            <p style={{ fontSize: '14px', color: 'var(--muted)', maxWidth: '480px', margin: '0 auto' }}>5 posts a week across all platforms. VARA updates, MiCA news, SEC enforcement, digital asset regulatory intelligence.</p>
+          </div>
+          <div className="social-follow-grid">
+            {SOCIAL.map(s => (
+              <a key={s.name} href={s.url} target="_blank" rel="noreferrer" className="social-follow-card">
+                <span className="social-follow-icon" style={{ color: s.color === '#fff' ? 'var(--white)' : s.color }}>{s.icon}</span>
+                <div className="social-follow-name">{s.name}</div>
+                <div className="social-follow-btn">{s.followers} →</div>
+              </a>
+            ))}
+          </div>
+          <div style={{ textAlign: 'center', marginTop: '32px' }}>
+            <Link href="/social-hub" className="lx-btn-g">View Content Calendar →</Link>
           </div>
         </div>
       </section>
@@ -290,18 +327,15 @@ export default function HomePage() {
           <h2 className="lx-h2">Built for people <em>like you</em></h2>
           <div className="lx-testi-grid">
             {[
-              { av: 'JB', quote: 'The VARA compliance report from BRAI gave us the roadmap to get our crypto licence in Dubai. Clear, actionable, fast — no law firm could deliver this at this speed.', name: 'James B.', role: 'FinTech Founder, UAE' },
-              { av: 'SL', quote: 'DOR INNOVATIONS flagged our MiCA exposure before we launched. Saved us from a costly compliance mistake on the EU rollout. The AI precision is exceptional.', name: 'Sofia L.', role: 'Digital Asset Founder, Lisbon' },
-              { av: 'MC', quote: 'Closed a $4M digital asset fund round in DIFC using the capital call agreement. Saved $12k in legal fees. The VARA structuring guidance was precise.', name: 'Maria C.', role: 'Fund Manager, Dubai' },
+              { av:'JB', quote:'The VARA compliance report from BRAI gave us the roadmap to get our crypto licence in Dubai. Clear, actionable, fast — no law firm could deliver this at this speed.', name:'James B.', role:'FinTech Founder, UAE' },
+              { av:'SL', quote:'DOR INNOVATIONS flagged our MiCA exposure before we launched. Saved us from a costly compliance mistake on the EU rollout. The AI precision is exceptional.', name:'Sofia L.', role:'Digital Asset Founder, Lisbon' },
+              { av:'MC', quote:'Closed a $4M digital asset fund round in DIFC using the capital call agreement. Saved $12k in legal fees. The VARA structuring guidance was precise.', name:'Maria C.', role:'Fund Manager, Dubai' },
             ].map(t => (
               <div key={t.name} className="lx-tcard">
                 <p className="lx-tquote">"{t.quote}"</p>
                 <div className="lx-tauthor">
                   <div className="lx-tav">{t.av}</div>
-                  <div>
-                    <div className="lx-tname">{t.name}</div>
-                    <div className="lx-trole">{t.role}</div>
-                  </div>
+                  <div><div className="lx-tname">{t.name}</div><div className="lx-trole">{t.role}</div></div>
                 </div>
               </div>
             ))}
@@ -320,47 +354,11 @@ export default function HomePage() {
                 <div className="lx-guide-region">{group.flag} {group.region}</div>
                 {group.items.map(item => (
                   <Link key={item.href} href={item.href} className="lx-guide-link">
-                    <span>{item.title}</span>
-                    <span className="lx-guide-arr">→</span>
+                    <span>{item.title}</span><span className="lx-guide-arr">→</span>
                   </Link>
                 ))}
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── LEAD CAPTURE ── */}
-      <section className="lx-section">
-        <div className="container">
-          <div className="lx-capture-box">
-            <div className="lx-capture-content">
-              <div className="lx-eyebrow">Free Resource</div>
-              <h2 className="lx-h2" style={{ marginBottom: '12px' }}>
-                UAE Digital Asset<br /><em>Regulatory Starter Kit</em>
-              </h2>
-              <p className="lx-body">46-point regulatory checklist + VARA licensing roadmap + MiCA token classification flowchart. Used by digital asset founders raising in UAE, EU & US.</p>
-            </div>
-            <div className="lx-capture-form">
-              {!heroSent ? (
-                <>
-                  <input
-                    type="email"
-                    className="lx-input"
-                    placeholder="your@email.com"
-                    value={heroEmail}
-                    onChange={e => setHeroEmail(e.target.value)}
-                    onKeyDown={e => e.key === 'Enter' && submitHero()}
-                  />
-                  <button className="lx-btn-p" onClick={submitHero} style={{ width: '100%', textAlign: 'center' }}>
-                    Send Free Kit →
-                  </button>
-                  <p className="lx-form-sub">No spam · Instant access · Unsubscribe anytime</p>
-                </>
-              ) : (
-                <div className="lx-form-sent">✓ Kit on its way — check your inbox!</div>
-              )}
-            </div>
           </div>
         </div>
       </section>
@@ -371,25 +369,20 @@ export default function HomePage() {
           <div className="lx-nl-box">
             <div className="lx-eyebrow" style={{ justifyContent: 'center' }}>Weekly Intelligence</div>
             <h2 className="lx-h2" style={{ textAlign: 'center' }}>Regulatory intelligence, <em>weekly</em></h2>
-            <p className="lx-body" style={{ textAlign: 'center', maxWidth: '480px', margin: '0 auto 32px' }}>
-              VARA updates, MiCA enforcement news, SEC actions, and cross-border digital asset regulatory intelligence from DOR INNOVATIONS.
-            </p>
+            <p className="lx-body" style={{ textAlign: 'center', maxWidth: '480px', margin: '0 auto 32px' }}>VARA updates, MiCA enforcement news, SEC actions. Published on Substack — free to subscribe.</p>
             {!nlSent ? (
               <div className="lx-nl-row">
-                <input
-                  type="email"
-                  className="lx-input"
-                  placeholder="your@email.com"
-                  value={nlEmail}
-                  onChange={e => setNlEmail(e.target.value)}
-                  onKeyDown={e => e.key === 'Enter' && submitNl()}
-                />
+                <input type="email" className="lx-input" placeholder="your@email.com" value={nlEmail} onChange={e => setNlEmail(e.target.value)} onKeyDown={e => e.key === 'Enter' && submitNl()} />
                 <button className="lx-btn-p" onClick={submitNl}>Subscribe →</button>
               </div>
             ) : (
               <div className="lx-form-sent" style={{ textAlign: 'center' }}>✓ Subscribed! See you next week.</div>
             )}
-            <p className="lx-form-sub" style={{ textAlign: 'center', marginTop: '12px' }}>Founders · Attorneys · Investors · No spam · Weekly max</p>
+            <p className="lx-form-sub" style={{ textAlign: 'center', marginTop: '12px' }}>
+              Also on <a href="https://substack.com/@dorinnovations" target="_blank" rel="noreferrer" style={{ color: '#FF6719', textDecoration: 'none' }}>Substack</a> ·
+              <a href="https://www.linkedin.com/company/DorInnovations" target="_blank" rel="noreferrer" style={{ color: '#0A66C2', textDecoration: 'none', marginLeft: '4px' }}>LinkedIn</a> ·
+              <a href="https://x.com/DorInnovations" target="_blank" rel="noreferrer" style={{ color: 'var(--muted)', textDecoration: 'none', marginLeft: '4px' }}>X</a>
+            </p>
           </div>
         </div>
       </section>
@@ -416,20 +409,33 @@ export default function HomePage() {
               <div className="nav-logo" style={{ marginBottom: '12px', display: 'inline-block' }}>DOR<em>INNOVATIONS</em></div>
               <p className="lx-foot-desc">Boutique regulatory intelligence & AI-driven risk analysis for digital asset ventures. Commercial attorney · Entrepreneur · UAE / DIFC focus.</p>
               <div className="lx-foot-products">
-                {[['DocStack', 'https://docstack.bizlegal-ai.com'], ['BRAI', 'https://brai.bizlegal-ai.com'], ['TRACR', 'https://tracr.bizlegal-ai.com']].map(([n, h]) => (
+                {[['DocStack','https://docstack.bizlegal-ai.com'],['BRAI','https://brai.bizlegal-ai.com'],['TRACR','https://tracr.bizlegal-ai.com']].map(([n,h]) => (
                   <a key={n} href={h} className="lx-foot-product">{n}</a>
+                ))}
+              </div>
+              <div className="foot-social-row">
+                {[
+                  { icon: '💼', url: 'https://www.linkedin.com/company/DorInnovations', label: 'LinkedIn' },
+                  { icon: '𝕏', url: 'https://x.com/DorInnovations', label: 'X' },
+                  { icon: '📸', url: 'https://www.instagram.com/dorinnovations/', label: 'Instagram' },
+                  { icon: '▶', url: 'https://www.youtube.com/@DorInnovations', label: 'YouTube' },
+                  { icon: '📨', url: 'https://substack.com/@dorinnovations', label: 'Substack' },
+                  { icon: 'f', url: 'https://www.facebook.com/DorInnovations/', label: 'Facebook' },
+                  { icon: '𝐏', url: 'https://www.pinterest.com/DorInnovations/', label: 'Pinterest' },
+                ].map(s => (
+                  <a key={s.url} href={s.url} target="_blank" rel="noreferrer" className="foot-social-icon" title={s.label}>{s.icon}</a>
                 ))}
               </div>
             </div>
             <div className="lx-foot-cols">
               {[
-                { title: 'Products', links: [['DocStack — Templates', 'https://docstack.bizlegal-ai.com'], ['BRAI — Compliance', 'https://brai.bizlegal-ai.com'], ['TRACR — Forensics', 'https://tracr.bizlegal-ai.com'], ['Pricing', '/pricing']] },
-                { title: 'Resources', links: [['Free Guides', '/#guides'], ['Calculators', '/calculators'], ['FAQ', '/faq'], ['About', '/about']] },
-                { title: 'Legal', links: [['Terms', '/terms'], ['Privacy', '/privacy'], ['Accessibility', '/accessibility']] },
+                { title: 'Products', links: [['DocStack','https://docstack.bizlegal-ai.com'],['BRAI','https://brai.bizlegal-ai.com'],['TRACR','https://tracr.bizlegal-ai.com'],['Pricing','/pricing']] },
+                { title: 'Resources', links: [['Blog & Insights','/blog'],['Template Gallery','/templates'],['Free Guides','/#guides'],['Social Hub','/social-hub']] },
+                { title: 'Company', links: [['About','/about'],['FAQ','/faq'],['Terms','/terms'],['Privacy','/privacy']] },
               ].map(col => (
                 <div key={col.title}>
                   <div className="lx-fcol-title">{col.title}</div>
-                  {col.links.map(([label, href]) => (
+                  {col.links.map(([label,href]) => (
                     <a key={label} href={href} className="lx-fcol-a">{label}</a>
                   ))}
                 </div>
@@ -439,9 +445,7 @@ export default function HomePage() {
           <div className="lx-foot-bottom">
             <span>© 2025 DOR INNOVATIONS · Regulatory intelligence only — not legal advice</span>
             <div className="lx-foot-legal">
-              <a href="/terms">Terms</a>
-              <a href="/privacy">Privacy</a>
-              <a href="/faq">FAQ</a>
+              <a href="/terms">Terms</a><a href="/privacy">Privacy</a><a href="/faq">FAQ</a>
             </div>
           </div>
         </div>

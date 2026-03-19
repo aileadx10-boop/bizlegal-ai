@@ -2223,3 +2223,360 @@ footer {
   .lx-tools-grid { grid-template-columns: 1fr; }
   .lx-foot-cols { grid-template-columns: 1fr; }
 }
+
+/* ═══════════════════════════════════════════════════════
+   NEW PAGE COMPONENTS — Blog · Templates · Social Hub
+   Frase.io-inspired dark cards + LLM brand grid
+═══════════════════════════════════════════════════════ */
+
+/* ── LX BUTTON VARIANTS ── */
+.lx-btn-p {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 11px 22px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: 'Geist Mono', monospace;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: rgba(125,211,252,0.1);
+  border: 1px solid rgba(125,211,252,0.4);
+  color: var(--sky);
+}
+.lx-btn-p:hover {
+  background: rgba(125,211,252,0.18);
+  border-color: rgba(125,211,252,0.7);
+  color: var(--white);
+  transform: translateY(-1px);
+}
+.lx-btn-g {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 11px 22px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: 'Geist Mono', monospace;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: rgba(94,234,212,0.07);
+  border: 1px solid rgba(94,234,212,0.25);
+  color: var(--teal);
+}
+.lx-btn-g:hover {
+  background: rgba(94,234,212,0.14);
+  border-color: rgba(94,234,212,0.5);
+  color: var(--white);
+  transform: translateY(-1px);
+}
+
+/* ── BUTTON HELPERS (used in nav) ── */
+.btn-primary {
+  padding: 8px 18px;
+  border-radius: 7px;
+  background: rgba(125,211,252,0.1);
+  border: 1px solid rgba(125,211,252,0.4);
+  color: var(--sky);
+  font-family: 'Geist Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.btn-primary:hover { background: rgba(125,211,252,0.2); color: var(--white); }
+.btn-ghost {
+  padding: 8px 18px;
+  border-radius: 7px;
+  background: transparent;
+  border: 1px solid rgba(125,211,252,0.15);
+  color: var(--muted);
+  font-family: 'Geist Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.btn-ghost:hover { border-color: rgba(125,211,252,0.35); color: var(--white); }
+
+/* ── AI ENGINE GRID ── */
+.ai-engine-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.ai-engine-card {
+  padding: 20px;
+  border-radius: 14px;
+  border: 1px solid rgba(125,211,252,0.1);
+  background: rgba(7,9,26,0.7);
+  transition: all 0.25s;
+  text-align: center;
+}
+.ai-engine-card:hover {
+  border-color: rgba(125,211,252,0.25);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(125,211,252,0.05);
+}
+.ai-engine-badge { font-size: 22px; margin-bottom: 8px; }
+.ai-engine-name {
+  font-family: 'Gloock', serif;
+  font-size: 15px;
+  color: var(--white);
+  margin-bottom: 4px;
+}
+.ai-engine-company {
+  font-size: 10px;
+  font-family: 'Geist Mono', monospace;
+  color: var(--dim);
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+.ai-engine-desc {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+/* ── FRASE-STYLE FEATURE GRID (8-card) ── */
+.frase-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.frase-card {
+  padding: 24px 20px;
+  border-radius: 14px;
+  border: 1px solid rgba(125,211,252,0.08);
+  background: rgba(7,9,26,0.6);
+  transition: all 0.25s;
+  position: relative;
+  overflow: hidden;
+}
+.frase-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(125,211,252,0.2), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.frase-card:hover { border-color: rgba(125,211,252,0.2); transform: translateY(-3px); }
+.frase-card:hover::before { opacity: 1; }
+.frase-card-icon { font-size: 26px; margin-bottom: 12px; }
+.frase-card-title {
+  font-family: 'Gloock', serif;
+  font-size: 15px;
+  color: var(--white);
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+.frase-card-desc {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+/* ── BLOG CARDS ── */
+.blog-card {
+  display: block;
+  padding: 24px;
+  border-radius: 14px;
+  border: 1px solid rgba(125,211,252,0.08);
+  background: rgba(7,9,26,0.65);
+  transition: all 0.25s;
+}
+.blog-card:hover {
+  border-color: rgba(125,211,252,0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(125,211,252,0.05);
+}
+.blog-tag {
+  display: inline-block;
+  font-size: 9px;
+  font-family: 'Geist Mono', monospace;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  padding: 2px 9px;
+  border-radius: 4px;
+  border: 1px solid;
+  margin-bottom: 12px;
+}
+.blog-title {
+  font-family: 'Gloock', serif;
+  font-size: 15px;
+  color: var(--white);
+  line-height: 1.35;
+  margin-bottom: 10px;
+}
+.blog-meta {
+  font-size: 10px;
+  font-family: 'Geist Mono', monospace;
+  color: var(--dim);
+  margin-top: auto;
+}
+.blog-featured-card {
+  transition: all 0.25s;
+}
+.blog-featured-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 50px rgba(125,211,252,0.06);
+}
+
+/* ── TEMPLATE CARDS ── */
+.tmpl-card {
+  display: flex;
+  flex-direction: column;
+  padding: 28px;
+  border-radius: 16px;
+  border: 1px solid rgba(125,211,252,0.1);
+  background: rgba(7,9,26,0.7);
+  text-decoration: none;
+  transition: all 0.25s;
+  position: relative;
+  overflow: hidden;
+}
+.tmpl-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(125,211,252,0.04) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.tmpl-card:hover {
+  border-color: rgba(125,211,252,0.25);
+  transform: translateY(-3px);
+  box-shadow: 0 16px 50px rgba(125,211,252,0.07);
+}
+.tmpl-card:hover::before { opacity: 1; }
+.tmpl-juri {
+  font-size: 10px;
+  font-family: 'Geist Mono', monospace;
+  color: var(--sky);
+  background: rgba(125,211,252,0.06);
+  padding: 3px 9px;
+  border-radius: 4px;
+  border: 1px solid rgba(125,211,252,0.14);
+}
+
+/* ── SOCIAL FOLLOW GRID ── */
+.social-follow-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+}
+.social-follow-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 20px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(125,211,252,0.08);
+  background: rgba(7,9,26,0.6);
+  text-decoration: none;
+  transition: all 0.25s;
+  text-align: center;
+}
+.social-follow-card:hover {
+  border-color: rgba(125,211,252,0.2);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(125,211,252,0.06);
+}
+.social-follow-icon { font-size: 22px; }
+.social-follow-name {
+  font-size: 10px;
+  font-family: 'Geist Mono', monospace;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+}
+.social-follow-action {
+  font-size: 9px;
+  font-family: 'Geist Mono', monospace;
+  color: var(--dim);
+}
+
+/* ── SOCIAL PLATFORM CARDS (social-hub page) ── */
+.social-platform-card {
+  padding: 28px;
+  border-radius: 16px;
+  border: 1px solid rgba(125,211,252,0.1);
+  background: rgba(7,9,26,0.7);
+  transition: all 0.25s;
+}
+.social-platform-card:hover {
+  border-color: rgba(125,211,252,0.22);
+  transform: translateY(-2px);
+}
+
+/* ── FOOTER SOCIAL ROW ── */
+.foot-social-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+.foot-social-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid rgba(125,211,252,0.1);
+  background: rgba(7,9,26,0.7);
+  font-size: 14px;
+  text-decoration: none;
+  transition: all 0.2s;
+  color: var(--muted);
+}
+.foot-social-icon:hover {
+  border-color: rgba(125,211,252,0.3);
+  background: rgba(125,211,252,0.07);
+  transform: translateY(-2px);
+}
+
+/* ── NAV SOCIAL STRIP ── */
+.nav-social-strip {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+.nav-social-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  font-size: 12px;
+  text-decoration: none;
+  color: var(--dim);
+  transition: all 0.2s;
+}
+.nav-social-icon:hover {
+  color: var(--sky);
+  background: rgba(125,211,252,0.06);
+}
+
+/* ── RESPONSIVE for new pages ── */
+@media (max-width: 960px) {
+  .ai-engine-grid { grid-template-columns: repeat(2, 1fr); }
+  .frase-grid { grid-template-columns: repeat(2, 1fr); }
+  .social-follow-grid { grid-template-columns: repeat(4, 1fr); }
+}
+@media (max-width: 620px) {
+  .ai-engine-grid { grid-template-columns: repeat(2, 1fr); }
+  .frase-grid { grid-template-columns: 1fr; }
+  .social-follow-grid { grid-template-columns: repeat(3, 1fr); }
+  .foot-social-row { flex-wrap: wrap; }
+}

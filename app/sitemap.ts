@@ -40,6 +40,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/brai`,                                    lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
     { url: `${baseUrl}/docstack`,                                lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
     { url: `${baseUrl}/tracr`,                                   lastModified: new Date(), changeFrequency: 'monthly', priority: 0.85 },
+    // Content hub pages
+    { url: `${baseUrl}/blog`,                                    lastModified: new Date(), changeFrequency: 'daily',   priority: 0.9 },
+    { url: `${baseUrl}/templates`,                               lastModified: new Date(), changeFrequency: 'weekly',  priority: 0.9 },
+    { url: `${baseUrl}/social-hub`,                              lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
+    // Blog posts
+    { url: `${baseUrl}/blog/vara-mvl-license-guide-2025`,        lastModified: new Date(), changeFrequency: 'monthly', priority: 0.85 },
+    { url: `${baseUrl}/blog/mica-enforcement-2025`,              lastModified: new Date(), changeFrequency: 'monthly', priority: 0.85 },
+    { url: `${baseUrl}/blog/brai-regulatory-intelligence`,       lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/blog/howey-test-2025-token-analysis`,     lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/blog/difc-vs-adgm-digital-assets`,        lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/blog/docstack-vara-mica-contracts`,       lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/blog/cross-border-digital-asset-structuring`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/blog/tracr-blockchain-forensics-litigation`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/blog/vara-difc-comparison-2025`,          lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/blog/mas-dpt-license-singapore-2025`,     lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/blog/mica-token-white-paper-requirements`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/blog/defi-regulatory-risk-analysis`,      lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
   ]
 
   // Dynamic guide pages from Supabase
