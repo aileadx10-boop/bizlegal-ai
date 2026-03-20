@@ -1,4 +1,4 @@
-﻿import Link from 'next/link'
+import Link from 'next/link'
 
 import { navigationLinks, productLinks, seoFactorySchedule } from '@/app/lib/site-content'
 
@@ -17,8 +17,8 @@ export function SiteHeader({
     <header className="site-header">
       <div className="promo-bar">
         <div className="container promo-bar__inner">
-          <p>SEO Factory is scheduled for 10 new pages every {seoFactorySchedule}.</p>
-          <Link href="/posts">Open blog and posts</Link>
+          <p>SEO Factory is scheduled for 10 dynamic pages every {seoFactorySchedule}.</p>
+          <Link href="/posts">Open Auto-SEO hub</Link>
         </div>
       </div>
       <div className="container nav-shell">
@@ -35,7 +35,7 @@ export function SiteHeader({
         </nav>
         <div className="nav-actions">
           <Link className="button button-ghost" href="/posts">
-            Blog / Posts
+            Auto-SEO Hub
           </Link>
           {isExternal ? (
             <a className="button button-primary" href={ctaHref}>

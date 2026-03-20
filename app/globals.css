@@ -300,3 +300,94 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
   }
 }
 
+
+.compact-heading h2 { font-size: clamp(2.1rem, 4vw, 3.4rem); }
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .9rem;
+  align-items: center;
+}
+.keyword-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .45rem .8rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.08);
+  background: rgba(255,255,255,.04);
+  color: var(--muted-strong);
+  font-family: var(--font-mono), monospace;
+  font-size: .76rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.keyword-cloud--compact { gap: .55rem; }
+.engine-overview, .engine-feature-card, .provider-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+.engine-overview::before, .engine-feature-card::before, .provider-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(224,188,121,.42), transparent);
+}
+.engine-overview, .engine-feature-card, .provider-card { padding: 1.3rem; }
+.engine-overview { display: grid; gap: 1.2rem; }
+.engine-metrics, .engine-feature-grid, .provider-grid {
+  display: grid;
+  gap: 1rem;
+}
+.engine-metrics { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.engine-feature-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.provider-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.engine-metric, .engine-diagram__step {
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255,255,255,.06);
+  background: rgba(255,255,255,.03);
+  padding: 1rem;
+}
+.engine-metric span, .engine-step-index {
+  color: var(--muted-strong);
+  font-family: var(--font-mono), monospace;
+  font-size: .76rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+.engine-metric strong {
+  display: block;
+  margin-top: .35rem;
+  font-family: var(--font-display), serif;
+  font-size: 1.4rem;
+}
+.engine-feature-card h3, .engine-diagram__step h3, .provider-card h3 {
+  margin: 0 0 .5rem;
+  font-family: var(--font-display), serif;
+  letter-spacing: -.03em;
+}
+.engine-feature-card p, .engine-diagram__step p, .provider-card p {
+  color: var(--muted);
+  line-height: 1.8;
+}
+.engine-diagram {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(145deg, rgba(224,188,121,.08), rgba(142,166,255,.07));
+  border: 1px solid rgba(224,188,121,.12);
+}
+.engine-diagram--hub { margin-top: 1rem; }
+@media (max-width: 1120px) {
+  .engine-feature-grid, .engine-diagram, .engine-metrics, .provider-grid {
+    grid-template-columns: 1fr;
+  }
+}

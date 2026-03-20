@@ -1,9 +1,10 @@
-﻿import type { Metadata } from 'next'
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 import { SiteFooter } from '@/app/components/SiteFooter'
 import { SiteHeader } from '@/app/components/SiteHeader'
+import { buildSeoFactoryExperience } from '@/app/lib/seo-factory-experience'
 import {
   buildAbsoluteUrl,
   ctaLabels,
@@ -132,6 +133,8 @@ function formatDate(value: string) {
   }).format(new Date(value))
 }
 
+export const dynamic = 'force-dynamic'
+
 export async function generateMetadata({ params }: { params: { parts: string[] } }): Promise<Metadata> {
   const page = await getSeoPageBySlug(`guides/${params.parts.join('/')}`)
 
@@ -168,6 +171,7 @@ export default async function GuidePage({ params }: { params: { parts: string[] 
   const cta = ctaMap[page.cta_type] ?? ctaMap.docstack
   const related = await getRelatedSeoPages(page.slug, page.jurisdiction, 3)
   const takeaways = blocks.find((block) => block.type === 'ul')?.items.slice(0, 4) ?? []
+  const experience = buildSeoFactoryExperience(page)
 
   const articleSchema = {
     '@context': 'https://schema.org',
@@ -208,6 +212,21 @@ export default async function GuidePage({ params }: { params: { parts: string[] 
                 <span>{page.reading_time} min read</span>
                 <span>Updated {formatDate(page.updated_at)}</span>
               </div>
+              <div className="keyword-cloud">
+                {experience.keywordChips.map((keyword) => (
+                  <span key={keyword} className="keyword-chip">
+                    {keyword}
+                  </span>
+                ))}
+              </div>
+              <div className="engine-metrics">
+                {experience.signalMetrics.map((metric) => (
+                  <div key={metric.label} className="engine-metric">
+                    <span>{metric.label}</span>
+                    <strong>{metric.value}</strong>
+                  </div>
+                ))}
+              </div>
               <div className="article-actions">
                 <a className="button button-primary" href={cta.href}>
                   {cta.label}
@@ -218,6 +237,31 @@ export default async function GuidePage({ params }: { params: { parts: string[] 
               </div>
             </div>
             <div className="article-content-shell">
+              <section className="engine-overview">
+                <div className="section-heading compact-heading">
+                  <span className="eyebrow">Dynamic SEO profile</span>
+                  <h2>Designed like an auto-SEO product page.</h2>
+                  <p>{experience.intro}</p>
+                </div>
+                <div className="engine-feature-grid">
+                  {experience.featurePanels.map((panel) => (
+                    <article key={panel.title} className="engine-feature-card">
+                      <span className="info-card__label">{panel.eyebrow}</span>
+                      <h3>{panel.title}</h3>
+                      <p>{panel.body}</p>
+                    </article>
+                  ))}
+                </div>
+                <div className="engine-diagram">
+                  {experience.diagramSteps.map((step) => (
+                    <article key={step.label} className="engine-diagram__step">
+                      <span className="engine-step-index">{step.label}</span>
+                      <strong>{step.title}</strong>
+                      <p>{step.body}</p>
+                    </article>
+                  ))}
+                </div>
+              </section>
               <div className="rich-content">
                 {blocks.map((block, index) => (
                   <div key={`${block.type}-${index}`}>
@@ -268,11 +312,13 @@ export default async function GuidePage({ params }: { params: { parts: string[] 
           <aside className="article-rail">
             <div className="article-summary">
               <span className="info-card__label">What this page does</span>
-              <h3>Productized legal intelligence</h3>
-              <p>
-                This guide is structured to answer search intent and move serious buyers into a matched
-                product path instead of stopping at awareness.
-              </p>
+              <h3>{experience.outcomeLabel}</h3>
+              <p>{experience.intro}</p>
+            </div>
+            <div className="info-card">
+              <span className="info-card__label">Best matched buyer</span>
+              <strong>{experience.buyerLabel}</strong>
+              <p>The page is tuned to move serious operators toward a clearer paid or high-value next step.</p>
             </div>
             <div className="info-card">
               <span className="info-card__label">Quick takeaways</span>
@@ -281,6 +327,16 @@ export default async function GuidePage({ params }: { params: { parts: string[] 
                   <li key={item}>{item}</li>
                 ))}
               </ul>
+            </div>
+            <div className="info-card">
+              <span className="info-card__label">Keyword cluster</span>
+              <div className="keyword-cloud keyword-cloud--compact">
+                {experience.keywordChips.map((keyword) => (
+                  <span key={keyword} className="keyword-chip">
+                    {keyword}
+                  </span>
+                ))}
+              </div>
             </div>
             <div className="info-card">
               <span className="info-card__label">Trust links</span>

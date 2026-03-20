@@ -1,27 +1,24 @@
 import Link from 'next/link'
-import {
-  insightStreams,
-  productLinks,
-  workflowSteps,
-} from '@/app/lib/site-content'
+import { insightStreams, productLinks, workflowSteps } from '@/app/lib/site-content'
 
 export function HeroSection() {
   return (
     <section className="hero-section">
       <div className="container hero-grid">
         <div className="hero-copy">
-          <span className="eyebrow">Luxury legal intelligence designed to convert</span>
-          <h1>Turn legal research, compliance, and documents into one premium revenue machine.</h1>
+          <span className="eyebrow">Automatic SEO for legal revenue systems</span>
+          <h1>Build a premium legal intelligence SaaS that publishes, qualifies, and converts on autopilot.</h1>
           <p>
-            BizLegal AI packages high-intent legal workflows into a polished SaaS experience for
-            founders, investors, family offices, legal ops teams, and cross-border counsel.
+            BizLegal AI turns search demand into paid templates, compliance workflows, and investigation
+            briefs with a luxury product shell, a visible trust layer, and a Claude-first SEO engine that
+            is ready for Gemini expansion when volume matters more than restraint.
           </p>
           <div className="hero-actions">
             <a className="button button-primary" href={productLinks.docstack}>
               Launch DocStack
             </a>
             <Link className="button button-secondary" href="/posts">
-              Open Intelligence Hub
+              Open Auto-SEO Hub
             </Link>
             <Link className="button button-ghost" href="/security">
               Review Trust Pages
@@ -30,16 +27,16 @@ export function HeroSection() {
           <div className="hero-proof">
             <span>10 pages per SEO run</span>
             <span>3x weekly publishing cadence</span>
-            <span>Productized paths into DocStack, BRAI, and TRACR</span>
+            <span>Claude default, Gemini optional</span>
           </div>
         </div>
         <div className="hero-panel">
           <div className="showcase-toolbar">
             <div>
               <span className="mini-label">Command center</span>
-              <strong>BizLegal AI Operating Layer</strong>
+              <strong>Auto-SEO Operating Layer</strong>
             </div>
-            <span className="badge">Live conversion system</span>
+            <span className="badge">Conversion system live</span>
           </div>
           <div className="showcase-grid">
             <div className="showcase-main">
@@ -49,8 +46,8 @@ export function HeroSection() {
                   <strong>Guide to product to checkout</strong>
                 </div>
                 <div className="metric-card">
-                  <span>Publishing loop</span>
-                  <strong>Mon / Wed / Fri</strong>
+                  <span>Generation core</span>
+                  <strong>Claude default, Gemini optional</strong>
                 </div>
                 <div className="metric-card">
                   <span>Primary buyers</span>

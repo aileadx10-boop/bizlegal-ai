@@ -1,9 +1,20 @@
-﻿#!/usr/bin/env npx tsx
+#!/usr/bin/env npx tsx
 
 import Anthropic from '@anthropic-ai/sdk'
 import { createClient } from '@supabase/supabase-js'
 
 type Topic = [string, string, string, 'docstack' | 'brai' | 'tracr', string]
+type Provider = 'claude' | 'gemini'
+
+type GeminiResponse = {
+  candidates?: Array<{
+    content?: {
+      parts?: Array<{
+        text?: string
+      }>
+    }
+  }>
+}
 
 const TOPICS: Topic[] = [
   ['uae', 'share-purchase-agreement-uae', 'Share Purchase Agreement UAE Guide 2026', 'docstack', 'share purchase agreement uae, spa difc, share transfer uae'],
@@ -43,14 +54,27 @@ function parseArgs() {
   let count = 10
   let start = 0
   let dryRun = false
+  let provider: string | undefined
 
   for (let index = 0; index < args.length; index += 1) {
     if (args[index] === '--count' && args[index + 1]) count = Number(args[index + 1])
     if (args[index] === '--start' && args[index + 1]) start = Number(args[index + 1])
+    if (args[index] === '--provider' && args[index + 1]) provider = args[index + 1]
     if (args[index] === '--dry-run') dryRun = true
   }
 
-  return { count, start, dryRun }
+  return { count, start, dryRun, provider }
+}
+
+function resolveProvider(input?: string): Provider {
+  const value = (input || process.env.SEO_PROVIDER || 'claude').trim().toLowerCase()
+  if (value === 'gemini') return 'gemini'
+  return 'claude'
+}
+
+function resolveModel(provider: Provider) {
+  if (process.env.SEO_FACTORY_MODEL) return process.env.SEO_FACTORY_MODEL
+  return provider === 'gemini' ? 'gemini-2.5-pro' : 'claude-sonnet-4-20250514'
 }
 
 function buildPrompt(row: Topic) {
@@ -117,11 +141,50 @@ function parseResponse(text: string, row: Topic) {
   }
 }
 
-async function main() {
-  const { count, start, dryRun } = parseArgs()
+async function generateWithClaude(model: string, prompt: string) {
   const anthropic = new Anthropic({ apiKey: required('ANTHROPIC_API_KEY') })
+  const response = await anthropic.messages.create({
+    model,
+    max_tokens: 2600,
+    messages: [{ role: 'user', content: prompt }],
+  })
+
+  return response.content[0]?.type === 'text' ? response.content[0].text : ''
+}
+
+async function generateWithGemini(model: string, prompt: string) {
+  const apiKey = required('GOOGLE_API_KEY')
+  const response = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ role: 'user', parts: [{ text: prompt }] }],
+        generationConfig: { temperature: 0.4, topP: 0.9, maxOutputTokens: 3200 },
+      }),
+    },
+  )
+
+  if (!response.ok) {
+    throw new Error(`Gemini request failed: ${response.status} ${await response.text()}`)
+  }
+
+  const data = (await response.json()) as GeminiResponse
+  const text = data.candidates?.[0]?.content?.parts?.map((part) => part.text || '').join('').trim()
+  if (!text) throw new Error('Gemini returned an empty response')
+  return text
+}
+
+async function generateDraft(provider: Provider, model: string, prompt: string) {
+  return provider === 'gemini' ? generateWithGemini(model, prompt) : generateWithClaude(model, prompt)
+}
+
+async function main() {
+  const { count, start, dryRun, provider: providerArg } = parseArgs()
+  const provider = resolveProvider(providerArg)
+  const model = resolveModel(provider)
   const supabase = createClient(required('NEXT_PUBLIC_SUPABASE_URL'), required('SUPABASE_SERVICE_KEY'))
-  const model = process.env.SEO_FACTORY_MODEL || 'claude-opus-4-5'
 
   const requestedSlugs = TOPICS.map((topic) => `guides/${topic[0]}/${topic[1]}`)
   const { data: existingRows } = await supabase.from('seo_pages').select('slug').in('slug', requestedSlugs)
@@ -129,6 +192,7 @@ async function main() {
   const pending = TOPICS.filter((topic) => !existing.has(`guides/${topic[0]}/${topic[1]}`)).slice(start, start + count)
 
   console.log(`SEO Factory batch size: ${pending.length}`)
+  console.log(`Provider: ${provider}`)
   console.log(`Model: ${model}`)
 
   if (dryRun) {
@@ -144,16 +208,9 @@ async function main() {
     process.stdout.write(`Publishing ${slug} ... `)
 
     try {
-      const response = await anthropic.messages.create({
-        model,
-        max_tokens: 2600,
-        messages: [{ role: 'user', content: buildPrompt(topic) }],
-      })
-
-      const text = response.content[0]?.type === 'text' ? response.content[0].text : ''
+      const text = await generateDraft(provider, model, buildPrompt(topic))
       const payload = parseResponse(text, topic)
       const { error } = await supabase.from('seo_pages').insert(payload)
-
       if (error) {
         failed += 1
         console.log(`failed: ${error.message}`)
@@ -166,7 +223,7 @@ async function main() {
       console.log(`failed: ${(error as Error).message}`)
     }
 
-    await new Promise((resolve) => setTimeout(resolve, 1200))
+    await new Promise((resolve) => setTimeout(resolve, provider === 'gemini' ? 900 : 1200))
   }
 
   console.log(`Created: ${created}`)

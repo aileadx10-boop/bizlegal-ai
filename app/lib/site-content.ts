@@ -1,4 +1,4 @@
-﻿export const baseUrl = 'https://www.bizlegal-ai.com'
+export const baseUrl = 'https://www.bizlegal-ai.com'
 export const seoFactorySchedule = 'Monday, Wednesday, Friday'
 
 export type CtaType = 'docstack' | 'brai' | 'tracr'
@@ -19,7 +19,7 @@ export const productLinks = {
 
 export const navigationLinks = [
   { label: 'Products', href: '/#products' },
-  { label: 'Intelligence Hub', href: '/posts' },
+  { label: 'Auto-SEO Hub', href: '/posts' },
   { label: 'Security', href: '/security' },
   { label: 'FAQ', href: '/faq' },
 ] as const
@@ -128,6 +128,73 @@ export const insightStreams = [
     title: 'Investigations and disputes',
     body:
       'Forensic analysis, tracing, and dispute-support narratives that give TRACR a premium service lane.',
+  },
+] as const
+
+export const seoFactoryFeatureCards = [
+  {
+    eyebrow: 'Autopilot publishing',
+    title: '10 dynamic pages per run',
+    body:
+      'The factory only fills missing slugs, which keeps output controlled while the hub compounds every Monday, Wednesday, and Friday.',
+  },
+  {
+    eyebrow: 'Conversion framing',
+    title: 'Every page exits into a product lane',
+    body:
+      'Search traffic does not end at awareness. Each guide routes into DocStack, BRAI, or TRACR with a visible next action.',
+  },
+  {
+    eyebrow: 'Structured authority',
+    title: 'Features, schema, and trust surfaces included',
+    body:
+      'Dynamic guide pages expose keyword clusters, workflow visuals, FAQ schema, and trust links so they feel like premium product pages.',
+  },
+  {
+    eyebrow: 'Operator controls',
+    title: 'Claude-first, Gemini-ready pipeline',
+    body:
+      'The generator can stay on Claude for legal precision while keeping Gemini available for broader discovery or expansion campaigns.',
+  },
+] as const
+
+export const seoFactoryFlow = [
+  {
+    step: 'Data layer',
+    title: 'Topic set and jurisdiction map',
+    body:
+      'Topics, keywords, jurisdictions, and product destinations define the commercial intent before any draft is generated.',
+  },
+  {
+    step: 'Generation',
+    title: 'Model creates the first structured asset',
+    body:
+      'The prompt enforces title, meta, keywords, article sections, and FAQ output so every draft lands in the same premium shell.',
+  },
+  {
+    step: 'Productization',
+    title: 'Guide becomes a designed selling surface',
+    body:
+      'Each post inherits keyword chips, automation panels, workflow diagrams, and CTA alignment instead of publishing as plain text.',
+  },
+  {
+    step: 'Revenue loop',
+    title: 'Traffic flows into products and trust pages',
+    body:
+      'The experience keeps buyers inside one ecosystem where trust, product, and research reinforce each other.',
+  },
+] as const
+
+export const providerChoices = [
+  {
+    name: 'Claude default',
+    description:
+      'Best fit for legal, compliance, and risk-heavy pages where disciplined structure, restraint, and premium tone matter most.',
+  },
+  {
+    name: 'Gemini optional',
+    description:
+      'Useful for long-context expansion, broader discovery sweeps, and high-volume experiments when you want a second generation lane.',
   },
 ] as const
 
