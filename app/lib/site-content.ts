@@ -17,117 +17,189 @@ export const productLinks = {
   tracr: 'https://tracr.bizlegal-ai.com',
 } as const
 
+export const founderProfile = {
+  name: 'DOR INNOVATIONS',
+  shortLabel: 'Commercial attorney | Entrepreneur | Digital asset regulatory intelligence',
+  heroSummary: 'Founder of DOR INNOVATIONS. AI-assisted crypto risk analysis with UAE focus.',
+  shortBio: [
+    'Commercial lawyer and entrepreneur.',
+    'Founder of DOR INNOVATIONS.',
+    'AI-driven regulatory risk intelligence for digital asset ventures.',
+  ],
+  founderAbout:
+    'Founder of BizLegal. Commercial attorney and entrepreneur operating at the intersection of law, innovation, and digital asset markets. Focused on structured regulatory risk intelligence for emerging financial technologies.',
+} as const
+
+export const companyProfile = {
+  name: 'BizLegal',
+  title: 'Boutique Regulatory Intelligence & AI-Driven Risk Analysis',
+  summary:
+    'BizLegal provides structured regulatory risk intelligence for digital asset ventures operating in complex jurisdictions.',
+  detail:
+    'Our work focuses on identifying regulatory exposure before it becomes structural liability, enabling founders to scale with clarity and reduced uncertainty.',
+} as const
+
 export const navigationLinks = [
+  { label: 'About', href: '/about' },
   { label: 'Products', href: '/#products' },
-  { label: 'Auto-SEO Hub', href: '/posts' },
+  { label: 'Intelligence Hub', href: '/posts' },
   { label: 'Security', href: '/security' },
   { label: 'FAQ', href: '/faq' },
 ] as const
 
 export const trustMetrics = [
-  { value: '10', label: 'Pages per SEO run' },
-  { value: '3x', label: 'Publishing cadence each week' },
-  { value: '8+', label: 'Jurisdictions in the hub' },
-  { value: '60s', label: 'Fastest template turnaround' },
+  { value: 'UAE', label: 'Primary regulatory focus' },
+  { value: 'VARA', label: 'Exposure analysis depth' },
+  { value: 'ADGM', label: 'Comparative jurisdiction view' },
+  { value: 'AI', label: 'Assisted risk intelligence' },
 ] as const
 
 export const productCards = [
   {
-    eyebrow: 'Revenue engine',
+    eyebrow: 'Commercial legal strategy',
     name: 'DocStack',
     description:
-      'Package buyer intent into premium legal templates for transactions, diligence, and deal execution.',
+      'Commercial attorney-led templates for token launches, venture structuring, and cross-border digital asset execution.',
     points: [
-      'Lawyer-grade templates tuned for cross-border deals and real estate operators.',
-      'Fast conversion path from intelligence page to paid document checkout.',
-      'Clear pricing and productized delivery for founder, investor, and counsel use cases.',
+      'Built for founders, operators, and counsel who need practical legal structure without law-firm drag.',
+      'Turns regulatory and commercial pain into documentation that can actually be used in a live venture.',
+      'Pairs founder clarity with fast, productized delivery for high-friction legal workflows.',
     ],
     href: productLinks.docstack,
-    ctaLabel: 'Open DocStack',
+    ctaLabel: 'Browse DocStack',
   },
   {
-    eyebrow: 'Compliance intelligence',
+    eyebrow: 'Risk intelligence',
     name: 'BRAI',
     description:
-      'Monitor regulatory pressure across VARA, MiCA, SEC, MAS, and adjacent frameworks without drowning in PDFs.',
+      'AI-assisted regulatory exposure analysis for digital asset ventures navigating UAE, VARA, ADGM, MiCA, SEC, and adjacent frameworks.',
     points: [
-      'Route high-intent compliance traffic into scans, assessments, and paid advisory workflows.',
-      'Turn each guide into an operational next step with industry-specific calls to action.',
-      'Pair research pages with a premium SaaS narrative instead of a generic legal blog.',
+      'Built to identify regulatory exposure before launch, fundraising, or market expansion.',
+      'Gives founders a structured view of what matters, what is unclear, and where risk is accumulating.',
+      'Designed as a premium legaltech instrument rather than a loose collection of compliance notes.',
     ],
     href: productLinks.brai,
-    ctaLabel: 'Launch BRAI',
+    ctaLabel: 'Start BRAI Scan',
   },
   {
-    eyebrow: 'Investigations',
+    eyebrow: 'Forensic support',
     name: 'TRACR',
     description:
-      'Position forensic investigations, wallet tracing, and litigation support as a premium service lane.',
+      'Structured crypto risk analysis, forensic tracing, and investigation-ready reporting for high-stakes digital asset matters.',
     points: [
-      'Designed for disputes, asset tracing, enforcement teams, and fraud response programs.',
-      'Supports a court-ready deliverable story instead of a vague consulting promise.',
-      'Creates a third monetization surface alongside templates and compliance workflows.',
+      'Useful when regulatory uncertainty collides with disputes, asset movement, or enforcement pressure.',
+      'Supports a more credible escalation path than generic crypto consulting.',
+      'Keeps the platform positioned for sophisticated founders, counsel, and recovery teams.',
     ],
     href: productLinks.tracr,
     ctaLabel: 'Explore TRACR',
   },
   {
-    eyebrow: 'SEO factory',
+    eyebrow: 'Intelligence hub',
     name: 'Intelligence Hub',
     description:
-      'Publish 10 productized SEO pages three times a week and route every article into a commercial workflow.',
+      'Founder notes, regulatory briefings, and dynamic research pages designed to reduce uncertainty before it becomes operational drag.',
     points: [
-      'Blog and posts feed designed as a premium intelligence product, not a content warehouse.',
-      'Every page carries a matched CTA, schema, internal links, and conversion framing.',
-      'Built to compound search demand into templates, scans, and investigation requests.',
+      'Built around high-intent questions digital asset ventures ask before launch or jurisdiction expansion.',
+      'Connects research directly to BizLegal products instead of leaving users in a passive blog loop.',
+      'Keeps SEO useful, premium, and commercially aligned with the rest of the platform.',
     ],
     href: '/posts',
-    ctaLabel: 'Browse Posts',
+    ctaLabel: 'Open Intelligence Hub',
   },
 ] as const
 
 export const workflowSteps = [
   {
     step: '01',
-    title: 'Capture intent',
+    title: 'Identify exposure',
     body:
-      'Search-ready legal pages target buyers looking for templates, regulatory guidance, and due diligence answers.',
+      'Start with the specific regulatory pressure facing the venture, not a vague request for generic compliance help.',
   },
   {
     step: '02',
-    title: 'Qualify with intelligence',
+    title: 'Map jurisdiction friction',
     body:
-      'Every page turns research into a concrete next move with product context, timeline cues, and CTA alignment.',
+      'Compare UAE, VARA, ADGM, and cross-border pressure points before they harden into structural mistakes.',
   },
   {
     step: '03',
-    title: 'Convert into product',
+    title: 'Structure the response',
     body:
-      'Visitors move from guide to paid template, compliance scan, or investigation brief without leaving the ecosystem.',
+      'Route the matter into the right product path, whether that means risk analysis, documentation, or forensic support.',
   },
   {
     step: '04',
-    title: 'Compound weekly',
+    title: 'Move with clarity',
     body:
-      'The SEO factory pushes 10 new pages on each scheduled run so the hub keeps expanding while the product story stays consistent.',
+      'Use a tighter decision framework so founders can move faster with less uncertainty and fewer preventable surprises.',
   },
 ] as const
 
 export const insightStreams = [
   {
-    title: 'Transactional playbooks',
+    title: 'UAE digital asset intelligence',
     body:
-      'High-intent template and contract guides mapped to paid DocStack journeys and rapid document delivery.',
+      'Founder-facing guidance on VARA, ADGM, DIFC, and the pressure points that matter before launch.',
   },
   {
-    title: 'Regulatory briefings',
+    title: 'Cross-border regulatory analysis',
     body:
-      'Jurisdiction-aware compliance intelligence that sets up BRAI as an always-on operating system.',
+      'Structured comparisons across complex jurisdictions so expansion decisions are based on exposure, not assumption.',
   },
   {
-    title: 'Investigations and disputes',
+    title: 'AI-assisted risk assessment',
     body:
-      'Forensic analysis, tracing, and dispute-support narratives that give TRACR a premium service lane.',
+      'A legaltech operating layer that helps founders see risk concentration earlier and act before liability compounds.',
+  },
+] as const
+
+export const companyIntersections = [
+  {
+    title: 'Commercial legal strategy',
+    body: 'Commercial structuring informed by founder reality, transaction pressure, and actual venture execution.',
+  },
+  {
+    title: 'Cross-border regulatory analysis',
+    body: 'Comparative exposure mapping across jurisdictions where digital asset ventures face conflicting rules and incentives.',
+  },
+  {
+    title: 'Entrepreneurial execution',
+    body: 'Advice shaped by speed, capital constraints, and the practical cost of waiting too long to resolve uncertainty.',
+  },
+  {
+    title: 'AI-assisted risk assessment',
+    body: 'A structured intelligence layer that accelerates analysis without collapsing nuance or judgment.',
+  },
+] as const
+
+export const specializationAreas = [
+  {
+    title: 'UAE Crypto Regulatory Risk Intelligence',
+    body: 'Primary focus on UAE digital asset ventures that need founder-grade clarity before launch, fundraising, or strategic expansion.',
+  },
+  {
+    title: 'VARA & ADGM Exposure Analysis',
+    body: 'Detailed attention to jurisdiction fit, licensing pressure, and where exposure is likely to emerge across UAE pathways.',
+  },
+] as const
+
+export const painPoints = [
+  {
+    title: 'Regulatory uncertainty before launch',
+    body: 'Founders often know there is risk but do not know where it is concentrated or which jurisdiction assumptions are wrong.',
+  },
+  {
+    title: 'Confusion between VARA and ADGM routes',
+    body: 'Digital asset ventures need a cleaner view of which UAE path actually fits the model before building around the wrong structure.',
+  },
+  {
+    title: 'Cross-border expansion without a clear exposure map',
+    body: 'Growth across jurisdictions creates overlapping obligations that can become structural liability if not analyzed early.',
+  },
+  {
+    title: 'Slow legal work that does not match execution speed',
+    body: 'BizLegal is designed to reduce friction, compress analysis time, and move founders toward a clearer next step.',
   },
 ] as const
 
@@ -202,50 +274,50 @@ export const securityPillars = [
   {
     title: 'Secure-by-default delivery',
     body:
-      'The site is structured around hardened headers, isolated server-side content access, and minimal client-side bloat.',
+      'The platform pairs a premium frontend shell with hardened defaults, isolated content access, and minimal client-side bloat.',
   },
   {
     title: 'Controlled publishing workflow',
     body:
-      'SEO generation now uses a scheduled, idempotent batch process that only publishes missing pages in controlled runs.',
+      'Publishing is structured, scheduled, and intentionally controlled so content growth does not dilute brand quality or legal clarity.',
   },
   {
     title: 'Trust-first legal pages',
     body:
-      'Privacy, terms, FAQ, security, and disclaimer pages are wired into the product shell so buyers can validate credibility fast.',
+      'Privacy, terms, FAQ, security, and disclaimer pages stay visible so serious buyers can validate credibility quickly.',
   },
   {
     title: 'Revenue with guardrails',
     body:
-      'Every CTA is commercial, but the platform now clearly distinguishes templates, intelligence, and non-legal-advice boundaries.',
+      'The platform is conversion-aware, but it still separates intelligence, legal products, and non-legal-advice boundaries clearly.',
   },
 ] as const
 
 export const faqItems = [
   {
-    question: 'What does BizLegal AI actually sell?',
+    question: 'What is BizLegal?',
     answer:
-      'BizLegal AI sells premium legal workflows: paid templates through DocStack, compliance intelligence through BRAI, and investigation-ready deliverables through TRACR.',
+      'BizLegal is a boutique regulatory intelligence and AI-driven risk analysis practice focused on digital asset ventures operating in complex jurisdictions.',
   },
   {
-    question: 'How often does the SEO factory publish new pages?',
+    question: 'What is the founder background?',
     answer:
-      'The publishing workflow is configured for three weekly runs, each creating up to 10 missing SEO pages and pushing them into the intelligence hub.',
+      'BizLegal is founded by DOR INNOVATIONS: a commercial attorney and entrepreneur operating at the intersection of law, innovation, and digital asset markets.',
   },
   {
-    question: 'Are the guides just blog posts?',
+    question: 'What is the primary specialization?',
     answer:
-      'No. Each guide is framed as a productized intelligence asset with matched calls to action, jurisdiction context, and a direct path into a paid workflow.',
+      'The core specialization is UAE crypto regulatory risk intelligence, with particular attention to VARA and ADGM exposure analysis.',
   },
   {
-    question: 'Is BizLegal AI a law firm?',
+    question: 'What kind of problems does BizLegal help solve?',
     answer:
-      'No. The platform provides templates, workflow tooling, and legal intelligence. It does not replace licensed counsel for jurisdiction-specific advice.',
+      'BizLegal helps founders reduce regulatory uncertainty before launch, fundraising, or expansion by identifying exposure before it becomes structural liability.',
   },
   {
     question: 'How should teams use the platform?',
     answer:
-      'Founders, investors, family offices, legal ops teams, and compliance leads can use the hub to research, qualify, and move into execution faster.',
+      'Founders, operators, funds, legal teams, and digital asset ventures can use BizLegal to move from uncertainty into a clearer decision path faster.',
   },
 ] as const
 

@@ -1,17 +1,17 @@
 ﻿import Link from 'next/link'
 
-import { featuredGuides, legalLinks, productLinks } from '@/app/lib/site-content'
+import { companyProfile, featuredGuides, founderProfile, legalLinks, productLinks } from '@/app/lib/site-content'
 
 export function SiteFooter() {
   return (
     <footer className="site-footer">
       <div className="container footer-grid">
         <div className="footer-brand">
-          <span className="brand-mark__eyebrow">Revenue-focused legal intelligence</span>
-          <h2>BizLegal AI</h2>
+          <span className="brand-mark__eyebrow">{founderProfile.name}</span>
+          <h2>{companyProfile.name}</h2>
           <p>
-            Productized legal templates, compliance workflows, and intelligence-led conversion pages
-            for operators moving across jurisdictions.
+            {companyProfile.title}. Structured regulatory risk intelligence for digital asset ventures
+            operating across complex jurisdictions with UAE-focused depth.
           </p>
         </div>
         <div>
@@ -39,8 +39,8 @@ export function SiteFooter() {
         </div>
       </div>
       <div className="container footer-bottom">
-        <p>Templates, compliance workflows, and intelligence assets only. Not legal advice.</p>
-        <p>Manual Vercel deployment supported. GitHub-ready publishing workflow included.</p>
+        <p>Founder of BizLegal. Commercial attorney and entrepreneur operating at the intersection of law, innovation, and digital asset markets.</p>
+        <p>Information and intelligence materials only. Not legal advice.</p>
       </div>
     </footer>
   )

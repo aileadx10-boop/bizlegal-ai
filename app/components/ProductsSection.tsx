@@ -8,8 +8,8 @@ export function ProductsSection() {
       <div className="container">
         <SectionHeading
           eyebrow="Product stack"
-          title="Four revenue surfaces, one coherent platform story."
-          description="Each offer is framed like a premium SaaS module with a clear buyer, a measurable outcome, and a direct path from intelligence content into conversion."
+          title="Four intelligence instruments built for real digital asset pain points."
+          description="Each offer is framed as a premium legaltech module designed to reduce friction, expose regulatory blind spots, and move serious buyers toward a clear next step."
         />
         <div className="grid-4">
           {productCards.map((card) => {

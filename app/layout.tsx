@@ -24,33 +24,33 @@ const mono = IBM_Plex_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.bizlegal-ai.com'),
   title: {
-    default: 'BizLegal AI | Revenue-focused legal intelligence SaaS',
-    template: '%s | BizLegal AI',
+    default: 'BizLegal | Boutique Regulatory Intelligence & AI-Driven Risk Analysis',
+    template: '%s | BizLegal',
   },
   description:
-    'Premium legal intelligence workflows for contract generation, compliance research, and high-conversion cross-border deal execution.',
-  applicationName: 'BizLegal AI',
+    'Commercial attorney | Entrepreneur | Digital asset regulatory intelligence. Founder of DOR INNOVATIONS. AI-assisted crypto risk analysis with UAE focus.',
+  applicationName: 'BizLegal',
   keywords: [
-    'legal intelligence platform',
-    'AI legal templates',
-    'compliance intelligence',
-    'cross-border deals',
-    'legal SaaS',
-    'contract automation',
+    'digital asset regulatory intelligence',
+    'UAE crypto regulatory risk intelligence',
+    'VARA exposure analysis',
+    'ADGM exposure analysis',
+    'AI-assisted risk assessment',
+    'commercial attorney digital assets',
   ],
   openGraph: {
-    title: 'BizLegal AI',
+    title: 'BizLegal',
     description:
-      'A premium SaaS hub for legal templates, compliance intelligence, and revenue-focused research workflows.',
+      'Boutique regulatory intelligence and AI-driven risk analysis for digital asset ventures operating in complex jurisdictions.',
     url: 'https://www.bizlegal-ai.com',
-    siteName: 'BizLegal AI',
+    siteName: 'BizLegal',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'BizLegal AI',
+    title: 'BizLegal',
     description:
-      'Luxury legal intelligence SaaS for templates, compliance research, and cross-border execution.',
+      'Commercial attorney and entrepreneur. AI-assisted crypto risk analysis with UAE focus.',
   },
   robots: {
     index: true,

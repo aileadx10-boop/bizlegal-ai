@@ -20,10 +20,11 @@ export function LeadCapture() {
     <section className="section-shell lead-capture-section">
       <div className="container lead-capture-grid">
         <div className="lead-capture-content">
-          <span className="eyebrow">Exclusive Access</span>
-          <h2>Join the inner circle of legal tech.</h2>
+          <span className="eyebrow">Founder updates</span>
+          <h2>Get regulatory intelligence before uncertainty compounds.</h2>
           <p>
-            Get early access to our premium templates, compliance workflows, and industry reports before they launch publicly.
+            Receive founder notes, UAE regulatory briefings, and product updates across BRAI, DocStack,
+            TRACR, and the intelligence hub.
           </p>
         </div>
         <form onSubmit={handleSubmit} className="lead-capture-form">
@@ -42,14 +43,18 @@ export function LeadCapture() {
               className="button button-primary"
               disabled={status === 'loading' || status === 'success'}
             >
-              {status === 'loading' ? 'Joining...' : status === 'success' ? 'Welcome Inside' : 'Get Access'}
+              {status === 'loading'
+                ? 'Submitting...'
+                : status === 'success'
+                  ? 'Request Received'
+                  : 'Request Access'}
             </button>
           </div>
           {status === 'success' && (
-            <p className="success-message">You're on the list. Watch your inbox.</p>
+            <p className="success-message">Request received. Watch your inbox.</p>
           )}
           <p className="micro-copy">
-            We respect your privacy. Unsubscribe at any time.
+            Work email only. No noise, no spam, and no sharing of your details.
           </p>
         </form>
       </div>

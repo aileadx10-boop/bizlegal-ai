@@ -1,33 +1,39 @@
 import Link from 'next/link'
-import { productLinks } from '@/app/lib/site-content'
+import { productLinks, specializationAreas } from '@/app/lib/site-content'
 
 export function CTASection() {
   return (
     <section className="section-shell">
       <div className="container trust-grid">
         <div className="hero-copy">
-          <span className="eyebrow">Final call to action</span>
-          <h1>Build the intelligence layer. Capture the revenue. Keep the trust visible.</h1>
+          <span className="eyebrow">Move with clarity</span>
+          <h1>Identify regulatory exposure before it becomes structural liability.</h1>
           <p>
-            The redesigned BizLegal AI experience is ready to sell paid templates, compliance
-            workflows, and investigation services through a single, polished SaaS narrative.
+            Built for founders and operators who need premium legaltech execution, not generic
+            compliance theater. Start with a structured risk view, then move into the right product path.
           </p>
           <div className="hero-actions">
-            <a className="button button-primary" href={productLinks.docstack}>
-              Start with DocStack
+            <a className="button button-primary" href={productLinks.brai}>
+              Start BRAI Scan
             </a>
-            <Link className="button button-secondary" href="/posts">
-              Browse Posts
+            <Link className="button button-secondary" href="/about">
+              Read Founder Profile
             </Link>
           </div>
         </div>
         <div className="trust-panel">
           <div className="info-card">
-            <span className="info-card__label">Ready now</span>
-            <strong>Homepage, posts hub, guide pages, and trust content aligned</strong>
+            <span className="info-card__label">Primary specialization</span>
+            <strong>{specializationAreas[0].title}</strong>
             <p>
-              You can deploy manually to Vercel after reviewing the repo. The site structure is now
-              oriented around conversion, research depth, and premium positioning.
+              {specializationAreas[0].body}
+            </p>
+          </div>
+          <div className="info-card">
+            <span className="info-card__label">UAE depth</span>
+            <strong>{specializationAreas[1].title}</strong>
+            <p>
+              {specializationAreas[1].body}
             </p>
           </div>
         </div>

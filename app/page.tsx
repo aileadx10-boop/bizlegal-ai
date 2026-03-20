@@ -1,24 +1,29 @@
 import Link from 'next/link'
 
+import { CTASection } from '@/app/components/CTASection'
+import { HeroSection } from '@/app/components/HeroSection'
+import { LeadCapture } from '@/app/components/LeadCapture'
+import { ProductsSection } from '@/app/components/ProductsSection'
+import { SectionHeading } from '@/app/components/SectionHeading'
 import { SiteFooter } from '@/app/components/SiteFooter'
 import { SiteHeader } from '@/app/components/SiteHeader'
-import { HeroSection } from '@/app/components/HeroSection'
-import { ProductsSection } from '@/app/components/ProductsSection'
-import { LeadCapture } from '@/app/components/LeadCapture'
-import { CTASection } from '@/app/components/CTASection'
-import { SectionHeading } from '@/app/components/SectionHeading'
 import {
+  companyIntersections,
+  companyProfile,
   faqItems,
+  founderProfile,
   insightStreams,
+  painPoints,
   productLinks,
   securityPillars,
+  specializationAreas,
   trustMetrics,
 } from '@/app/lib/site-content'
 
 export default function HomePage() {
   return (
     <>
-      <SiteHeader ctaHref={productLinks.docstack} ctaLabel="Generate Paid Templates" />
+      <SiteHeader ctaHref={productLinks.brai} ctaLabel="Start BRAI Scan" />
       <main>
         <HeroSection />
 
@@ -26,9 +31,9 @@ export default function HomePage() {
           <div className="container trust-grid">
             <div>
               <SectionHeading
-                eyebrow="Why this will convert better"
-                title="The site now sells products first, research second, and trust all the way through."
-                description="Instead of looking like a disconnected legal brochure, BizLegal AI is positioned as a premium operating system with clear commercial outcomes."
+                eyebrow="Short bio"
+                title="Commercial attorney. Entrepreneur. Founder of DOR INNOVATIONS."
+                description="AI-driven regulatory risk intelligence for digital asset ventures."
               />
               <div className="trust-ribbon">
                 {trustMetrics.map((metric) => (
@@ -41,35 +46,82 @@ export default function HomePage() {
             </div>
             <div className="trust-panel">
               <div className="info-card">
-                <span className="info-card__label">Design direction</span>
-                <strong>Obsidian luxury with editorial typography</strong>
-                <p>
-                  A premium, layered SaaS shell inspired by polished automation brands rather than a
-                  conventional legal-services homepage.
-                </p>
+                <span className="info-card__label">{founderProfile.shortLabel}</span>
+                <strong>{founderProfile.heroSummary}</strong>
+                <ul className="list-clean">
+                  {founderProfile.shortBio.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
               </div>
               <div className="info-card">
-                <span className="info-card__label">Conversion strategy</span>
-                <strong>Every surface earns the next click</strong>
-                <p>
-                  Homepage sections move buyers from problem recognition into a product lane, then use
-                  trust content to remove friction instead of adding clutter.
-                </p>
+                <span className="info-card__label">{companyProfile.name}</span>
+                <strong>{companyProfile.title}</strong>
+                <p>{companyProfile.summary}</p>
+                <p>{companyProfile.detail}</p>
+                <Link className="button button-ghost" href="/about">
+                  Read founder profile
+                </Link>
               </div>
             </div>
           </div>
         </section>
 
         <ProductsSection />
-        
+
         <LeadCapture />
 
         <section className="section-shell">
           <div className="container">
             <SectionHeading
+              eyebrow="Company bio"
+              title={companyProfile.title}
+              description={`${companyProfile.summary} ${companyProfile.detail}`}
+            />
+            <div className="grid-4">
+              {companyIntersections.map((item) => (
+                <article key={item.title} className="security-card">
+                  <h3>{item.title}</h3>
+                  <p>{item.body}</p>
+                </article>
+              ))}
+            </div>
+            <div className="faq-grid" style={{ marginTop: '1.1rem' }}>
+              {specializationAreas.map((item) => (
+                <article key={item.title} className="faq-card">
+                  <h3>{item.title}</h3>
+                  <p>{item.body}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="section-shell">
+          <div className="container">
+            <SectionHeading
+              eyebrow="Problems we solve"
+              title="Legaltech designed around founder pain, not generic compliance theater."
+              description="Built for pre-launch structuring, fundraising pressure, and UAE expansion where uncertainty can turn into structural liability."
+            />
+            <div className="grid-4">
+              {painPoints.map((item) => (
+                <article key={item.title} className="workflow-card">
+                  <span className="product-card__eyebrow">Founder pain</span>
+                  <h3>{item.title}</h3>
+                  <p>{item.body}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="section-shell">
+          <div className="container">
+            <SectionHeading
               eyebrow="Intelligence hub"
-              title="The blog is now a product, not an afterthought."
-              description="SEO pages are presented as intelligence assets with jurisdiction framing, matched commercial outcomes, and an obvious blog/posts entry in the top navigation."
+              title="Research that reduces uncertainty before it becomes operational drag."
+              description="Founder notes, regulatory briefings, and dynamic pages built to qualify serious traffic and route it into the right BizLegal product."
             />
             <div className="grid-3">
               {insightStreams.map((stream) => (
@@ -78,7 +130,7 @@ export default function HomePage() {
                   <h3>{stream.title}</h3>
                   <p>{stream.body}</p>
                   <Link className="button button-ghost" href="/posts">
-                    View posts
+                    Open intelligence hub
                   </Link>
                 </article>
               ))}
@@ -87,34 +139,11 @@ export default function HomePage() {
         </section>
 
         <section className="section-shell">
-          <div className="container compare-grid">
-            <article className="compare-card">
-              <span className="product-card__eyebrow">Traditional experience</span>
-              <h3>Static legal brochure</h3>
-              <ul className="list-clean">
-                <li>Disconnected product messaging and buried trust content.</li>
-                <li>No real path from research to purchase.</li>
-                <li>SEO pages feel like content inventory, not monetizable assets.</li>
-              </ul>
-            </article>
-            <article className="compare-card">
-              <span className="product-card__eyebrow">BizLegal AI now</span>
-              <h3>Premium conversion-led SaaS shell</h3>
-              <ul className="list-clean">
-                <li>Homepage, posts, and guide pages all point into product workflows.</li>
-                <li>Security, FAQ, privacy, terms, and disclaimer pages are surfaced visibly.</li>
-                <li>SEO factory cadence is visible, credible, and operationally grounded.</li>
-              </ul>
-            </article>
-          </div>
-        </section>
-
-        <section className="section-shell">
           <div className="container">
             <SectionHeading
               eyebrow="Trust and governance"
-              title="Trust pages are part of the experience, not buried legal debris."
-              description="The security center, FAQ, privacy, terms, and disclaimer pages are integrated into the navigation and footer so serious buyers can validate the platform quickly."
+              title="Credibility is visible across the experience, not hidden in the footer."
+              description="Security, privacy, disclaimers, and operating boundaries are surfaced to support real diligence by founders, counterparties, and sophisticated buyers."
             />
             <div className="grid-4">
               {securityPillars.map((pillar) => (
@@ -131,8 +160,8 @@ export default function HomePage() {
           <div className="container">
             <SectionHeading
               eyebrow="FAQ preview"
-              title="The buying questions are answered before they block revenue."
-              description="Commercial clarity and legal clarity now live side-by-side, which helps serious traffic convert faster."
+              title="Answers built for launch, fundraising, and UAE expansion decisions."
+              description="Key questions are handled early so serious visitors can move from curiosity into action with less friction."
             />
             <div className="faq-grid">
               {faqItems.slice(0, 4).map((item) => (

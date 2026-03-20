@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import { navigationLinks, productLinks, seoFactorySchedule } from '@/app/lib/site-content'
+import { founderProfile, navigationLinks, productLinks } from '@/app/lib/site-content'
 
 type SiteHeaderProps = {
   ctaHref?: string
@@ -8,8 +8,8 @@ type SiteHeaderProps = {
 }
 
 export function SiteHeader({
-  ctaHref = productLinks.docstack,
-  ctaLabel = 'Launch DocStack',
+  ctaHref = productLinks.brai,
+  ctaLabel = 'Start BRAI Scan',
 }: SiteHeaderProps) {
   const isExternal = ctaHref.startsWith('http')
 
@@ -17,14 +17,14 @@ export function SiteHeader({
     <header className="site-header">
       <div className="promo-bar">
         <div className="container promo-bar__inner">
-          <p>SEO Factory is scheduled for 10 dynamic pages every {seoFactorySchedule}.</p>
-          <Link href="/posts">Open Auto-SEO hub</Link>
+          <p>{founderProfile.heroSummary}</p>
+          <Link href="/about">View founder profile</Link>
         </div>
       </div>
       <div className="container nav-shell">
         <Link className="brand-mark" href="/">
-          <span className="brand-mark__eyebrow">Luxury legal intelligence SaaS</span>
-          <span className="brand-mark__title">BizLegal AI</span>
+          <span className="brand-mark__eyebrow">{founderProfile.name}</span>
+          <span className="brand-mark__title">BizLegal</span>
         </Link>
         <nav className="nav-links" aria-label="Primary navigation">
           {navigationLinks.map((item) => (
@@ -34,8 +34,8 @@ export function SiteHeader({
           ))}
         </nav>
         <div className="nav-actions">
-          <Link className="button button-ghost" href="/posts">
-            Auto-SEO Hub
+          <Link className="button button-ghost" href="/about">
+            About Founder
           </Link>
           {isExternal ? (
             <a className="button button-primary" href={ctaHref}>
