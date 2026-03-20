@@ -109,6 +109,9 @@ export default function HomePage() {
             <a href="https://brai.bizlegal-ai.com" className="btn-ghost">Free Scan</a>
             <a href="https://docstack.bizlegal-ai.com" className="btn-primary">Get Templates →</a>
           </div>
+          <a href="https://docstack.bizlegal-ai.com" style={{padding:'8px 20px',borderRadius:8,background:'rgba(99,102,241,0.10)',border:'1px solid rgba(99,102,241,0.38)',color:'#a5b4fc',fontFamily:'Geist Mono,monospace',fontSize:11,fontWeight:700,textDecoration:'none',letterSpacing:'0.07em',transition:'all 0.2s'}}>
+            Get Templates
+          </a>
         </div>
       </nav>
 
