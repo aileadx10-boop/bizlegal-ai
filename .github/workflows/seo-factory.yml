@@ -1,0 +1,34 @@
+﻿name: seo-factory
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 8 * * 1,3,5'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    concurrency:
+      group: seo-factory
+      cancel-in-progress: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Publish 10 SEO pages
+        run: npm run seo:scheduled
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          SEO_FACTORY_MODEL: ${{ secrets.SEO_FACTORY_MODEL }}
