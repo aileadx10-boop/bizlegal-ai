@@ -28,6 +28,9 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Gloock:ital@0;1&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,600&family=Geist+Mono:wght@300;400;600;700&display=swap"
           rel="stylesheet"
         />
+        <style>{`
+          * { transition: color 0.15s, background-color 0.15s, border-color 0.15s, box-shadow 0.15s, transform 0.15s; }
+        `}</style>
       </head>
       <body>{children}</body>
     </html>
