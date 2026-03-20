@@ -1,0 +1,78 @@
+// app/sitemap.ts
+// Auto-generated sitemap pulled from Supabase seo_pages table
+// Next.js reads this at build time (or ISR) and serves /sitemap.xml
+
+import { createClient } from '@supabase/supabase-js'
+import type { MetadataRoute } from 'next'
+
+export const revalidate = 3600 // refresh sitemap every hour
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const sb = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_KEY!
+  )
+  const baseUrl = 'https://bizlegal-ai.com'
+
+  // Static pages
+  const staticRoutes: MetadataRoute.Sitemap = [
+    { url: baseUrl,                                  lastModified: new Date(), changeFrequency: 'weekly',  priority: 1.0 },
+    { url: `${baseUrl}/pricing`,                     lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/tools`,                       lastModified: new Date(), changeFrequency: 'weekly',  priority: 0.9 },
+    { url: `${baseUrl}/tools/saas-risk-scanner`,     lastModified: new Date(), changeFrequency: 'monthly', priority: 0.85 },
+    { url: `${baseUrl}/tools/contract-fixer`,        lastModified: new Date(), changeFrequency: 'monthly', priority: 0.85 },
+    { url: `${baseUrl}/tools/website-compliance`,    lastModified: new Date(), changeFrequency: 'monthly', priority: 0.85 },
+    { url: `${baseUrl}/tools/debt-collection`,       lastModified: new Date(), changeFrequency: 'monthly', priority: 0.85 },
+    { url: `${baseUrl}/calculators`,                 lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/faq`,                         lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${baseUrl}/about`,                       lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${baseUrl}/privacy`,                     lastModified: new Date(), changeFrequency: 'yearly',  priority: 0.4 },
+    { url: `${baseUrl}/terms`,                       lastModified: new Date(), changeFrequency: 'yearly',  priority: 0.4 },
+    { url: `${baseUrl}/accessibility`,               lastModified: new Date(), changeFrequency: 'yearly',  priority: 0.4 },
+    // SEO product & jurisdiction landing pages
+    { url: `${baseUrl}/vara-compliance`,                         lastModified: new Date(), changeFrequency: 'weekly',  priority: 0.95 },
+    { url: `${baseUrl}/vara-mvl-license`,                        lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${baseUrl}/mica-regulation-2025`,                    lastModified: new Date(), changeFrequency: 'weekly',  priority: 0.95 },
+    { url: `${baseUrl}/uae-difc-crypto-regulation`,              lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${baseUrl}/digital-asset-regulatory-intelligence`,   lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${baseUrl}/digital-asset-risk-analysis`,             lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${baseUrl}/cross-border-compliance`,                 lastModified: new Date(), changeFrequency: 'monthly', priority: 0.85 },
+    { url: `${baseUrl}/brai`,                                    lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${baseUrl}/docstack`,                                lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${baseUrl}/tracr`,                                   lastModified: new Date(), changeFrequency: 'monthly', priority: 0.85 },
+    // Content hub pages
+    { url: `${baseUrl}/blog`,                                    lastModified: new Date(), changeFrequency: 'daily',   priority: 0.9 },
+    { url: `${baseUrl}/templates`,                               lastModified: new Date(), changeFrequency: 'weekly',  priority: 0.9 },
+    { url: `${baseUrl}/social-hub`,                              lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
+    // Blog posts
+    { url: `${baseUrl}/blog/vara-mvl-license-guide-2025`,        lastModified: new Date(), changeFrequency: 'monthly', priority: 0.85 },
+    { url: `${baseUrl}/blog/mica-enforcement-2025`,              lastModified: new Date(), changeFrequency: 'monthly', priority: 0.85 },
+    { url: `${baseUrl}/blog/brai-regulatory-intelligence`,       lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/blog/howey-test-2025-token-analysis`,     lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/blog/difc-vs-adgm-digital-assets`,        lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/blog/docstack-vara-mica-contracts`,       lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/blog/cross-border-digital-asset-structuring`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/blog/tracr-blockchain-forensics-litigation`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/blog/vara-difc-comparison-2025`,          lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/blog/mas-dpt-license-singapore-2025`,     lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/blog/mica-token-white-paper-requirements`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/blog/defi-regulatory-risk-analysis`,      lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+  ]
+
+  // Dynamic guide pages from Supabase
+  const { data: pages } = await sb
+    .from('seo_pages')
+    .select('slug, created_at, updated_at')
+    .eq('published', true)
+    .order('created_at', { ascending: false })
+
+  // slug already contains 'guides/region/page-name' prefix from DB
+  const guideRoutes: MetadataRoute.Sitemap = (pages ?? []).map(page => ({
+    url: `${baseUrl}/${page.slug}`,
+    lastModified: new Date(page.updated_at ?? page.created_at),
+    changeFrequency: 'monthly' as const,
+    priority: 0.9,
+  }))
+
+  return [...staticRoutes, ...guideRoutes]
+}

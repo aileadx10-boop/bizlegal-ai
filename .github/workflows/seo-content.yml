@@ -1,0 +1,59 @@
+name: Automated SEO Content Generation
+
+# ─── SCHEDULE ─────────────────────────────────────────────────
+# Runs every Sunday, Tuesday, and Friday at 08:00 UTC
+# Generates 10 new SEO guide pages per run → 30 pages/week
+on:
+  schedule:
+    - cron: '0 8 * * 0,2,5'   # 0=Sunday, 2=Tuesday, 5=Friday
+  workflow_dispatch:
+    inputs:
+      batch_size:
+        description: 'Number of pages to generate (default: 10)'
+        required: false
+        default: '10'
+      offset:
+        description: 'Offset into pending seed list (default: 0)'
+        required: false
+        default: '0'
+
+jobs:
+  generate-seo-pages:
+    name: Generate SEO Content
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      # 1. Checkout code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Set up Node.js 20
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      # 3. Install dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # 4. Generate SEO pages
+      - name: Generate SEO pages
+        run: |
+          BATCH="${{ github.event.inputs.batch_size || '10' }}"
+          OFFSET="${{ github.event.inputs.offset || '0' }}"
+          echo "Running: npm run generate $BATCH $OFFSET"
+          npx tsx scripts/generate-seo-pages.ts "$BATCH" "$OFFSET"
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+
+      # 5. Report results
+      - name: Report generation summary
+        if: always()
+        run: |
+          echo "::notice::SEO content generation completed. Check logs above for details."
+          echo "Run date: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
