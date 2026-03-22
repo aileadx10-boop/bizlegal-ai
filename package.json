@@ -1,14 +1,19 @@
 {
   "name": "bizlegal-ai",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "seo": "tsx scripts/seo-factory.ts",
-    "seo:batch": "tsx scripts/seo-factory.ts --count 10",
-    "seo:scheduled": "tsx scripts/seo-factory.ts --count 10"
+    "seo:auto": "tsx scripts/auto-seo-generator.ts",
+    "seo:auto:force": "tsx scripts/auto-seo-generator.ts --force",
+    "tools:auto": "tsx scripts/auto-tool-generator.ts",
+    "tools:auto:force": "tsx scripts/auto-tool-generator.ts --force",
+    "social:adapt": "tsx scripts/social-media-adapter.ts",
+    "social:adapt:all": "tsx scripts/social-media-adapter.ts --all",
+    "automation:run": "curl -X POST http://localhost:3000/api/automation/run -H 'Authorization: Bearer dev-secret' -H 'Content-Type: application/json' -d '{\"type\":\"all\",\"count\":10}'"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.27.0",
