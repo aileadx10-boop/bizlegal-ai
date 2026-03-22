@@ -1,24 +1,32 @@
 #!/usr/bin/env npx tsx
 /**
- * Social Media Content Adapter
+ * Social Media Content Adapter for Dor Innovations
  * Adapts each SEO post for 7 social media platforms
+ * 
+ * Platforms:
+ * - Facebook: https://www.facebook.com/DorInnovations/
+ * - Instagram: https://www.instagram.com/dorinnovations/
+ * - Twitter/X: https://x.com/DorInnovations
+ * - Pinterest: https://www.pinterest.com/DorInnovations/
+ * - LinkedIn: https://www.linkedin.com/company/DorInnovations
+ * - YouTube: https://www.youtube.com/@DorInnovations
+ * - Substack: dorinnovations
  * 
  * Usage: npx tsx scripts/social-media-adapter.ts [--all] [--slug=specific-slug]
  */
 
 import { createClient } from '@supabase/supabase-js'
 import { GeminiClient } from '../lib/gemini'
+import { DOR_INNOVATIONS_SOCIALS, PLATFORM_CONFIG } from '../lib/social-accounts'
 
 // ─── CONFIGURATION ────────────────────────────────────────────
-const PLATFORMS = [
-  { id: 'twitter', name: 'Twitter/X', charLimit: 280 },
-  { id: 'linkedin', name: 'LinkedIn', charLimit: 1300 },
-  { id: 'facebook', name: 'Facebook', charLimit: 500 },
-  { id: 'instagram', name: 'Instagram', charLimit: 300 },
-  { id: 'tiktok', name: 'TikTok', charLimit: 150 },
-  { id: 'youtube', name: 'YouTube', charLimit: 500 },
-  { id: 'threads', name: 'Threads', charLimit: 500 },
-] as const
+const PLATFORMS = DOR_INNOVATIONS_SOCIALS.map(account => ({
+  id: account.platform,
+  name: PLATFORM_CONFIG[account.platform]?.displayName || account.platform,
+  charLimit: PLATFORM_CONFIG[account.platform]?.maxChars || 500,
+  url: account.url,
+  handle: account.handle,
+}))
 
 // ─── HELPER FUNCTIONS ─────────────────────────────────────────
 function required(name: string): string {

@@ -92,9 +92,15 @@ export default function AutomationDashboard() {
     <div className="automation-dashboard">
       <div className="container" style={{ maxWidth: '1400px', margin: '0 auto', padding: '2rem' }}>
         <div style={{ marginBottom: '2rem' }}>
-          <Link href="/" style={{ color: 'var(--sky)', textDecoration: 'none', marginBottom: '1rem', display: 'block' }}>
-            &larr; Back to Site
-          </Link>
+          <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
+            <Link href="/" style={{ color: 'var(--sky)', textDecoration: 'none' }}>
+              &larr; Back to Site
+            </Link>
+            <span style={{ color: 'var(--dim)' }}>|</span>
+            <Link href="/automation/social" style={{ color: 'var(--sky)', textDecoration: 'none' }}>
+              📱 Social Accounts
+            </Link>
+          </div>
           <h1 style={{ fontFamily: 'Gloock, serif', fontSize: '2.5rem', marginBottom: '0.5rem' }}>
             🤖 SEO Automation Dashboard
           </h1>

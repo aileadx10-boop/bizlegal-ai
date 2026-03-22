@@ -79,22 +79,29 @@ export class GeminiClient {
     return this.parseResponse(text, request)
   }
 
-  async generateSocialPosts(topic: string, content: string): Promise<SocialPost[]> {
-    const prompt = `Adapt this content for 7 social media platforms. Return JSON array with platform-specific posts:
+  async generateSocialPosts(topic: string, content: string, brandName = 'Dor Innovations'): Promise<SocialPost[]> {
+    const prompt = `Adapt this content for Dor Innovations across 7 social media platforms.
 
+Brand: ${brandName}
 Topic: ${topic}
 Content: ${content.substring(0, 2000)}
 
-Platforms: Twitter (280 chars), LinkedIn (professional, 1300 chars), Facebook (engaging, 500 chars), 
-Instagram (visual caption, 300 chars + emojis), TikTok (script hook, 150 chars), 
-YouTube (description, 500 chars), Threads (casual, 500 chars)
+Platforms and requirements:
+1. Facebook (500 chars): Engaging, shareable, 3-4 hashtags
+2. Instagram (300 chars): Visual caption with emojis, 5-8 hashtags
+3. Twitter/X (280 chars): Punchy, thread-worthy, 2-3 hashtags
+4. Pinterest (500 chars): Descriptive, keyword-rich, 10-15 hashtags
+5. LinkedIn (1300 chars): Professional, industry insights, 3-5 hashtags
+6. YouTube (5000 chars): Video description format, SEO keywords, 5-10 hashtags
+7. Substack (1000 chars): Newsletter style, detailed, professional tone
 
-Include 3-5 relevant hashtags per platform.
+Include relevant hashtags for each platform.
+Mention Dor Innovations where appropriate.
 
 Return ONLY valid JSON array in this format:
 [
-  {"platform": "twitter", "content": "...", "hashtags": ["#tag1", "#tag2"]},
-  {"platform": "linkedin", "content": "...", "hashtags": ["#tag1"]},
+  {"platform": "facebook", "content": "...", "hashtags": ["#tag1", "#tag2"]},
+  {"platform": "instagram", "content": "...", "hashtags": ["#tag1"]},
   ...
 ]`
 
