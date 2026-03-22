@@ -85,6 +85,40 @@ export default function ToolsPage() {
       {/* Tools Grid */}
       <div className="section" style={{ paddingTop: '0' }}>
         <div className="container">
+          {/* Enterprise Suite Card */}
+          <Link href="/enterprise" style={{ textDecoration: 'none', marginBottom: '20px', display: 'block' }}>
+            <div style={{
+              borderRadius: '20px', padding: '36px',
+              border: '1px solid rgba(165, 180, 252, 0.3)',
+              background: 'rgba(165, 180, 252, 0.08)',
+              transition: 'all 0.3s',
+              cursor: 'pointer',
+              display: 'flex', flexDirection: 'column', gap: '16px',
+              position: 'relative', overflow: 'hidden',
+            }}
+              className="tool-hub-card enterprise-highlight"
+            >
+              <div style={{ position: 'absolute', top: '-40px', right: '-40px', width: '200px', height: '200px', borderRadius: '50%', background: 'radial-gradient(ellipse, rgba(165, 180, 252, 0.2) 0%, transparent 70%)', pointerEvents: 'none' }} />
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                <span style={{ fontSize: '40px' }}>🏢</span>
+                <span style={{ padding: '4px 12px', borderRadius: '100px', fontSize: '10px', fontFamily: 'Geist Mono, monospace', fontWeight: 700, background: 'rgba(165, 180, 252, 0.2)', border: '1px solid rgba(165, 180, 252, 0.3)', color: 'var(--indigo)', letterSpacing: '0.1em' }}>ENTERPRISE</span>
+              </div>
+              <div>
+                <h2 style={{ fontFamily: 'Gloock, serif', fontSize: '24px', color: 'var(--white)', marginBottom: '10px', lineHeight: 1.2 }}>Enterprise Tool Suite</h2>
+                <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.75 }}>ROI Calculator, Multi-Framework Compliance Estimator, and ISO 31000 Risk Matrix. Board-ready reports with 3-year projections.</p>
+              </div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                {['ROI Analysis', 'SOC 2', 'ISO 27001', 'Risk Matrix', 'Executive Reports'].map(tag => (
+                  <span key={tag} style={{ padding: '3px 10px', borderRadius: '100px', fontSize: '11px', fontFamily: 'Geist Mono, monospace', background: 'rgba(165, 180, 252, 0.15)', color: 'var(--indigo)', border: '1px solid rgba(165, 180, 252, 0.2)' }}>{tag}</span>
+                ))}
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto', paddingTop: '16px', borderTop: '1px solid rgba(165, 180, 252, 0.2)' }}>
+                <span style={{ fontSize: '12px', color: 'var(--dim)', fontFamily: 'Geist Mono, monospace' }}>📊 3 Interactive Tools</span>
+                <span style={{ fontSize: '13px', color: 'var(--indigo)', fontFamily: 'Geist Mono, monospace', fontWeight: 700 }}>Explore Suite →</span>
+              </div>
+            </div>
+          </Link>
+
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }}>
             {TOOLS.map(tool => {
               const c = colorMap[tool.color as keyof typeof colorMap]
